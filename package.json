@@ -1,0 +1,40 @@
+{
+  "name": "element-internals-polyfill",
+  "version": "0.0.0",
+  "description": "A polyfill for the element internals specification",
+  "main": "element-internals.js",
+  "scripts": {
+    "test": "karma start",
+    "start": "rollup -c --watch",
+    "release": "standard-version",
+    "postrelease": "git push --follow-tags origin master; npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calebdwilliams/element-internals-polyfill.git"
+  },
+  "keywords": [
+    "elementinternals",
+    "internals",
+    "element",
+    "internals",
+    "formassociated",
+    "customelements",
+    "web",
+    "components",
+    "forms",
+    "polyfill"
+  ],
+  "author": "Caleb D. Williams <caleb.d.williams@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/calebdwilliams/element-internals-polyfill/issues"
+  },
+  "homepage": "https://github.com/calebdwilliams/element-internals-polyfill#readme",
+  "devDependencies": {
+    "rollup": "^1.27.0",
+    "rollup-plugin-livereload": "^1.0.4",
+    "rollup-plugin-serve": "^1.0.1",
+    "standard-version": "^7.0.0"
+  }
+}

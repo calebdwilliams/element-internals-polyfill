@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <title>ElementInternals polyfill</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="description" content="ElementInternals polyfill">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles/page.css"/>
+  </head>
+  <body>
+    <form id="form">
+      <label for="foo">Custom label</label>
+      <foo-bar id="foo" name="foo"></foo-bar>
+
+      <label for="some-input">Some input</label>
+      <input id="some-input" type="text" name="some-input" required minlength="3">
+
+      <div class="buttons">
+        <button type="reset">Reset</button>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </body>
+  <script defer src="/element-internals.js" type="module"></script>
+  <script defer src="/scripts/foo-bar.js" type="module"></script>
+  <script defer src="/scripts/page.js" type="module"></script>
+</html>
