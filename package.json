@@ -5,7 +5,9 @@
   "main": "element-internals.js",
   "scripts": {
     "test": "karma start",
-    "start": "rollup -c --watch",
+    "start": "rollup -c --watch --environment BUILD:dev",
+    "build": "rollup -c --environment BUILD:production",
+    "prerelease": "npm run build",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master; npm publish"
   },

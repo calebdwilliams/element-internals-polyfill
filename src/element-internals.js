@@ -79,13 +79,6 @@ export class ElementInternals {
     }
 
     validationMessageMap.set(this, validationMessage);
-    // if (validationMessage && validationMessage !== '') {
-    //   validity.customError = true;
-    //   validity.valid = false;
-    // } else if (validationMessage === '') {
-    //   validity.customError = false;
-    //   validity.valid = true;
-    // }
 
     this.reportValidity();
   }

@@ -1,22 +1,33 @@
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
 
-export default {
+const plugins = [];
+const config = {
   input: 'src/element-internals.js',
   output: {
     format: 'esm',
     file: 'dist/element-internals.js'
   },
-  plugins: [
+  plugins
+};
+
+console.log(process.env.BUILD)
+if (process.env.BUILD === 'dev') {
+  plugins.push([
     serve({
       open: true,
       verbose: true,
       contentBase: ['static', 'dist'],
       historyApiFallback: true,
       port: 8181,
-    }),
+    })
+  ]);
+
+  plugins.push(
     livereload({
       watch: 'dist'
     })
-  ]
-};
+  );
+}
+
+export default config;
