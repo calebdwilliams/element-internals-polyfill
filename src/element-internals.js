@@ -17,11 +17,9 @@ export class ElementInternals {
     const { labels, form } = this;
     Object.seal(this);
 
-    // Promise.resolve().then(() => {
-      initRef(ref, this);
-      initLabels(ref, labels);
-      initForm(ref, form, this);
-    // });
+    initRef(ref, this);
+    initLabels(ref, labels);
+    initForm(ref, form, this);
   }
 
   checkValidity() {
