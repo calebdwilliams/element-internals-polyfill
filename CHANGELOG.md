@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.1...v0.0.4) (2019-11-16)
+
+
+### Bug Fixes
+
+* **polyfill:** Include built files in npm ([ca45513](https://github.com/calebdwilliams/element-internals-polyfill/commit/ca455135e622d6682e489959a79e0aa12dc249ff))
+* **structure:** Fix file structure ([9c4bff2](https://github.com/calebdwilliams/element-internals-polyfill/commit/9c4bff2f0db6253afd39fea20830756482eae595))
+
 ### [0.0.3](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.2...v0.0.3) (2019-11-15)
 
 ### [0.0.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.1...v0.0.2) (2019-11-15)
