@@ -5,7 +5,7 @@
   "main": "./dist/element-internals.js",
   "module": "./dist/element-internals.js",
   "files": [
-    "./dist/element-internals.js"
+    "/dist/element-internals.js"
   ],
   "scripts": {
     "test": "karma start",
