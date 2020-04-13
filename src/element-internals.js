@@ -10,6 +10,12 @@ import { ValidityState, isValid } from './ValidityState.js';
 
 export class ElementInternals {
   constructor(ref) {
+    if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
+      throw new TypeError('Illegal constructor');
+    }
+    if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
+      throw new TypeError('Illegal constructor');
+    }
     const validity = new ValidityState();
     refMap.set(this, ref);
     validityMap.set(this, validity);
@@ -107,6 +113,9 @@ if (!window.ElementInternals) {
   Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
     get() {
       return () => {
+        if (this.tagName.indexOf('-') === -1) {
+          throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
+        }
         return new ElementInternals(this);
       };
     }
