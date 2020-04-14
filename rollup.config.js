@@ -5,7 +5,7 @@ const plugins = [];
 const config = {
   input: 'src/element-internals.js',
   output: {
-    format: 'esm',
+    format: 'iife',
     file: 'dist/element-internals.js'
   },
   plugins

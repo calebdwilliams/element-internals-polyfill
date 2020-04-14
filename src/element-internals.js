@@ -8,7 +8,7 @@ import {
 import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils.js';
 import { ValidityState, reconcileValidty, setInvalid, isValid, setValid } from './ValidityState.js';
 
-export class ElementInternals {
+class ElementInternals {
   constructor(ref) {
     if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
       throw new TypeError('Illegal constructor');
