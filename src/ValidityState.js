@@ -16,6 +16,27 @@ export class ValidityState {
   }
 };
 
+export const setValid = validityObject => {
+  validityObject.badInput = false;
+  validityObject.customError = false;
+  validityObject.patternMismatch = false;
+  validityObject.rangeOverflow = false;
+  validityObject.rangeUnderflow = false;
+  validityObject.stepMismatch = false;
+  validityObject.tooLong = false;
+  validityObject.tooShort = false;
+  validityObject.typeMismatch = false;
+  validityObject.valid = true;
+  validityObject.valueMissing = false;
+  return validityObject;
+};
+
+export const reconcileValidty = (validityObject, newState) => {
+  validityObject.valid = isValid(newState);
+  Object.keys(newState).forEach(key => validityObject[key] = newState[key]);
+  return validityObject;
+};
+
 export const isValid = validityState => {
   let valid = true;
   for (let key in validityState) {

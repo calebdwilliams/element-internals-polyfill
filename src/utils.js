@@ -8,7 +8,7 @@ const observer = new MutationObserver(mutationsList => {
 
     if (attributeName === 'disabled' && target.constructor.formAssociated) {
       if (target.formDisabledCallback) {
-        target.formDisabledCallback.bind(target)();
+        target.formDisabledCallback.apply(target);
       }
     }
   }
@@ -36,27 +36,31 @@ export const initRef = (ref, internals) => {
 };
 
 export const initLabels = (ref, labels) => {
-  Array.from(labels).forEach(label =>
-    label.addEventListener('click', ref.focus.bind(ref)));
-  const firstLabelId = `${labels[0].htmlFor}_Label`;
-  labels[0].id = firstLabelId;
-  ref.setAttribute('aria-describedby', firstLabelId);
+  if (labels.length) {
+    Array.from(labels).forEach(label =>
+      label.addEventListener('click', ref.focus.bind(ref)));
+    const firstLabelId = `${labels[0].htmlFor}_Label`;
+    labels[0].id = firstLabelId;
+    ref.setAttribute('aria-describedby', firstLabelId);
+  }
 };
 
 export const initForm = (ref, form, internals) => {
-  form.addEventListener('submit', event => {
-    if (internals.checkValidity() === false) {
-      event.stopImmediatePropagation();
-      event.stopPropagation();
-      event.preventDefault();
-    }
-  });
+  if (form) {
+    form.addEventListener('submit', event => {
+      if (internals.checkValidity() === false) {
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    });
 
-  form.addEventListener('reset', () => {
-    if (ref.constructor.formAssociated && ref.formResetCallback) {
-      ref.formResetCallback();
-    }
-  });
+    form.addEventListener('reset', () => {
+      if (ref.constructor.formAssociated && ref.formResetCallback) {
+        ref.formResetCallback();
+      }
+    });
+  }
 };
 
 export const findParentForm = elem => {

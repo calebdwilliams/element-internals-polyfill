@@ -6,13 +6,10 @@ import {
   validationMessageMap
 } from './maps.js';
 import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils.js';
-import { ValidityState, isValid } from './ValidityState.js';
+import { ValidityState, reconcileValidty, setInvalid, isValid, setValid } from './ValidityState.js';
 
 export class ElementInternals {
   constructor(ref) {
-    if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
-      throw new TypeError('Illegal constructor');
-    }
     if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
       throw new TypeError('Illegal constructor');
     }
@@ -55,37 +52,29 @@ export class ElementInternals {
 
   setFormValue(value) {
     if (!this.form) {
-      return;
+      return undefined;
     }
     const hiddenInput = hiddenInputMap.get(this);
     hiddenInput.value = value;
   }
 
-  setValidity(validityChanges = {}, validationMessage = '') {
+  setValidity(validityChanges, validationMessage) {
+    if (!validityChanges) {
+      throw new TypeError('Failed to execute \'setValidity\' on \'ElementInternals\': 1 argument required, but only 0 present.');
+    }
     const validity = validityMap.get(this);
     if (Object.keys(validityChanges).length === 0) {
-      console.log('yes')
-      validity.valid = true;
-      for (const key in validity) {
-        if (key !== 'valid') {
-          validity[key] = false;
-        }
-      }
-    } else {
-      for (const key in validityChanges) {
-        if (validityChanges.hasOwnProperty(key)) {
-          const value = validityChanges[key];
-          validity[key] = validityChanges[key];
+      setValid(validity);
+    }
+    const check = { ...validity, ...validityChanges };
+    delete check.valid;
+    const { valid } = reconcileValidty(validity, check);
 
-          if (value === true && key !== 'valid') {
-            validity.valid = false;
-          }
-        }
-      }
+    if (!valid && !validationMessage) {
+      throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The second argument should not be empty if one or more flags in the first argument are true.`);
     }
 
-    validationMessageMap.set(this, validationMessage);
-
+    validationMessageMap.set(this, valid ? '' : validationMessage);
     this.reportValidity();
   }
 

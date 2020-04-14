@@ -30,7 +30,8 @@ module.exports = function(config) {
       'karma-ie-launcher',
       'karma-safarinative-launcher',
       'karma-detect-browsers',
-      'karma-rollup-preprocessor'
+      'karma-rollup-preprocessor',
+      'karma-coverage-istanbul-reporter'
     ],
 
     browserNoActivityTimeout: 60000, //default 10000
@@ -45,6 +46,17 @@ module.exports = function(config) {
       postDetection(availableBrowsers) {
         return availableBrowsers.filter(browser => browser !== 'SafariTechPreview');
       }
+    },
+
+    coverageIstanbulReporter: {
+      reports: ['html', 'lcovonly'],
+      dir: '.coverage',
+      combineBrowserReports: true,
+      skipFilesWithNoCoverage: true,
+      'report-config': {
+        html: {subdir: 'html'},
+        lcovonly: {subdir: 'lcov'},
+      },
     },
 
     customLaunchers: {
@@ -83,11 +95,12 @@ module.exports = function(config) {
           include: 'node_modules/**',
           exclude: 'node_modules/@open-wc/**',
         }),
+        require('@rollup/plugin-node-resolve')(),
         require('rollup-plugin-babel')({
           babelrc: false,
+          include: ['node_modules/@open-wc/**', 'test/**'],
           ...babelrc,
-          plugins: [
-          ],
+          plugins: ['babel-plugin-transform-async-to-promises']
         }),
       ],
       output: {
@@ -101,11 +114,12 @@ module.exports = function(config) {
         base: 'rollup',
         options: {
           plugins: [
+            require('@rollup/plugin-node-resolve')(),
             require('rollup-plugin-babel')({
               babelrc: false,
               ...babelrc,
               plugins: [coverage && 'babel-plugin-istanbul'].filter(Boolean),
-            })
+            }),
           ],
           output: {
             format: 'iife',

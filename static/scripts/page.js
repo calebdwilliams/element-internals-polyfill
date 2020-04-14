@@ -2,7 +2,7 @@ const form = document.getElementById('form');
 
 form.addEventListener('submit', event => {
   console.log(event);
-  event.preventDefault();
+  // event.preventDefault();
 
   const formData = new FormData(event.target);
   const formValue = {};

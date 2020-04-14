@@ -24,6 +24,7 @@ export class FooBar extends HTMLElement {
     this.input = this.shadowRoot.querySelector('input');
 
     this._init();
+    this.required = this.getAttribute('required');
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
