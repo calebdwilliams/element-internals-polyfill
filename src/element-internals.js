@@ -27,6 +27,13 @@ class ElementInternals {
 
   checkValidity() {
     const validity = validityMap.get(this);
+    const ref = refMap.get(this);
+    const validityEvent = new Event(validity.valid, {
+      bubbles: false,
+      cancelable: true,
+      composed: false
+    });
+    ref.dispatchEvent(validityEvent)
     return validity.valid;
   }
 
@@ -47,7 +54,7 @@ class ElementInternals {
   }
 
   reportValidity() {
-    // TODO: Figure out how to polyfill this
+    return this.checkValidity();
   }
 
   setFormValue(value) {

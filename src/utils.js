@@ -1,4 +1,4 @@
-import { hiddenInputMap } from './maps.js';
+import { hiddenInputMap, formsMap } from './maps.js';
 
 const observerConfig = { attributes: true };
 
@@ -60,6 +60,8 @@ export const initForm = (ref, form, internals) => {
         ref.formResetCallback();
       }
     });
+
+    formsMap.set(form, { ref, internals });
   }
 };
 

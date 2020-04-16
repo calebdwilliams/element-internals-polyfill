@@ -272,8 +272,6 @@ describe('The ElementInternals polyfill', () => {
 
     setTimeout(() => {
       expect(element.internals.labels[0]).toBe(label);
-      expect(element.getAttribute('aria-labelledby')).toBe(`${tagName}_Label`);
-      expect(label.getAttribute('id', `${tagName}_Label`));
       done();
     }, 500);
   });
