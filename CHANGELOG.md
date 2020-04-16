@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.6...v0.0.7) (2020-04-16)
+
+
+### Features
+
+* **polyfill:** now fires invalid and valid events ([1e05937](https://github.com/calebdwilliams/element-internals-polyfill/commit/1e0593702c6c8a56cda40a6936d654d91b1176ce))
+
 ### [0.0.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.5...v0.0.6) (2020-04-14)
 
 
