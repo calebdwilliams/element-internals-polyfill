@@ -26,7 +26,6 @@ export const getHostRoot = node => {
 };
 
 export const initRef = (ref, internals) => {
-  ref.toggleAttribute('form-associated-custom-element', true);
   const input = document.createElement('input');
   input.type = 'hidden';
   input.name = ref.getAttribute('name');
@@ -62,6 +61,10 @@ export const initForm = (ref, form, internals) => {
     });
 
     formsMap.set(form, { ref, internals });
+
+    if (ref.formAssociatedCallback) {
+      ref.formAssociatedCallback.apply(ref, [form]);
+    }
   }
 };
 
@@ -70,7 +73,7 @@ export const findParentForm = elem => {
   if (parent && parent.tagName !== 'FORM') {
     parent = findParentForm(parent);
   } else if (!parent && elem.toString() === '[object ShadowRoot]') {
-    parent = findParentForm(parent.host);
+    parent = findParentForm(elem.host);
   }
   return parent;
 };

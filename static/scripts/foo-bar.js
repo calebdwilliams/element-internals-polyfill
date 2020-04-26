@@ -40,6 +40,10 @@ export class FooBar extends HTMLElement {
     }
   }
 
+  formAssociatedCallback(form) {
+    console.log({form})
+  }
+
   _init() {
     this.input.addEventListener('input', this._handleChanges);
   }

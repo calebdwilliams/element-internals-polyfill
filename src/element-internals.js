@@ -3,10 +3,12 @@ import {
   validityMap,
   internalsMap,
   hiddenInputMap,
-  validationMessageMap
+  validationMessageMap,
+  shadowHostsMap
 } from './maps.js';
 import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils.js';
-import { ValidityState, reconcileValidty, setInvalid, isValid, setValid } from './ValidityState.js';
+import { ValidityState, reconcileValidty, setValid } from './ValidityState.js';
+import { observerCallback, observerConfig } from './mutation-observers.js';
 
 class ElementInternals {
   constructor(ref) {
@@ -50,7 +52,7 @@ class ElementInternals {
     const ref = refMap.get(this);
     const id = ref.getAttribute('id');
     const hostRoot = getHostRoot(ref);
-    return hostRoot.querySelectorAll(`[for=${id}]`);
+    return hostRoot ? hostRoot.querySelectorAll(`[for=${id}]`) : [];
   }
 
   reportValidity() {
@@ -106,6 +108,14 @@ class ElementInternals {
 if (!window.ElementInternals) {
   window.ElementInternals = ElementInternals;
 
+  function attachShadowObserver(...args) {
+    const shadowRoot = attachShadow.apply(this, args);
+    const observer = new MutationObserver(observerCallback);
+    observer.observe(shadowRoot, observerConfig);
+    shadowHostsMap.set(this, observer);
+    return shadowRoot;
+  }
+
   Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
     get() {
       return () => {
@@ -116,4 +126,10 @@ if (!window.ElementInternals) {
       };
     }
   });
+
+  const attachShadow = HTMLElement.prototype.attachShadow;
+  HTMLElement.prototype.attachShadow = attachShadowObserver;
+
+  const documentObserver = new MutationObserver(observerCallback);
+  documentObserver.observe(document.body, observerConfig);
 }
