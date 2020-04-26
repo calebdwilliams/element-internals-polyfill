@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.7...v0.0.8) (2020-04-26)
+
+
+### Features
+
+* **polyfill:** add support for formAssociatedCallback ([7988907](https://github.com/calebdwilliams/element-internals-polyfill/commit/79889071474d843803bf5dd1087b8c1fb7ddc934))
+
 ### [0.0.7](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.6...v0.0.7) (2020-04-16)
 
 
