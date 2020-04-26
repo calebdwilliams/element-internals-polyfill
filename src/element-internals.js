@@ -68,6 +68,7 @@ class ElementInternals {
   }
 
   setValidity(validityChanges, validationMessage) {
+    const ref = refMap.get(this);
     if (!validityChanges) {
       throw new TypeError('Failed to execute \'setValidity\' on \'ElementInternals\': 1 argument required, but only 0 present.');
     }
@@ -84,6 +85,7 @@ class ElementInternals {
     }
 
     validationMessageMap.set(this, valid ? '' : validationMessage);
+    ref.setAttribute('aria-invalid', !valid);
     this.reportValidity();
   }
 

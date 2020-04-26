@@ -20,6 +20,7 @@ const testRoot = div.attachShadow({ mode: 'open' });
 const shadowForm = document.createElement('form');
 shadowForm.id = 'shadowTestForm';
 const fooBar = document.createElement('foo-bar');
+fooBar.required = true;
 testRoot.append(shadowForm);
 testRoot.append(fooBar);
 setTimeout(() => {

@@ -40,7 +40,7 @@ export const initLabels = (ref, labels) => {
       label.addEventListener('click', ref.focus.bind(ref)));
     const firstLabelId = `${labels[0].htmlFor}_Label`;
     labels[0].id = firstLabelId;
-    ref.setAttribute('aria-describedby', firstLabelId);
+    ref.setAttribute('aria-labelledby', firstLabelId);
   }
 };
 

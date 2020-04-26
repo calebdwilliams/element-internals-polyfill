@@ -46,6 +46,10 @@ export class FooBar extends HTMLElement {
 
   _init() {
     this.input.addEventListener('input', this._handleChanges);
+
+    if (this.required) {
+      this._handleRequired(this.value);
+    }
   }
 
   _handleChanges(event) {
@@ -72,6 +76,14 @@ export class FooBar extends HTMLElement {
   formResetCallback() {
     this.input.value = '';
     this.internals_.setFormValue('');
+  }
+
+  get required() {
+    return this.hasAttribute('required');
+  }
+
+  set required(required) {
+    this.setAttribute('aria-required', !!required);
   }
 
   get value() {
