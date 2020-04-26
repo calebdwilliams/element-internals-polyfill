@@ -1,6 +1,6 @@
 {
   "name": "element-internals-polyfill",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A polyfill for the element internals specification",
   "main": "/dist/element-internals.js",
   "module": "/dist/element-internals.js",

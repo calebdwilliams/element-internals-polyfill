@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.8...v0.0.9) (2020-04-26)
+
+
+### Bug Fixes
+
+* **polyfill:** change aria-descrbedby to aria-labelledby ([3cc5cd3](https://github.com/calebdwilliams/element-internals-polyfill/commit/3cc5cd31af66e298f9c8ffdb8a6c5fcf747162d2))
+
 ### [0.0.8](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.7...v0.0.8) (2020-04-26)
 
 
