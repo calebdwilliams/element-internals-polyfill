@@ -4,7 +4,9 @@ import {
   internalsMap,
   hiddenInputMap,
   validationMessageMap,
-  shadowHostsMap
+  shadowHostsMap,
+  formElementsMap,
+  refValueMap
 } from './maps.js';
 import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils.js';
 import { ValidityState, reconcileValidty, setValid } from './ValidityState.js';
@@ -63,8 +65,10 @@ class ElementInternals {
     if (!this.form) {
       return undefined;
     }
-    const hiddenInput = hiddenInputMap.get(this);
-    hiddenInput.value = value;
+    // const hiddenInput = hiddenInputMap.get(this);
+    const ref = refMap.get(this);
+    refValueMap.set(ref, value);
+    // hiddenInput.value = value;
   }
 
   setValidity(validityChanges, validationMessage) {
@@ -134,4 +138,21 @@ if (!window.ElementInternals) {
 
   const documentObserver = new MutationObserver(observerCallback);
   documentObserver.observe(document.body, observerConfig);
+
+  class FormData extends window.FormData {
+    constructor(form) {
+      super(form);
+      if (form && formElementsMap.has(form)) {
+        const refs = formElementsMap.get(form);
+        refs.forEach(ref => {
+          if (ref.getAttribute('name')) {
+            const value = refValueMap.get(ref);
+            this.set(ref.getAttribute('name'), value);
+          }
+        });
+      }
+    }
+  }
+
+  window.FormData = FormData;
 }

@@ -1,4 +1,4 @@
-import { hiddenInputMap, formsMap } from './maps.js';
+import { hiddenInputMap, formsMap, formElementsMap } from './maps.js';
 
 const observerConfig = { attributes: true };
 
@@ -46,6 +46,7 @@ export const initLabels = (ref, labels) => {
 
 export const initForm = (ref, form, internals) => {
   if (form) {
+    // TODO: check all form elements instead of just this
     form.addEventListener('submit', event => {
       if (internals.checkValidity() === false) {
         event.stopImmediatePropagation();
@@ -60,8 +61,16 @@ export const initForm = (ref, form, internals) => {
       }
     });
 
+    const formElements = formElementsMap.get(form);
     formsMap.set(form, { ref, internals });
 
+    if (formElements) {
+      formElements.add(ref);
+    } else {
+      const initSet = new Set();
+      initSet.add(ref);
+      formElementsMap.set(form, initSet);
+    }
     if (ref.formAssociatedCallback) {
       ref.formAssociatedCallback.apply(ref, [form]);
     }

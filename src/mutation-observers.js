@@ -1,4 +1,5 @@
 import { internalsMap, shadowHostsMap } from './maps.js';
+import { initForm } from './utils.js';
 
 export function observerCallback(mutationList) {
   mutationList.forEach(mutationRecord => {
@@ -8,9 +9,7 @@ export function observerCallback(mutationList) {
         const internals = internalsMap.get(node);
         const { form } = internals;
 
-        if (form && node.formAssociatedCallback) {
-          node.formAssociatedCallback.apply(node, [form]);
-        }
+        initForm(node, form, internals);
       }
     });
 
