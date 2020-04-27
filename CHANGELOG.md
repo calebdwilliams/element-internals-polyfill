@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.9...v0.0.10) (2020-04-27)
+
+
+### Features
+
+* **remove hidden input:** work to remove hidden input ([bc1345f](https://github.com/calebdwilliams/element-internals-polyfill/commit/bc1345f2b64b7c034fe1514d1f16f6761e76c3c1))
+
 ### [0.0.9](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.8...v0.0.9) (2020-04-26)
 
 
