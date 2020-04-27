@@ -135,18 +135,21 @@ if (!window.ElementInternals) {
   const documentObserver = new MutationObserver(observerCallback);
   documentObserver.observe(document.body, observerConfig);
 
-  class FormData extends window.FormData {
+  const formDataOriginal = window.FormData;
+
+  class FormData {
     constructor(form) {
-      super(form);
+      const data = new formDataOriginal(form);
       if (form && formElementsMap.has(form)) {
         const refs = formElementsMap.get(form);
         refs.forEach(ref => {
           if (ref.getAttribute('name')) {
             const value = refValueMap.get(ref);
-            this.set(ref.getAttribute('name'), value);
+            data.set(ref.getAttribute('name'), value);
           }
         });
       }
+      return data;
     }
   }
 
