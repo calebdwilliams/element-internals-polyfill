@@ -24,7 +24,7 @@ export class FooBar extends HTMLElement {
     this.input = this.shadowRoot.querySelector('input');
 
     this._init();
-    this.required = this.getAttribute('required');
+    this.required = this.hasAttribute('required');
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -42,6 +42,16 @@ export class FooBar extends HTMLElement {
 
   formAssociatedCallback(form) {
     console.log({form})
+  }
+
+  formDisabledCallback(isDisabled) {
+    console.log({isDisabled})
+    this.input.disabled = isDisabled;
+  }
+
+  formResetCallback() {
+    this.input.value = '';
+    this.internals_.setFormValue('');
   }
 
   _init() {
@@ -69,21 +79,14 @@ export class FooBar extends HTMLElement {
     }
   }
 
-  formDisabledCallback() {
-    this.input.disabled = this.disabled;
-  }
-
-  formResetCallback() {
-    this.input.value = '';
-    this.internals_.setFormValue('');
-  }
-
   get required() {
     return this.hasAttribute('required');
   }
 
   set required(required) {
+    this.toggleAttribute('required', required);
     this.setAttribute('aria-required', !!required);
+    this._handleRequired(!required);
   }
 
   get value() {

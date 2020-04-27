@@ -2,7 +2,6 @@ import {
   refMap,
   validityMap,
   internalsMap,
-  hiddenInputMap,
   validationMessageMap,
   shadowHostsMap,
   formElementsMap,
@@ -24,7 +23,7 @@ class ElementInternals {
     const { labels, form } = this;
     Object.seal(this);
 
-    initRef(ref, this);
+    initRef(ref);
     initLabels(ref, labels);
     initForm(ref, form, this);
   }
@@ -65,10 +64,8 @@ class ElementInternals {
     if (!this.form) {
       return undefined;
     }
-    // const hiddenInput = hiddenInputMap.get(this);
     const ref = refMap.get(this);
     refValueMap.set(ref, value);
-    // hiddenInput.value = value;
   }
 
   setValidity(validityChanges, validationMessage) {
@@ -87,7 +84,6 @@ class ElementInternals {
     if (!valid && !validationMessage) {
       throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The second argument should not be empty if one or more flags in the first argument are true.`);
     }
-
     validationMessageMap.set(this, valid ? '' : validationMessage);
     ref.setAttribute('aria-invalid', !valid);
     this.reportValidity();
