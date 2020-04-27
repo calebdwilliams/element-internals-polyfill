@@ -17,7 +17,7 @@ const observer = new MutationObserver(mutationsList => {
 
 /**
  * Recursively get the host root
- * @param {HTMLElement} - The node to find the host root
+ * @param {HTMLElement} - The node to find the host root for
  * @return {DocumentOrShadowRoot}
  */
 export const getHostRoot = node => {
