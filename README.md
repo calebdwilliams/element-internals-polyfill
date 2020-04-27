@@ -6,6 +6,29 @@ This package is a polyfill for the [`ElementInternals` standard](https://html.sp
 
 The primary use case for `ElementInternals` right now is allowing custom elements full participation in HTML forms. To do this, it provides any element designated as `formAssociated` access to a handful of utilities.
 
+## Installation
+
+This package is available on `npm` under the name `construct-style-sheet-polyfill`
+and can be installed with [npm](https://docs.npmjs.com/getting-started),
+[yarn](https://yarnpkg.com/en/docs/getting-started), [unpkg](https://unpkg.com)
+or however else you consume dependencies.
+
+### Example commands: 
+
+npm:
+```bash
+npm i element-internals-polyfill
+```
+
+yarn:
+```bash
+yarn add element-internals-polyfill
+```
+
+unpkg:
+```javascript
+import 'https://unpkg.com/element-internals-polyfill';
+```
 
 ## How it works
 
