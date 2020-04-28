@@ -7,6 +7,7 @@ import {
   formElementsMap,
   refValueMap
 } from './maps.js';
+import { aom, initAom } from './aom.js';
 import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils.js';
 import { ValidityState, reconcileValidty, setValid } from './ValidityState.js';
 import { observerCallback, observerConfig } from './mutation-observers.js';
@@ -21,6 +22,7 @@ class ElementInternals {
     validityMap.set(this, validity);
     internalsMap.set(ref, this);
     const { labels, form } = this;
+    initAom(ref, this);
     Object.seal(this);
 
     initRef(ref);

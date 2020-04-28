@@ -27,3 +27,10 @@ export const formElementsMap = new WeakMap();
  * @type {WeakMap<HTMLElement, any>}
  */
 export const refValueMap = new WeakMap();
+
+
+/**
+ * Elements that need to be upgraded once added to the DOM
+ * @type {WeakMap<HTMLElement, ElemntInternals>}
+ */
+export const upgradeMap = new WeakMap();

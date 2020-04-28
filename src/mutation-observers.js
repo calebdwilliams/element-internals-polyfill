@@ -1,4 +1,5 @@
-import { internalsMap, shadowHostsMap } from './maps.js';
+import { internalsMap, shadowHostsMap, upgradeMap } from './maps.js';
+import { aom } from './aom.js';
 import { initForm } from './utils.js';
 
 export function observerCallback(mutationList) {
@@ -10,6 +11,18 @@ export function observerCallback(mutationList) {
         const { form } = internals;
 
         initForm(node, form, internals);
+      }
+
+      if (upgradeMap.has(node)) {
+        const internals = upgradeMap.get(node);
+        const aomKeys = Object.keys(aom);
+        aomKeys
+          .filter(key => internals[key] !== null)
+          .forEach(key => {
+            console.log({key})
+            node.setAttribute(aom[key], internals[key]);
+          });
+        upgradeMap.delete(node);
       }
     });
 

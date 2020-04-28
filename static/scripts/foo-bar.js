@@ -9,6 +9,7 @@ export class FooBar extends HTMLElement {
       delegatesFocus: true
     });
     this.internals_ = this.attachInternals();
+    this.internals_.ariaChecked = true;
     this._handleChanges = this._handleChanges.bind(this);
   }
 
