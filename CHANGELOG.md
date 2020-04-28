@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.14...v0.0.15) (2020-04-28)
+
+
+### Features
+
+* **polyfill:** add basic aom support ([a2696c2](https://github.com/calebdwilliams/element-internals-polyfill/commit/a2696c2147237849ce165f42411c34adb924169c))
+
 ### [0.0.14](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.13...v0.0.14) (2020-04-27)
 
 ### [0.0.13](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.12...v0.0.13) (2020-04-27)
