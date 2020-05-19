@@ -130,7 +130,10 @@ export const initForm = (ref, form, internals) => {
       form.addEventListener('reset', formResetCallback);
     }
 
-
+    /** Save the element on the form instance if it has a name */
+    if (ref.hasAttribute('name')) {
+      form[ref.getAttribute('name')] = ref;
+    }
     formsMap.set(form, { ref, internals });
 
     /** Call formAssociatedCallback if applicable */

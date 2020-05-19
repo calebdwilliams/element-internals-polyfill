@@ -275,4 +275,14 @@ describe('The ElementInternals polyfill', () => {
       done();
     }, 500);
   });
+
+  it('will associate the element\'s name with the form', async () => {
+    const [tag] = createCustomElement(true);
+    const form = await fixture(`<form id="form">
+      <label for="${tagName}">Label</label>
+      ${renderTag(tag)}
+    </form>`);
+    const element = form.querySelector(tag);
+    expect(form[tagName]).toBe(element);
+  });
 });
