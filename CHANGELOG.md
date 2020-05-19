@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.16](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.15...v0.0.16) (2020-05-19)
+
+
+### Features
+
+* **polyfill:** element's register self with forms under the prop [el.name] ([c01d1c7](https://github.com/calebdwilliams/element-internals-polyfill/commit/c01d1c71c2acbc95fcad07604795fae02c05aae4))
+
 ### [0.0.15](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.14...v0.0.15) (2020-04-28)
 
 
