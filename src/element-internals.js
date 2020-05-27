@@ -88,7 +88,6 @@ class ElementInternals {
     }
     validationMessageMap.set(this, valid ? '' : validationMessage);
     ref.setAttribute('aria-invalid', !valid);
-    this.reportValidity();
   }
 
   get validationMessage() {
