@@ -51,8 +51,11 @@ export const initLabels = (ref, labels) => {
   if (labels.length) {
     Array.from(labels).forEach(label =>
       label.addEventListener('click', ref.focus.bind(ref)));
-    const firstLabelId = `${labels[0].htmlFor}_Label`;
-    labels[0].id = firstLabelId;
+    let firstLabelId = label[0].id;
+    if (!labels[0].id) {
+      firstLabelId = `${labels[0].htmlFor}_Label`;
+      labels[0].id = firstLabelId;
+    }
     ref.setAttribute('aria-labelledby', firstLabelId);
   }
 };

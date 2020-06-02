@@ -1,5 +1,6 @@
 .DS_Store
 .coverage
+coverage
 node_modules
 dist
 .npmrc

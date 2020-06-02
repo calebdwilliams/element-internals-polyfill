@@ -1,158 +1,46 @@
+const { createDefaultConfig } = require('@open-wc/testing-karma');
+const merge = require('deepmerge');
 
-// Karma configuration
-// Generated on Mon Apr 13 2020 13:45:54 GMT-0500 (Central Daylight Time)
-const {readFileSync} = require('fs');
-const {resolve} = require('path');
-
-const isCI = !!process.env.CI;
-const watch = !!process.argv.find(arg => arg.includes('watch')) && !isCI;
-const coverage = !!process.argv.find(arg => arg.includes('--coverage'));
-
-const babelrc = JSON.parse(
-  readFileSync(resolve(process.cwd(), '.babelrc'), 'utf8'),
-);
-
-module.exports = function(config) {
-  config.set({
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
-
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'detectBrowsers'],
-
-    // plugins
-    plugins: [
-      'karma-jasmine',
-      'karma-chrome-launcher',
-      'karma-edge-launcher',
-      'karma-firefox-launcher',
-      'karma-ie-launcher',
-      'karma-safarinative-launcher',
-      'karma-detect-browsers',
-      'karma-rollup-preprocessor',
-      'karma-coverage-istanbul-reporter'
-    ],
-
-    browserNoActivityTimeout: 60000, //default 10000
-    browserDisconnectTimeout: 10000, // default 2000
-    browserDisconnectTolerance: 1, // default 0
-    captureTimeout: 60000,
-
-    detectBrowsers: {
-      enabled: true,
-      usePhantomJS: false,
-      preferHeadless: true,
-      postDetection(availableBrowsers) {
-        return availableBrowsers.filter(browser => browser !== 'SafariTechPreview');
-      }
-    },
-
-    coverageIstanbulReporter: {
-      reports: ['html', 'lcovonly'],
-      dir: '.coverage',
-      combineBrowserReports: true,
-      skipFilesWithNoCoverage: true,
-      'report-config': {
-        html: {subdir: 'html'},
-        lcovonly: {subdir: 'lcov'},
-      },
-    },
-
-    customLaunchers: {
-      Safari: {
-        base: 'SafariNative',
-      },
-    },
-
-    // list of files / patterns to load in the browser
-    files: [
-      { pattern: 'src/element-internals.js', watched: false },
-      { pattern: 'test/*.test.js', watched: false },
-    ],
-
-
-    // list of files / patterns to exclude
-    exclude: [
-    ],
-
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      'src/element-internals.js': ['sourceRollup'],
-      'test/*.test.js': ['rollup'],
-    },
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', coverage && 'coverage-istanbul'].filter(Boolean),
-
-    rollupPreprocessor: {
-      plugins: [
-        require('rollup-plugin-commonjs')({
-          include: 'node_modules/**',
-          exclude: 'node_modules/@open-wc/**',
-        }),
-        require('@rollup/plugin-node-resolve')(),
-        require('rollup-plugin-babel')({
-          babelrc: false,
-          include: ['node_modules/@open-wc/**', 'test/**'],
-          ...babelrc,
-          plugins: ['babel-plugin-transform-async-to-promises']
-        }),
+module.exports = config => {
+  config.set(
+    merge(createDefaultConfig(config), {
+      files: [
+        // runs all files ending with .test in the test folder,
+        // can be overwritten by passing a --grep flag. examples:
+        //
+        // npm run test -- --grep test/foo/bar.test.js
+        // npm run test -- --grep test/bar/*
+        { pattern: config.grep ? config.grep : 'test/*.test.js', type: 'module' },
       ],
-      output: {
-        format: 'iife',
-        name: 'tests',
-      },
-    },
 
-    customPreprocessors: {
-      sourceRollup: {
-        base: 'rollup',
-        options: {
-          plugins: [
-            require('@rollup/plugin-node-resolve')(),
-            require('rollup-plugin-babel')({
-              babelrc: false,
-              ...babelrc,
-              plugins: [coverage && 'babel-plugin-istanbul'].filter(Boolean),
-            }),
-          ],
-          output: {
-            format: 'iife',
-            name: 'tests',
-          },
-          treeshake: false,
+      // see the karma-esm docs for all options
+      esm: {
+        // if you are using 'bare module imports' you will need this option
+        nodeResolve: true,
+      },
+
+      frameworks: [...config.frameworks, 'detectBrowsers'],
+
+      detectBrowsers: {
+        enabled: config.detectBrowsers,
+        usePhantomJS: false,
+        preferHeadless: true,
+        postDetection(availableBrowsers) {
+          return availableBrowsers.filter(browser => browser !== 'SafariTechPreview');
+        }
+      },
+
+      customLaunchers: {
+        Safari: {
+          base: 'SafariNative',
         },
       },
-    },
 
-    // web server port
-    port: 9876,
-
-
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
-
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: watch,
-
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: !watch,
-
-    // Concurrency level
-    // how many browser should be started simultaneous
-    concurrency: Infinity
-  })
-}
+      browserNoActivityTimeout: 60000, //default 10000
+      browserDisconnectTimeout: 10000, // default 2000
+      browserDisconnectTolerance: 1, // default 0
+      captureTimeout: 60000,
+    }),
+  );
+  return config;
+};

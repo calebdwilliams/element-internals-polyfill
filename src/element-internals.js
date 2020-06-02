@@ -7,12 +7,16 @@ import {
   formElementsMap,
   refValueMap
 } from './maps.js';
-import { aom, initAom } from './aom.js';
+import { initAom } from './aom.js';
 import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils.js';
 import { ValidityState, reconcileValidty, setValid } from './ValidityState.js';
 import { observerCallback, observerConfig } from './mutation-observers.js';
 
 class ElementInternals {
+  static get isPolyfilled() {
+    return true;
+  }
+
   constructor(ref) {
     if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
       throw new TypeError('Illegal constructor');
@@ -33,13 +37,14 @@ class ElementInternals {
   checkValidity() {
     const validity = validityMap.get(this);
     const ref = refMap.get(this);
-    const eventName = validity.valid ? 'valid' : 'invalid';
-    const validityEvent = new Event(eventName, {
-      bubbles: false,
-      cancelable: true,
-      composed: false
-    });
-    ref.dispatchEvent(validityEvent)
+    if (!validity.valid) {
+      const validityEvent = new Event('invalid', {
+        bubbles: false,
+        cancelable: true,
+        composed: false
+      });
+      ref.dispatchEvent(validityEvent);
+    }
     return validity.valid;
   }
 
@@ -55,8 +60,11 @@ class ElementInternals {
   get labels() {
     const ref = refMap.get(this);
     const id = ref.getAttribute('id');
-    const hostRoot = getHostRoot(ref);
-    return hostRoot ? hostRoot.querySelectorAll(`[for=${id}]`) : [];
+    if (id) {
+      const hostRoot = getHostRoot(ref);
+      return hostRoot ? hostRoot.querySelectorAll(`[for=${id}]`) : [];
+    }
+    return [];
   }
 
   reportValidity() {

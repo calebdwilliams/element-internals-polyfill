@@ -1,6 +1,6 @@
 import { internalsMap, shadowHostsMap, upgradeMap } from './maps.js';
 import { aom } from './aom.js';
-import { initForm } from './utils.js';
+import { initForm, initLabels } from './utils.js';
 
 export function observerCallback(mutationList) {
   mutationList.forEach(mutationRecord => {
@@ -11,6 +11,7 @@ export function observerCallback(mutationList) {
         const { form } = internals;
 
         initForm(node, form, internals);
+        initLabels(node, internals.labels);
       }
 
       if (upgradeMap.has(node)) {
