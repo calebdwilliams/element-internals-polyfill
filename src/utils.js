@@ -51,7 +51,7 @@ export const initLabels = (ref, labels) => {
   if (labels.length) {
     Array.from(labels).forEach(label =>
       label.addEventListener('click', ref.focus.bind(ref)));
-    let firstLabelId = label[0].id;
+    let firstLabelId = labels[0].id;
     if (!labels[0].id) {
       firstLabelId = `${labels[0].htmlFor}_Label`;
       labels[0].id = firstLabelId;
