@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.21](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.20...v0.0.21) (2020-06-02)
+
+
+### Bug Fixes
+
+* **polyfill:** correct labels reference ([9d326d1](https://github.com/calebdwilliams/element-internals-polyfill/commit/9d326d10b6696061408c3f0cfefbe3b6a063fc32))
+
 ### [0.0.20](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.19...v0.0.20) (2020-06-02)
 
 ### [0.0.19](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.18...v0.0.19) (2020-06-02)
