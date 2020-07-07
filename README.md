@@ -8,7 +8,7 @@ The primary use case for `ElementInternals` right now is allowing custom element
 
 ## Installation
 
-This package is available on `npm` under the name `construct-style-sheet-polyfill`
+This package is available on `npm` under the name `element-internals-polyfill`
 and can be installed with [npm](https://docs.npmjs.com/getting-started),
 [yarn](https://yarnpkg.com/en/docs/getting-started), [unpkg](https://unpkg.com)
 or however else you consume dependencies.
