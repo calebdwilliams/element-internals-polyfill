@@ -6,6 +6,8 @@ This package is a polyfill for the [`ElementInternals` standard](https://html.sp
 
 The primary use case for `ElementInternals` right now is allowing custom elements full participation in HTML forms. To do this, it provides any element designated as `formAssociated` access to a handful of utilities.
 
+The `ElementInternals` API also offers users access to increased utilities for accessibility by exposing the [Accessibility Object Model](https://wicg.github.io/aom/explainer.html) to the element.
+
 ## Installation
 
 This package is available on `npm` under the name `construct-style-sheet-polyfill`
@@ -35,11 +37,7 @@ import 'https://unpkg.com/element-internals-polyfill';
 To do this, add the `static get formAssociated` to a custom element and call the `attachInternals` method to return a new instance of the `ElementInternals` interface:
 
 ```javascript
-class MyInput extends HTMLElement {
-  static get formAssociated() {
-    return true;
-  }
-
+class MyElement extends HTMLElement {
   constructor() {
     super();
     this._internals = this.attachInternals();
@@ -53,7 +51,81 @@ It also monkey-patches `HTMLElement.prototype.attachShadow` to wire up a similar
 
 The polyfill will also monkey-patch `window.FormData` to attach any custom elements to that feature as well.
 
-The currently-supported features of `ElementInternals` for form-associated custom elements are
+The currently-supported features of the polyfill are:
+
+### Form-associated custom elements
+
+To create a form-associated custom element using `ElementInternals`, the element's class must have a static `formAssociated` member that returns `true`. 
+
+```javascript
+class MyFormControl extends HTMLElement {
+  static get formAssociated() {
+    return true;
+  }
+
+  constructor() {
+    super();
+    this.internals = this.attachInternals();
+  }
+}
+```
+
+In the above example, the form control will now have access to several unique APIs for participating in a form:
+
+- Labels will be wired up properly as they would with any built-in input. The polyfill achieves this by applying an `aria-labelledby` attribute to the host element and referencing any labels with a `for` attribute corresponding to the host's `id`. A reference to these labels can be found under `this.internals.labels`.
+- The internals interface will have access to the host element's form if one exists under `this.internals.form`.
+- If the element has a name, a refernce to the host element will be saved on the form object.
+
+In addition to the above the `ElementInternals` prototype has access to several form-specific methods including:
+
+- `checkValidity`: Will return the validity state of the form control.
+- `reportValidity`: Will trigger an `invalid` event if the form control is invalid. For the polyfill this method will not trigger the `validationMessage` to show to the user, that is a task left to the consumer.
+- `setFormValue`: Sets the form control's value on the form. This value will be attached to the form's `FormData` method.
+- `setValidity`: Takes two arguments, the first being a partial validity object that will update the control's validity object and the second being an optional validation message (required if the form is invalid). If this object is missing the method will throw an error. If the first argument is an object literal the form will be marked as valid.
+- `validationMessage`: The element's validation message as set by callse to `ElementInternals.prototype.setValidity`.
+- `validity`: The validity controller which is identical to the interface of `HTMLInputElement.prototype.validity`.
+- `willValidate`: Will be `true` if the control is set to participate in a form.
+
+### Accessibility controls
+
+In addition to form controls, `ElementInternals` will also surface several accessibility methods for any element with internals attached. A list of supported properties (and their associated attributes) follows:
+
+- `ariaAtomic`: 'aria-atomic'
+- `ariaAutoComplete`: 'aria-autocomplete'
+- `ariaBusy`: 'aria-busy'
+- `ariaChecked`: 'aria-checked'
+- `ariaColCount`: 'aria-colcount'
+- `ariaConIndex`: 'aria-colindex'
+- `ariaColSpan`: 'aria-colspan'
+- `ariaCurrent`: 'aria-current'
+- `ariaDisabled`: 'aria-disabled'
+- `ariaExpanded`: 'aria-expanded'
+- `ariaHasPopup`: 'aria-haspopup'
+- `ariaHidden`: 'aria-hidden'
+- `ariaKeyShortcuts`: 'aria-keyshortcuts'
+- `ariaLabel`: 'aria-label'
+- `ariaLevel`: 'aria-level'
+- `ariaLive`: 'aria-live'
+- `ariaModal`: 'aria-modal'
+- `ariaMultiLine`: 'aria-multiline'
+- `ariaMultiSelectable`: 'aria-multiselectable'
+- `ariaOrientation`: 'aria-orientation'
+- `ariaPlaceholder`: 'aria-placeholder'
+- `ariaPosInSet`: 'aria-posinset'
+- `ariaPressed`: 'aria-pressed'
+- `ariaReadOnly`: 'aria-readonly'
+- `ariaRelevant`: 'aria-relevant'
+- `ariaRequired`: 'aria-required'
+- `ariaRoleDescription`: 'aria-roledescription'
+- `ariaRowCount`: 'aria-rowcount'
+- `ariaRowIndex`: 'aria-rowindex'
+- `ariaRowSpan`: 'aria-rowspan'
+- `ariaSelected`: 'aria-selected'
+- `ariaSort`: 'aria-sort'
+- `ariaValueMax`: 'aria-valuemax'
+- `ariaValueMin`: 'aria-valuemin'
+- `ariaValueNow`: 'aria-valuenow'
+- `ariaValueText`: 'aria-valuetext'
 
 ## Current limitations
 
