@@ -143,7 +143,7 @@ if (!window.ElementInternals) {
   HTMLElement.prototype.attachShadow = attachShadowObserver;
 
   const documentObserver = new MutationObserver(observerCallback);
-  documentObserver.observe(document.body, observerConfig);
+  documentObserver.observe(document.documentElement, observerConfig);
 
   const formDataOriginal = window.FormData;
 
