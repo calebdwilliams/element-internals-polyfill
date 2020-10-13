@@ -1,11 +1,15 @@
 import { internalsMap, shadowHostsMap, upgradeMap } from './maps.js';
 import { aom } from './aom.js';
 import { initForm, initLabels } from './utils.js';
+import { ICustomElement } from './types.js';
 
 export function observerCallback(mutationList) {
   mutationList.forEach(mutationRecord => {
     const { addedNodes, removedNodes } = mutationRecord;
-    Array.from(addedNodes).forEach(node => {
+    const added = Array.from(addedNodes) as ICustomElement[];
+    const removed = Array.from(removedNodes) as ICustomElement[];
+
+    added.forEach(node => {
       if (internalsMap.has(node)) {
         const internals = internalsMap.get(node);
         const { form } = internals;
@@ -27,7 +31,7 @@ export function observerCallback(mutationList) {
       }
     });
 
-    Array.from(removedNodes).forEach(node => {
+    removed.forEach(node => {
       if (shadowHostsMap.has(node)) {
         const observer = shadowHostsMap.get(node);
         observer.disconnect();
@@ -36,18 +40,8 @@ export function observerCallback(mutationList) {
   })
 }
 
-export function attachShadowObserverfunction(...args) {
-  const shadowRoot = attachShadow.apply(this, args);
-  const observer = new MutationObserver(observerCallback);
-  observer.observe(shadowRoot, {
-    childList: true,
-    subtree: true
-  });
-  return shadowRoot;
-}
-
 export const observer = new MutationObserver(observerCallback);
-export const observerConfig = {
+export const observerConfig: MutationObserverInit = {
   childList: true,
   subtree: true
 };

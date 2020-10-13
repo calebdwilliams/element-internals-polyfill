@@ -1,12 +1,14 @@
 import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
+import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
 const observerConfig = { attributes: true };
 
-const observer = new MutationObserver(mutationsList => {
+const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
   for (const mutation of mutationsList) {
-    const { attributeName, target } = mutation;
+    const attributeName = mutation.attributeName;
+    const target = mutation.target as ICustomElement;
 
-    if (attributeName === 'disabled' && target.constructor.formAssociated) {
+    if (attributeName === 'disabled' && target.constructor['formAssociated']) {
       if (target.formDisabledCallback) {
         target.formDisabledCallback.apply(target, [target.hasAttribute('disabled')]);
       }
@@ -17,10 +19,10 @@ const observer = new MutationObserver(mutationsList => {
 
 /**
  * Recursively get the host root
- * @param {HTMLElement} - The node to find the host root for
+ * @param {Node} - The node to find the host root for
  * @return {DocumentOrShadowRoot}
  */
-export const getHostRoot = node => {
+export const getHostRoot = (node: Node) => {
   if (node instanceof Document) {
     return node;
   }
@@ -37,17 +39,17 @@ export const getHostRoot = node => {
  * @param {HTMLElement} ref - The element to watch
  * @return {MutationObserver}
  */
-export const initRef = (ref) => {
+export const initRef = (ref: ICustomElement) => {
   return observer.observe(ref, observerConfig);
 };
 
 /**
  * Set up labels for the ref
- * @param {HTMLElement} ref - The ref to add labels to
- * @param {NodeList<HTMLLabelElement>} labels - A list of the labels
+ * @param {ICustomElement} ref - The ref to add labels to
+ * @param {LabelsList} labels - A list of the labels
  * @return {void}
  */
-export const initLabels = (ref, labels) => {
+export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
   if (labels.length) {
     Array.from(labels).forEach(label =>
       label.addEventListener('click', ref.focus.bind(ref)));
@@ -100,7 +102,7 @@ export const formResetCallback = event => {
 
   /** Loop over the elements and call formResetCallback if applicable */
   elements.forEach(element => {
-    if (element.constructor.formAssociated && element.formResetCallback) {
+    if ((element.constructor as any).formAssociated && element.formResetCallback) {
       element.formResetCallback.apply(element);
     }
   });
@@ -114,7 +116,7 @@ export const formResetCallback = event => {
  * @param {ElementInternals} internals - The internals for ref
  * @return {void}
  */
-export const initForm = (ref, form, internals) => {
+export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: IElementInternals) => {
   if (form) {
     /** This will be a WeakMap<HTMLFormElement, Set<HTMLElement> */
     const formElements = formElementsMap.get(form);
@@ -124,7 +126,7 @@ export const initForm = (ref, form, internals) => {
       formElements.add(ref);
     } else {
       /** If formElements doesn't exist, create it and add to it */
-      const initSet = new Set();
+      const initSet = new Set<ICustomElement>();
       initSet.add(ref);
       formElementsMap.set(form, initSet);
 
@@ -140,7 +142,7 @@ export const initForm = (ref, form, internals) => {
     formsMap.set(form, { ref, internals });
 
     /** Call formAssociatedCallback if applicable */
-    if (ref.constructor.formAssociated && ref.formAssociatedCallback) {
+    if (ref.constructor['formAssociated'] && ref.formAssociatedCallback) {
       ref.formAssociatedCallback.apply(ref, [form]);
     }
   }

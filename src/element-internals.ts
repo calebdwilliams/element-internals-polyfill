@@ -6,18 +6,56 @@ import {
   shadowHostsMap,
   formElementsMap,
   refValueMap
-} from './maps.js';
-import { initAom } from './aom.js';
-import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils.js';
-import { ValidityState, reconcileValidty, setValid } from './ValidityState.js';
-import { observerCallback, observerConfig } from './mutation-observers.js';
+} from './maps';
+import { initAom } from './aom';
+import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils';
+import { ValidityState, reconcileValidty, setValid } from './ValidityState';
+import { observerCallback, observerConfig } from './mutation-observers';
+import { IElementInternals, ICustomElement, LabelsList } from './types';
 
-class ElementInternals {
+export class ElementInternals implements IElementInternals {
+  ariaAtomic: string;
+  ariaAutoComplete: string;
+  ariaBusy: string;
+  ariaChecked: string;
+  ariaColCount: string;
+  ariaConIndex: string;
+  ariaColSpan: string;
+  ariaCurrent: string;
+  ariaDisabled: string;
+  ariaExpanded: string;
+  ariaHasPopup: string;
+  ariaHidden: string;
+  ariaKeyShortcuts: string;
+  ariaLabel: string;
+  ariaLevel: string;
+  ariaLive: string;
+  ariaModal: string;
+  ariaMultiLine: string;
+  ariaMultiSelectable: string;
+  ariaOrientation: string;
+  ariaPlaceholder: string;
+  ariaPosInSet: string;
+  ariaPressed: string;
+  ariaReadOnly: string;
+  ariaRelevant: string;
+  ariaRequired: string;
+  ariaRoleDescription: string;
+  ariaRowCount: string;
+  ariaRowIndex: string;
+  ariaRowSpan: string;
+  ariaSelected: string;
+  ariaSort: string;
+  ariaValueMax: string;
+  ariaValueMin: string;
+  ariaValueNow: string;
+  ariaValueText: string;
+
   static get isPolyfilled() {
     return true;
   }
 
-  constructor(ref) {
+  constructor(ref: ICustomElement) {
     if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
       throw new TypeError('Illegal constructor');
     }
@@ -34,7 +72,10 @@ class ElementInternals {
     initForm(ref, form, this);
   }
 
-  checkValidity() {
+  /**
+   * Will return true if the element is in a valid state
+   */
+  checkValidity(): boolean {
     const validity = validityMap.get(this);
     const ref = refMap.get(this);
     if (!validity.valid) {
@@ -48,30 +89,34 @@ class ElementInternals {
     return validity.valid;
   }
 
-  get form() {
+  /** The form element the custom element is associated with */
+  get form(): HTMLFormElement {
     const ref = refMap.get(this);
     let form;
-    if (ref && ref.constructor.formAssociated === true) {
+    if (ref.constructor['formAssociated'] === true) {
       form = findParentForm(ref);
     }
     return form;
   }
 
-  get labels() {
+  /** A list of all relative form labels for this element */
+  get labels(): LabelsList {
     const ref = refMap.get(this);
     const id = ref.getAttribute('id');
-    if (id) {
-      const hostRoot = getHostRoot(ref);
+    const hostRoot = getHostRoot(ref);
+    if (hostRoot && id) {
       return hostRoot ? hostRoot.querySelectorAll(`[for=${id}]`) : [];
     }
     return [];
   }
 
-  reportValidity() {
+  /** Will report the elements validity state */
+  reportValidity(): boolean {
     return this.checkValidity();
   }
 
-  setFormValue(value) {
+  /** Sets the element's value within the form */
+  setFormValue(value: string): void {
     if (!this.form) {
       return undefined;
     }
@@ -79,7 +124,14 @@ class ElementInternals {
     refValueMap.set(ref, value);
   }
 
-  setValidity(validityChanges, validationMessage) {
+  /**
+   * Sets the element's validity. The first argument is a partial ValidityState object
+   * reflecting the changes to be made to the element's validity. If the element is invalid,
+   * the second argument sets the element's validition message.
+   *
+   * If the field is valid and a message is specified, the method will throw a TypeError.
+   */
+  setValidity(validityChanges: Partial<globalThis.ValidityState>, validationMessage?: string) {
     const ref = refMap.get(this);
     if (!validityChanges) {
       throw new TypeError('Failed to execute \'setValidity\' on \'ElementInternals\': 1 argument required, but only 0 present.');
@@ -96,24 +148,34 @@ class ElementInternals {
       throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The second argument should not be empty if one or more flags in the first argument are true.`);
     }
     validationMessageMap.set(this, valid ? '' : validationMessage);
-    ref.setAttribute('aria-invalid', !valid);
+    ref.setAttribute('aria-invalid', `${!valid}`);
   }
 
-  get validationMessage() {
+  /** The element's validation message set during a call to ElementInternals.setValidity */
+  get validationMessage(): string {
     return validationMessageMap.get(this);
   }
 
-  get validity() {
+  /** The current validity state of the object */
+  get validity(): globalThis.ValidityState {
     const validity = validityMap.get(this);
     return validity;
   }
 
-  get willValidate() {
+  /** If true the element will participate in a form's constraint validation. */
+  get willValidate(): boolean {
     const ref = refMap.get(this);
+
     if (ref.disabled || ref.hasAttribute('disabled')) {
       return false;
     }
     return true;
+  }
+}
+
+declare global {
+  interface Window {
+    ElementInternals: typeof ElementInternals
   }
 }
 
@@ -128,7 +190,11 @@ if (!window.ElementInternals) {
     return shadowRoot;
   }
 
-  Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
+  /**
+   * Attaches an ElementInternals instance to a custom element. Calling this method
+   * on a built-in element will throw an error.
+   */
+  Object.defineProperty(Element.prototype, 'attachInternals', {
     get() {
       return () => {
         if (this.tagName.indexOf('-') === -1) {
@@ -139,17 +205,17 @@ if (!window.ElementInternals) {
     }
   });
 
-  const attachShadow = HTMLElement.prototype.attachShadow;
-  HTMLElement.prototype.attachShadow = attachShadowObserver;
+  const attachShadow = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = attachShadowObserver;
 
   const documentObserver = new MutationObserver(observerCallback);
   documentObserver.observe(document.documentElement, observerConfig);
 
-  const formDataOriginal = window.FormData;
+  const FormDataOriginal = window.FormData;
 
   class FormData {
-    constructor(form) {
-      const data = new formDataOriginal(form);
+    constructor(form?: HTMLFormElement) {
+      const data = new FormDataOriginal(form);
       if (form && formElementsMap.has(form)) {
         const refs = formElementsMap.get(form);
         refs.forEach(ref => {
@@ -163,5 +229,6 @@ if (!window.ElementInternals) {
     }
   }
 
+  // @ts-ignore
   window.FormData = FormData;
 }

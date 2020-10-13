@@ -6,7 +6,7 @@ import {
   fixtureCleanup,
   html,
 } from '@open-wc/testing';
-import '../dist/element-internals.js';
+import '../dist/index.js';
 
 describe('ElementInternals polyfill behavior', () => {
   describe('accessibility object model', () => {

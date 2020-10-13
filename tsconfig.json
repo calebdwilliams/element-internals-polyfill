@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ESNext",
+    "declaration": true,
+    "declarationDir": "dist",
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "lib": ["dom", "ESNext"],
+  "include": ["./src/**/*"]
+}
