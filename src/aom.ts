@@ -1,6 +1,7 @@
 import { upgradeMap } from './maps.js';
+import { IAom, IElementInternals } from './types';
 
-export const aom = {
+export const aom: IAom = {
   ariaAtomic: 'aria-atomic',
   ariaAutoComplete: 'aria-autocomplete',
   ariaBusy: 'aria-busy',
@@ -39,7 +40,7 @@ export const aom = {
   ariaValueText: 'aria-valuetext'
 };
 
-export const initAom = (ref, internals) => {
+export const initAom = (ref: Element, internals: IElementInternals) => {
   for (let key in aom) {
     internals[key] = null;
 

@@ -1,17 +1,19 @@
+import typescript from '@rollup/plugin-typescript';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
 
-const plugins = [];
+const plugins = [typescript({
+  rootDir: 'src'
+})];
 const config = {
-  input: 'src/element-internals.js',
+  input: 'src/index.ts',
   output: {
     format: 'iife',
-    file: 'dist/element-internals.js'
+    dir: 'dist'
   },
   plugins
 };
 
-console.log(process.env.BUILD)
 if (process.env.BUILD === 'dev') {
   plugins.push([
     serve({

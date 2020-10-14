@@ -5,7 +5,7 @@ import {
   fixtureCleanup,
   html,
 } from '@open-wc/testing';
-import '../dist/element-internals.js';
+import '../dist/index.js';
 
 let callCount = 0;
 

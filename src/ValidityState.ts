@@ -1,18 +1,18 @@
 /** Emulate the browser's default ValidityState object */
-export class ValidityState {
-  constructor() {
-    this.badInput = false;
-    this.customError = false;
-    this.patternMismatch = false;
-    this.rangeOverflow = false;
-    this.rangeUnderflow = false;
-    this.stepMismatch = false;
-    this.tooLong = false;
-    this.tooShort = false;
-    this.typeMismatch = false;
-    this.valid = true;
-    this.valueMissing = false;
+export class ValidityState implements globalThis.ValidityState {
+  badInput = false;
+  customError = false;
+  patternMismatch = false;
+  rangeOverflow = false;
+  rangeUnderflow = false;
+  stepMismatch = false;
+  tooLong = false;
+  tooShort = false;
+  typeMismatch = false;
+  valid = true;
+  valueMissing = false;
 
+  constructor() {
     Object.seal(this);
   }
 }
@@ -22,7 +22,7 @@ export class ValidityState {
  * @param {ValidityState} validityObject - The object to modify
  * @return {ValidityState} - The modified ValidityStateObject
  */
-export const setValid = validityObject => {
+export const setValid = (validityObject: ValidityState): ValidityState => {
   validityObject.badInput = false;
   validityObject.customError = false;
   validityObject.patternMismatch = false;
@@ -43,7 +43,7 @@ export const setValid = validityObject => {
  * @param {Object} - A partial ValidityState object to override the original
  * @return {ValidityState} - The updated ValidityState object
  */
-export const reconcileValidty = (validityObject, newState) => {
+export const reconcileValidty = (validityObject: ValidityState, newState: Partial<ValidityState>): ValidityState => {
   validityObject.valid = isValid(newState);
   Object.keys(newState).forEach(key => validityObject[key] = newState[key]);
   return validityObject;
@@ -54,7 +54,7 @@ export const reconcileValidty = (validityObject, newState) => {
  * @param {Object} - A partial ValidityState object
  * @return {Boolean} - Should the new object be valid
  */
-export const isValid = validityState => {
+export const isValid = (validityState: Partial<ValidityState>): boolean => {
   let valid = true;
   for (let key in validityState) {
     if (key !== 'valid' && validityState[key] !== false) {
