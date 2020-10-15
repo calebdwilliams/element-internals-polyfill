@@ -267,10 +267,6 @@ describe('The ElementInternals polyfill', () => {
       expect([...internals.labels]).to.deep.equal([label]);
     });
 
-    it('will associate the element\'s name with the form', () => {
-      expect(form.foo).to.equal(el);
-    });
-
     it('will dispatch an invalid event on checkValidity if invalid', (done) => {
       el.addEventListener('invalid', event => {
         expect(event).to.exist;

@@ -1,7 +1,7 @@
 import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
-const observerConfig = { attributes: true };
+const observerConfig: MutationObserverInit = { attributes: true };
 
 const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
   for (const mutation of mutationsList) {
@@ -16,13 +16,8 @@ const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
   }
 });
 
-
-/**
- * Recursively get the host root
- * @param {Node} - The node to find the host root for
- * @return {DocumentOrShadowRoot}
- */
-export const getHostRoot = (node: Node) => {
+/** Recursively get the host root */
+export const getHostRoot = (node: Node): Node&ParentNode => {
   if (node instanceof Document) {
     return node;
   }
@@ -36,11 +31,20 @@ export const getHostRoot = (node: Node) => {
 /**
  * Initialize a ref by setting up an attribute observe on it
  * looking for changes to disabled
- * @param {HTMLElement} ref - The element to watch
- * @return {MutationObserver}
+ * @param {ICustomElement} ref - The element to watch
+ * @param {IElementInternals} internals - The element internals instance for the ref
+ * @return {void}
  */
-export const initRef = (ref: ICustomElement) => {
-  return observer.observe(ref, observerConfig);
+export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
+  if (ref.constructor['formAssociated']) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = ref.getAttribute('name');
+    ref.after(input);
+    hiddenInputMap.set(internals, input);
+    console.log(input)
+  }
+  observer.observe(ref, observerConfig);
 };
 
 /**
@@ -68,9 +72,9 @@ export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
  * @param {Event} - The form submit event
  * @return {void}
  */
-export const formSubmitCallback = event => {
+export const formSubmitCallback = (event: Event) => {
   /** Get the Set of elements attached to this form */
-  const elements = formElementsMap.get(event.target);
+  const elements = formElementsMap.get(event.target as HTMLFormElement);
 
   /** If the Set has items, continue */
   if (elements.size) {
@@ -96,9 +100,9 @@ export const formSubmitCallback = event => {
  * inputs and call formResetCallback if applicable
  * @return {void}
  */
-export const formResetCallback = event => {
+export const formResetCallback = (event: Event) => {
   /** Get the Set of elements attached to this form */
-  const elements = formElementsMap.get(event.target);
+  const elements = formElementsMap.get(event.target as HTMLFormElement);
 
   /** Loop over the elements and call formResetCallback if applicable */
   elements.forEach(element => {
@@ -135,10 +139,6 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
       form.addEventListener('reset', formResetCallback);
     }
 
-    /** Save the element on the form instance if it has a name */
-    if (ref.hasAttribute('name')) {
-      form[ref.getAttribute('name')] = ref;
-    }
     formsMap.set(form, { ref, internals });
 
     /** Call formAssociatedCallback if applicable */
@@ -153,7 +153,7 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
  * @param {Element} elem - The element to look for a parent form
  * @return {HTMLFormElement|null} - The parent form, if one exists
  */
-export const findParentForm = elem => {
+export const findParentForm = (elem) => {
   let parent = elem.parentNode;
   if (parent && parent.tagName !== 'FORM') {
     parent = findParentForm(parent);

@@ -1,4 +1,4 @@
-import { internalsMap, shadowHostsMap, upgradeMap } from './maps.js';
+import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap } from './maps.js';
 import { aom } from './aom.js';
 import { initForm, initLabels } from './utils.js';
 import { ICustomElement } from './types.js';
@@ -10,6 +10,7 @@ export function observerCallback(mutationList) {
     const removed = Array.from(removedNodes) as ICustomElement[];
 
     added.forEach(node => {
+      /** Allows for dynamic addition of elements to forms */
       if (internalsMap.has(node)) {
         const internals = internalsMap.get(node);
         const { form } = internals;
@@ -18,13 +19,13 @@ export function observerCallback(mutationList) {
         initLabels(node, internals.labels);
       }
 
+      /** Upgrade the accessibility information on any previously connected */
       if (upgradeMap.has(node)) {
         const internals = upgradeMap.get(node);
         const aomKeys = Object.keys(aom);
         aomKeys
           .filter(key => internals[key] !== null)
           .forEach(key => {
-            console.log({key})
             node.setAttribute(aom[key], internals[key]);
           });
         upgradeMap.delete(node);
@@ -32,6 +33,12 @@ export function observerCallback(mutationList) {
     });
 
     removed.forEach(node => {
+      const internals = internalsMap.get(node);
+      /** Clean up any hidden input elements left after an element is disconnected */
+      if (internals && hiddenInputMap.get(internals)) {
+        hiddenInputMap.get(internals).remove();
+      }
+      /** Disconnect any unneeded MutationObservers */
       if (shadowHostsMap.has(node)) {
         const observer = shadowHostsMap.get(node);
         observer.disconnect();

@@ -9,6 +9,7 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
+    "pretest": "npm run build",
     "test": "karma start karma.conf.js --coverage",
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
@@ -68,7 +69,7 @@
     "rollup-plugin-livereload": "^1.2.0",
     "rollup-plugin-serve": "^1.0.1",
     "sinon": "^9.0.2",
-    "standard-version": "^8.0.1",
+    "standard-version": "^9.0.0",
     "tsc": "^1.20150623.0",
     "typescript": "^4.0.3"
   },

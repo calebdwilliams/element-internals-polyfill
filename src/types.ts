@@ -4,7 +4,7 @@ export interface IAom {
   ariaBusy: string;
   ariaChecked: string;
   ariaColCount: string;
-  ariaConIndex: string;
+  ariaColIndex: string;
   ariaColSpan: string;
   ariaCurrent: string;
   ariaDisabled: string;
@@ -39,14 +39,14 @@ export interface IAom {
 
 export interface IElementInternals extends IAom {
   checkValidity: () => boolean;
-  readonly form: HTMLFormElement;
-  readonly labels: NodeListOf<HTMLLabelElement>|[];
-  readonly reportValidity: () => boolean;
+  form: HTMLFormElement;
+  labels: NodeListOf<HTMLLabelElement>|[];
+  reportValidity: () => boolean;
   setFormValue: (value: string) => void;
   setValidity: (validityChanges: Partial<globalThis.ValidityState>, validationMessage?: string) => void;
   validationMessage: string;
-  readonly validity: globalThis.ValidityState;
-  readonly willValidate: boolean;
+  validity: globalThis.ValidityState;
+  willValidate: boolean;
 }
 
 export interface ICustomElement extends HTMLElement {

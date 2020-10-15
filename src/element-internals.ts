@@ -5,7 +5,8 @@ import {
   validationMessageMap,
   shadowHostsMap,
   formElementsMap,
-  refValueMap
+  refValueMap,
+  hiddenInputMap
 } from './maps';
 import { initAom } from './aom';
 import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils';
@@ -19,7 +20,7 @@ export class ElementInternals implements IElementInternals {
   ariaBusy: string;
   ariaChecked: string;
   ariaColCount: string;
-  ariaConIndex: string;
+  ariaColIndex: string;
   ariaColSpan: string;
   ariaCurrent: string;
   ariaDisabled: string;
@@ -67,7 +68,7 @@ export class ElementInternals implements IElementInternals {
     initAom(ref, this);
     Object.seal(this);
 
-    initRef(ref);
+    initRef(ref, this);
     initLabels(ref, labels);
     initForm(ref, form, this);
   }
@@ -117,6 +118,10 @@ export class ElementInternals implements IElementInternals {
 
   /** Sets the element's value within the form */
   setFormValue(value: string): void {
+    const hiddenInput = hiddenInputMap.get(this);
+    if (hiddenInput) {
+      hiddenInput.value = value;
+    }
     if (!this.form) {
       return undefined;
     }

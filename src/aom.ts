@@ -7,7 +7,7 @@ export const aom: IAom = {
   ariaBusy: 'aria-busy',
   ariaChecked: 'aria-checked',
   ariaColCount: 'aria-colcount',
-  ariaConIndex: 'aria-colindex',
+  ariaColIndex: 'aria-colindex',
   ariaColSpan: 'aria-colspan',
   ariaCurrent: 'aria-current',
   ariaDisabled: 'aria-disabled',
