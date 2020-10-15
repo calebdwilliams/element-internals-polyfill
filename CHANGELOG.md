@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.23...v0.1.0) (2020-10-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* update how input references are added to forms
+
+### Features
+
+* add hidden inputs back to polyfill ([9898822](https://github.com/calebdwilliams/element-internals-polyfill/commit/989882234578c26f69e00fb270ae1d5c38690cd4))
+
 ### [0.0.23](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.21...v0.0.23) (2020-10-14)
 
 ### [0.0.22](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.21...v0.0.22) (2020-07-09)
