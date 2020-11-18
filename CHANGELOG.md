@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.0...v0.1.1) (2020-11-18)
+
+
+### Bug Fixes
+
+* remove console.log() ([b7292b5](https://github.com/calebdwilliams/element-internals-polyfill/commit/b7292b52ee2baaf14a43436c41153c4f9179cbb1))
+
 ## [0.1.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.0.23...v0.1.0) (2020-10-15)
 
 
