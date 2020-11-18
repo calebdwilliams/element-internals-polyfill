@@ -42,7 +42,6 @@ export const initRef = (ref: ICustomElement, internals: IElementInternals): void
     input.name = ref.getAttribute('name');
     ref.after(input);
     hiddenInputMap.set(internals, input);
-    console.log(input)
   }
   observer.observe(ref, observerConfig);
 };
