@@ -117,7 +117,7 @@ export class ElementInternals implements IElementInternals {
   }
 
   /** Sets the element's value within the form */
-  setFormValue(value: string): void {
+  setFormValue(value: string | null): void {
     const hiddenInput = hiddenInputMap.get(this);
     if (hiddenInput) {
       hiddenInput.value = value;
@@ -126,7 +126,11 @@ export class ElementInternals implements IElementInternals {
       return undefined;
     }
     const ref = refMap.get(this);
-    refValueMap.set(ref, value);
+    if (value === null){
+      refValueMap.delete(ref);
+    }else{
+      refValueMap.set(ref, value);
+    }
   }
 
   /**
