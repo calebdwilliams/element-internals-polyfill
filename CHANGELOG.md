@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.1...v0.1.2) (2021-02-06)
+
+
+### Bug Fixes
+
+* **formAssociatedCallback:** make sure internals are available when formAssociatedCallback is called ([df9effa](https://github.com/calebdwilliams/element-internals-polyfill/commit/df9effa3d01c4b88a1de5ece45acdddc7df4e983))
+* **setValidity:** added missing anchor in method signature. ([0290325](https://github.com/calebdwilliams/element-internals-polyfill/commit/029032515dc1ba3ea250fb140f9df3eb67cbb476))
+
 ### [0.1.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.0...v0.1.1) (2020-11-18)
 
 
