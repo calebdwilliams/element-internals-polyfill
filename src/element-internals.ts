@@ -136,7 +136,7 @@ export class ElementInternals implements IElementInternals {
    *
    * If the field is valid and a message is specified, the method will throw a TypeError.
    */
-  setValidity(validityChanges: Partial<globalThis.ValidityState>, validationMessage?: string) {
+  setValidity(validityChanges: Partial<globalThis.ValidityState>, validationMessage?: string, anchor?: HTMLElement) {
     const ref = refMap.get(this);
     if (!validityChanges) {
       throw new TypeError('Failed to execute \'setValidity\' on \'ElementInternals\': 1 argument required, but only 0 present.');
