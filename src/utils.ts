@@ -142,7 +142,9 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
 
     /** Call formAssociatedCallback if applicable */
     if (ref.constructor['formAssociated'] && ref.formAssociatedCallback) {
-      ref.formAssociatedCallback.apply(ref, [form]);
+      setTimeout(() => {
+        ref.formAssociatedCallback.apply(ref, [form]);
+      }, 0);
     }
   }
 };

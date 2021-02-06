@@ -8,6 +8,7 @@ import {
 import '../dist/index.js';
 
 let callCount = 0;
+let internalsAvailableInFormAssociatedCallback = false;
 
 class CustomElement extends HTMLElement {
   static get formAssociated() {
@@ -57,6 +58,10 @@ class CustomElement extends HTMLElement {
 
   get value() {
     return this._value;
+  }
+
+  formAssociatedCallback() {
+    internalsAvailableInFormAssociatedCallback = !!this.internals;
   }
 
   formDisabledCallback() {
@@ -277,5 +282,9 @@ describe('The ElementInternals polyfill', () => {
       }, 'This field is required');
       el.internals.checkValidity();
     });
+
+    it('will call formAssociatedCallback after internals have been set', () => {
+      expect(internalsAvailableInFormAssociatedCallback).to.be.true;
+    })
   });
 });
