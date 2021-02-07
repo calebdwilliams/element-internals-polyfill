@@ -42,7 +42,7 @@ export interface IElementInternals extends IAom {
   form: HTMLFormElement;
   labels: NodeListOf<HTMLLabelElement>|[];
   reportValidity: () => boolean;
-  setFormValue: (value: string) => void;
+  setFormValue: (value: string | FormData) => void;
   setValidity: (validityChanges: Partial<globalThis.ValidityState>, validationMessage?: string) => void;
   validationMessage: string;
   validity: globalThis.ValidityState;

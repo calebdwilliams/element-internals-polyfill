@@ -123,12 +123,14 @@ export class ElementInternals implements IElementInternals {
       return undefined;
     }
     removeHiddenInputs(this);
-    if (typeof value === "string") {
-      const hiddenInput = createHiddenInput(ref, this);
-      hiddenInput.value = value;
+    if (typeof value === 'string') {
+      if (ref.getAttribute('name')) {
+        const hiddenInput = createHiddenInput(ref, this);
+        hiddenInput.value = value;
+      }
     } else if (value != null) {
       value.forEach((formDataValue, formDataKey) => {
-        if (typeof formDataValue === "string") {
+        if (typeof formDataValue === 'string') {
           const hiddenInput = createHiddenInput(ref, this);
           hiddenInput.name = formDataKey;
           hiddenInput.value = formDataValue;
@@ -235,11 +237,17 @@ if (!window.ElementInternals) {
         refs.forEach(ref => {
           if (ref.getAttribute('name')) {
             const value = refValueMap.get(ref);
-            if (typeof value === "string") {
+            if (typeof value === 'string') {
               data.set(ref.getAttribute('name'), value);
             } else if (value != null) {
+              const keysAdded = [];
               value.forEach((formDataValue, formDataKey) => {
-                data.set(formDataKey, formDataValue);
+                if (keysAdded.includes(formDataKey)) {
+                  data.append(formDataKey, formDataValue);
+                } else {
+                  data.set(formDataKey, formDataValue);
+                  keysAdded.push(formDataKey);
+                }
               })
             }
           }
