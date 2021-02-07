@@ -286,5 +286,38 @@ describe('The ElementInternals polyfill', () => {
     it('will call formAssociatedCallback after internals have been set', () => {
       expect(internalsAvailableInFormAssociatedCallback).to.be.true;
     })
+
+    it('will not include null values set via setFormValue', () => {
+      internals.setFormValue("test");
+      internals.setFormValue(null);
+      const output = new FormData(internals.form);
+      expect(Array.from(output.keys()).length).to.equal(0);
+    })
+
+    it('will not include undefined values set via setFormValue', () => {
+      internals.setFormValue("test");
+      internals.setFormValue(undefined);
+      const output = new FormData(internals.form);
+      expect(Array.from(output.keys()).length).to.equal(0);
+    })
+
+    it('will include multiple form values passed via FormData to setFormValue', () => {
+      let input;
+      let output;
+      input = new FormData();
+      input.set("first", "1");
+      input.set("second", "2");
+      internals.setFormValue(input);
+      output = new FormData(internals.form);
+      expect(Array.from(output.keys()).length).to.equal(2);
+      expect(output.get("first")).to.equal("1");
+      expect(output.get("second")).to.equal("2");
+      input = new FormData();
+      input.set("override", "3");
+      internals.setFormValue(input);
+      output = new FormData(internals.form);
+      expect(Array.from(output.keys()).length).to.equal(1);
+      expect(output.get("override")).to.equal("3");
+    })
   });
 });
