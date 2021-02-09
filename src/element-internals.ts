@@ -6,7 +6,8 @@ import {
   shadowHostsMap,
   formElementsMap,
   refValueMap,
-  hiddenInputMap
+  hiddenInputMap,
+  shadowRootMap
 } from './maps';
 import { initAom } from './aom';
 import { getHostRoot, initRef, initLabels, initForm, findParentForm, createHiddenInput, removeHiddenInputs } from './utils';
@@ -167,6 +168,15 @@ export class ElementInternals implements IElementInternals {
     ref.setAttribute('aria-invalid', `${!valid}`);
   }
 
+  get shadowRoot(): ShadowRoot | null {
+    const ref = refMap.get(this);
+    const shadowRoot = shadowRootMap.get(ref);
+    if (shadowRoot) {
+      return shadowRootMap.get(ref);
+    }
+    return null;
+  }
+
   /** The element's validation message set during a call to ElementInternals.setValidity */
   get validationMessage(): string {
     return validationMessageMap.get(this);
@@ -201,6 +211,7 @@ if (!window.ElementInternals) {
   function attachShadowObserver(...args) {
     const shadowRoot = attachShadow.apply(this, args);
     const observer = new MutationObserver(observerCallback);
+    shadowRootMap.set(this, shadowRoot);
     observer.observe(shadowRoot, observerConfig);
     shadowHostsMap.set(this, observer);
     return shadowRoot;
@@ -226,37 +237,4 @@ if (!window.ElementInternals) {
 
   const documentObserver = new MutationObserver(observerCallback);
   documentObserver.observe(document.documentElement, observerConfig);
-
-  const FormDataOriginal = window.FormData;
-
-  class FormData {
-    constructor(form?: HTMLFormElement) {
-      const data = new FormDataOriginal(form);
-      if (form && formElementsMap.has(form)) {
-        const refs = formElementsMap.get(form);
-        refs.forEach(ref => {
-          if (ref.getAttribute('name')) {
-            const value = refValueMap.get(ref);
-            if (typeof value === 'string') {
-              data.set(ref.getAttribute('name'), value);
-            } else if (value != null) {
-              const keysAdded = [];
-              value.forEach((formDataValue, formDataKey) => {
-                if (keysAdded.includes(formDataKey)) {
-                  data.append(formDataKey, formDataValue);
-                } else {
-                  data.set(formDataKey, formDataValue);
-                  keysAdded.push(formDataKey);
-                }
-              })
-            }
-          }
-        });
-      }
-      return data;
-    }
-  }
-
-  // @ts-ignore
-  window.FormData = FormData;
 }

@@ -336,6 +336,39 @@ describe('The ElementInternals polyfill', () => {
       const output = new FormData(form);
       expect(Array.from(output.keys()).length).to.equal(1);
       expect(output.get('formdata')).to.equal('works');
-    })
+    });
+
+    it('saves a reference to all shadow roots', () => {
+      expect(internals.shadowRoot).to.equal(el.shadowRoot);
+    });
+  });
+
+  describe('closed shadow root element', () => {
+    let shadowRoot;
+    let el;
+    let internals;
+
+    class ClosedRoot extends HTMLElement {
+      constructor() {
+        super();
+        shadowRoot = this.attachShadow({ mode: 'closed' });
+        this.internals = this.attachInternals();
+      }
+    }
+
+    customElements.define('closed-root', ClosedRoot);
+
+    beforeEach(async () => {
+      el = await fixture(html`<closed-root></closed-root>`);
+      internals = el.internals;
+    });
+
+    afterEach(async () => {
+      await fixtureCleanup(el);
+    });
+
+    it('maintains a reference to closed shadow roots', () => {
+      expect(internals.shadowRoot).to.equal(shadowRoot);
+    });
   });
 });

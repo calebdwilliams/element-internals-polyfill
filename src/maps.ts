@@ -34,3 +34,6 @@ export const refValueMap = new WeakMap<ICustomElement, any>();
 
 /** Elements that need to be upgraded once added to the DOM */
 export const upgradeMap = new WeakMap<Element, IElementInternals>();
+
+/** Save references to shadow roots for inclusion in internals instance */
+export const shadowRootMap = new WeakMap<ICustomElement, ShadowRoot>();
