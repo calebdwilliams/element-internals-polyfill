@@ -29,6 +29,34 @@ export const getHostRoot = (node: Node): Node&ParentNode => {
 };
 
 /**
+ * Removes all hidden inputs for the given element internals instance
+ * @param {IElementInternals} internals - The element internals instance
+ * @return {void}
+ */
+export const removeHiddenInputs = (internals: IElementInternals): void => {
+  const hiddenInputs = hiddenInputMap.get(internals);
+  hiddenInputs.forEach(hiddenInput => {
+    hiddenInput.remove();
+  });
+  hiddenInputMap.set(internals, []);
+}
+
+/**
+ * Creates a hidden input for the given ref
+ * @param {ICustomElement} ref - The element to watch
+ * @param {IElementInternals} internals - The element internals instance for the ref
+ * @return {HTMLInputElement} The hidden input
+ */
+export const createHiddenInput = (ref: ICustomElement, internals: IElementInternals): HTMLInputElement | null => {
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = ref.getAttribute('name');
+  ref.after(input);
+  hiddenInputMap.get(internals).push(input);
+  return input;
+}
+
+/**
  * Initialize a ref by setting up an attribute observe on it
  * looking for changes to disabled
  * @param {ICustomElement} ref - The element to watch
@@ -36,13 +64,7 @@ export const getHostRoot = (node: Node): Node&ParentNode => {
  * @return {void}
  */
 export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
-  if (ref.constructor['formAssociated']) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = ref.getAttribute('name');
-    ref.after(input);
-    hiddenInputMap.set(internals, input);
-  }
+  hiddenInputMap.set(internals, []);
   observer.observe(ref, observerConfig);
 };
 

@@ -12,7 +12,7 @@ export const refMap = new WeakMap<IElementInternals, ICustomElement>();
 export const validityMap = new WeakMap<IElementInternals, ValidityState>();
 
 /** Use an ElementInternals instance to get its attached input[type="hidden"] */
-export const hiddenInputMap = new WeakMap<IElementInternals, HTMLInputElement>();
+export const hiddenInputMap = new WeakMap<IElementInternals, HTMLInputElement[]>();
 
 /** Use a custom element to get its attached ElementInternals instance */
 export const internalsMap = new WeakMap<ICustomElement, IElementInternals>();

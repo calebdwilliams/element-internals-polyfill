@@ -9,7 +9,7 @@ import {
   hiddenInputMap
 } from './maps';
 import { initAom } from './aom';
-import { getHostRoot, initRef, initLabels, initForm, findParentForm } from './utils';
+import { getHostRoot, initRef, initLabels, initForm, findParentForm, createHiddenInput, removeHiddenInputs } from './utils';
 import { ValidityState, reconcileValidty, setValid } from './ValidityState';
 import { observerCallback, observerConfig } from './mutation-observers';
 import { IElementInternals, ICustomElement, LabelsList } from './types';
@@ -117,15 +117,26 @@ export class ElementInternals implements IElementInternals {
   }
 
   /** Sets the element's value within the form */
-  setFormValue(value: string): void {
-    const hiddenInput = hiddenInputMap.get(this);
-    if (hiddenInput) {
-      hiddenInput.value = value;
-    }
-    if (!this.form) {
+  setFormValue(value: string | FormData): void {
+    const ref = refMap.get(this);
+    if (!this.form || !ref.constructor['formAssociated']) {
       return undefined;
     }
-    const ref = refMap.get(this);
+    removeHiddenInputs(this);
+    if (typeof value === 'string') {
+      if (ref.getAttribute('name')) {
+        const hiddenInput = createHiddenInput(ref, this);
+        hiddenInput.value = value;
+      }
+    } else if (value != null) {
+      value.forEach((formDataValue, formDataKey) => {
+        if (typeof formDataValue === 'string') {
+          const hiddenInput = createHiddenInput(ref, this);
+          hiddenInput.name = formDataKey;
+          hiddenInput.value = formDataValue;
+        }
+      });
+    }
     refValueMap.set(ref, value);
   }
 
@@ -226,7 +237,19 @@ if (!window.ElementInternals) {
         refs.forEach(ref => {
           if (ref.getAttribute('name')) {
             const value = refValueMap.get(ref);
-            data.set(ref.getAttribute('name'), value);
+            if (typeof value === 'string') {
+              data.set(ref.getAttribute('name'), value);
+            } else if (value != null) {
+              const keysAdded = [];
+              value.forEach((formDataValue, formDataKey) => {
+                if (keysAdded.includes(formDataKey)) {
+                  data.append(formDataKey, formDataValue);
+                } else {
+                  data.set(formDataKey, formDataValue);
+                  keysAdded.push(formDataKey);
+                }
+              })
+            }
           }
         });
       }

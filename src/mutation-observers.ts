@@ -1,6 +1,6 @@
 import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap } from './maps.js';
 import { aom } from './aom.js';
-import { initForm, initLabels } from './utils.js';
+import { removeHiddenInputs, initForm, initLabels } from './utils.js';
 import { ICustomElement } from './types.js';
 
 export function observerCallback(mutationList) {
@@ -36,7 +36,7 @@ export function observerCallback(mutationList) {
       const internals = internalsMap.get(node);
       /** Clean up any hidden input elements left after an element is disconnected */
       if (internals && hiddenInputMap.get(internals)) {
-        hiddenInputMap.get(internals).remove();
+        removeHiddenInputs(internals);
       }
       /** Disconnect any unneeded MutationObservers */
       if (shadowHostsMap.has(node)) {

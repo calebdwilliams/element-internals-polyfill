@@ -130,19 +130,21 @@ describe('The ElementInternals polyfill', () => {
   });
 
   describe('inside a custom element with a form', () => {
-    let form, el, label, button, internals;
+    let form, el, noname, label, button, internals;
 
     beforeEach(async () => {
       form = await fixture(html`
         <form id="form">
           <label for="foo">Label text</label>
           <test-el name="foo" id="foo"></test-el>
+          <test-el id="noname"></test-el>
           <button type="submit">Submit</button>
         </form>
       `);
       callCount = 0;
       label = form.querySelector('label');
-      el = form.querySelector('test-el');
+      el = form.querySelector('test-el[id=foo]');
+      noname = form.querySelector('test-el[id=noname]');
       button = form.querySelector('button');
       internals = el.internals;
     });
@@ -254,7 +256,7 @@ describe('The ElementInternals polyfill', () => {
       // Lifecycle methods are stripped off at definition time
       // and added elsewhere so we can't use a spy. Instead
       // we're going to look for a side-effect
-      expect(callCount).to.equal(1);
+      expect(callCount).to.equal(2);
     });
 
     it('will cancel form submission if invalid', (done) => {
@@ -285,6 +287,55 @@ describe('The ElementInternals polyfill', () => {
 
     it('will call formAssociatedCallback after internals have been set', () => {
       expect(internalsAvailableInFormAssociatedCallback).to.be.true;
+    })
+
+    it('will not include null values set via setFormValue', () => {
+      internals.setFormValue('test');
+      internals.setFormValue(null);
+      const output = new FormData(form);
+      expect(Array.from(output.keys()).length).to.equal(0);
+    })
+
+    it('will not include undefined values set via setFormValue', () => {
+      internals.setFormValue('test');
+      internals.setFormValue(undefined);
+      const output = new FormData(form);
+      expect(Array.from(output.keys()).length).to.equal(0);
+    })
+
+    it('will include multiple form values passed via FormData to setFormValue', () => {
+      let input;
+      let output;
+      input = new FormData();
+      input.set('first', '1');
+      input.set('second', '2');
+      input.append('second', '22'); // Multi-value keys should also work
+      internals.setFormValue(input);
+      output = new FormData(form);
+      expect(Array.from(output.values()).length).to.equal(3);
+      expect(output.get('first')).to.equal('1');
+      expect(output.getAll('second').length).to.equal(2);
+      input = new FormData();
+      input.set('override', '3');
+      internals.setFormValue(input);
+      output = new FormData(form);
+      expect(Array.from(output.keys()).length).to.equal(1);
+      expect(output.get('override')).to.equal('3');
+    })
+
+    it('will not include form values from elements without a name', () => {
+      noname.internals.setFormValue('noop');
+      const output = new FormData(form);
+      expect(Array.from(output.keys()).length).to.equal(0);
+    })
+
+    it('will include form values from elements without a name if set with FormData', () => {
+      const formData = new FormData();
+      formData.set('formdata', 'works');
+      noname.internals.setFormValue(formData);
+      const output = new FormData(form);
+      expect(Array.from(output.keys()).length).to.equal(1);
+      expect(output.get('formdata')).to.equal('works');
     })
   });
 });
