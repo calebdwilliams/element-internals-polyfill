@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.2...v0.1.3) (2021-02-09)
+
+
+### Features
+
+* **setFormValue:** Add support for FormData to allow settings multiple form values ([a0b2890](https://github.com/calebdwilliams/element-internals-polyfill/commit/a0b2890365ccbc8d2c79073bdf32f1679e60aa0f))
+
 ### [0.1.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.1...v0.1.2) (2021-02-06)
 
 
