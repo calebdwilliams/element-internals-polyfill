@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.5...v0.1.6) (2021-02-10)
+
+
+### Bug Fixes
+
+* **formSubmitCallback:** elements now report validity when a form is submitted ([01b2499](https://github.com/calebdwilliams/element-internals-polyfill/commit/01b249956f3874f54e3b59db5184c0012ee8c324))
+
 ### [0.1.5](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.4...v0.1.5) (2021-02-10)
 
 
