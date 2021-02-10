@@ -19,9 +19,14 @@ class CustomElement extends HTMLElement {
     super();
     const root = this.attachShadow({ mode: 'open' });
     this.internals = this.attachInternals();
-    root.innerHTML = 'html';
+    root.innerHTML = '<input>';
 
     this._value = '';
+  }
+
+  connectedCallback() {
+    this.tabIndex = -1;
+    this.input = this.shadowRoot.querySelector('input');
   }
 
   set disabled(disabled) {
@@ -340,6 +345,14 @@ describe('The ElementInternals polyfill', () => {
 
     it('saves a reference to all shadow roots', () => {
       expect(internals.shadowRoot).to.equal(el.shadowRoot);
+    });;
+
+    it('will focus the element if validated with anchor', async () => {
+      internals.setValidity({
+        customError: true
+      }, 'Error message', el.input);
+      internals.reportValidity();
+      expect(document.activeElement).to.equal(el);
     });
   });
 

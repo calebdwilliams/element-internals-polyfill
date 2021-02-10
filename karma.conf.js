@@ -26,7 +26,8 @@ module.exports = config => {
         usePhantomJS: false,
         preferHeadless: true,
         postDetection(availableBrowsers) {
-          return availableBrowsers.filter(browser => browser !== 'SafariTechPreview');
+          console.log(availableBrowsers)
+          return availableBrowsers.filter(browser => !['ChromeCanaryHeadless', 'SafariTechPreview'].includes(browser));
         }
       },
 

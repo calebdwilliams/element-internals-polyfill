@@ -37,3 +37,6 @@ export const upgradeMap = new WeakMap<Element, IElementInternals>();
 
 /** Save references to shadow roots for inclusion in internals instance */
 export const shadowRootMap = new WeakMap<ICustomElement, ShadowRoot>();
+
+/** Save a refernce to the internals' validation anchor */
+export const validationAnchorMap = new WeakMap<IElementInternals, HTMLElement>();

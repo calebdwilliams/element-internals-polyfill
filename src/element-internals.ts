@@ -7,7 +7,8 @@ import {
   formElementsMap,
   refValueMap,
   hiddenInputMap,
-  shadowRootMap
+  shadowRootMap,
+  validationAnchorMap
 } from './maps';
 import { initAom } from './aom';
 import { getHostRoot, initRef, initLabels, initForm, findParentForm, createHiddenInput, removeHiddenInputs } from './utils';
@@ -114,7 +115,17 @@ export class ElementInternals implements IElementInternals {
 
   /** Will report the elements validity state */
   reportValidity(): boolean {
-    return this.checkValidity();
+    const valid =  this.checkValidity();
+    const anchor = validationAnchorMap.get(this);
+    const ref = refMap.get(this);
+    if (anchor && !ref.constructor['formAssociated']) {
+      throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
+    }
+    if (!valid && anchor) {
+      ref.focus();
+      anchor.focus();
+    }
+    return valid;
   }
 
   /** Sets the element's value within the form */
@@ -153,6 +164,7 @@ export class ElementInternals implements IElementInternals {
     if (!validityChanges) {
       throw new TypeError('Failed to execute \'setValidity\' on \'ElementInternals\': 1 argument required, but only 0 present.');
     }
+    validationAnchorMap.set(this, anchor);
     const validity = validityMap.get(this);
     if (Object.keys(validityChanges).length === 0) {
       setValid(validity);
