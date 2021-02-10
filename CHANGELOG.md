@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.4...v0.1.5) (2021-02-10)
+
+
+### Features
+
+* **validation anchor:** add validation anchor behavior ([4cc4631](https://github.com/calebdwilliams/element-internals-polyfill/commit/4cc4631cf0f97d5f57554c555689457bb227b4bf))
+
 ### [0.1.4](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.3...v0.1.4) (2021-02-09)
 
 
