@@ -104,7 +104,7 @@ export const formSubmitCallback = (event: Event) => {
     const validityList = nodes
       .map(node => {
         const internals = internalsMap.get(node);
-        return internals.checkValidity();
+        return internals.reportValidity();
       });
 
     /** If any node is false, stop the event */
