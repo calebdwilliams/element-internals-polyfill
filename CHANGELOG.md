@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.6...v0.1.7) (2021-02-11)
+
+
+### Bug Fixes
+
+* polyfill accepts non-string values like Chrome ([9ac948e](https://github.com/calebdwilliams/element-internals-polyfill/commit/9ac948e78a6ee7403f0d3515c5c8181b34bc366e))
+
 ### [0.1.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.5...v0.1.6) (2021-02-10)
 
 
