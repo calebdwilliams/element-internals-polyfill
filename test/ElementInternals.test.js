@@ -292,21 +292,21 @@ describe('The ElementInternals polyfill', () => {
 
     it('will call formAssociatedCallback after internals have been set', () => {
       expect(internalsAvailableInFormAssociatedCallback).to.be.true;
-    })
+    });
 
     it('will not include null values set via setFormValue', () => {
       internals.setFormValue('test');
       internals.setFormValue(null);
       const output = new FormData(form);
       expect(Array.from(output.keys()).length).to.equal(0);
-    })
+    });
 
     it('will not include undefined values set via setFormValue', () => {
       internals.setFormValue('test');
       internals.setFormValue(undefined);
       const output = new FormData(form);
       expect(Array.from(output.keys()).length).to.equal(0);
-    })
+    });
 
     it('will include multiple form values passed via FormData to setFormValue', () => {
       let input;
@@ -326,13 +326,13 @@ describe('The ElementInternals polyfill', () => {
       output = new FormData(form);
       expect(Array.from(output.keys()).length).to.equal(1);
       expect(output.get('override')).to.equal('3');
-    })
+    });
 
     it('will not include form values from elements without a name', () => {
       noname.internals.setFormValue('noop');
       const output = new FormData(form);
       expect(Array.from(output.keys()).length).to.equal(0);
-    })
+    });
 
     it('will include form values from elements without a name if set with FormData', () => {
       const formData = new FormData();
@@ -353,6 +353,13 @@ describe('The ElementInternals polyfill', () => {
       }, 'Error message', el.input);
       internals.reportValidity();
       expect(document.activeElement).to.equal(el);
+    });
+
+    if('will accept non strings', async () => {
+      internals.setFormValue(['a', 'b']);
+      expect(
+        new FormData(internals.form).get('foo')
+      ).to.equal('a,b');
     });
   });
 

@@ -1,8 +1,11 @@
+import 'https://cdn.skypack.dev/construct-style-sheets-polyfill';
+import './x-array.js';
+import './address.js';
+
 const form = document.getElementById('form');
 
 form.addEventListener('submit', event => {
-  console.log(event);
-  // event.preventDefault();
+  event.preventDefault();
 
   const formData = new FormData(event.target);
   const formValue = {};
