@@ -135,12 +135,12 @@ export class ElementInternals implements IElementInternals {
       return undefined;
     }
     removeHiddenInputs(this);
-    if (value && !(value instanceof FormData)) {
+    if (value != null && !(value instanceof FormData)) {
       if (ref.getAttribute('name')) {
         const hiddenInput = createHiddenInput(ref, this);
         hiddenInput.value = value;
       }
-    } else if (value && value instanceof FormData) {
+    } else if (value != null && value instanceof FormData) {
       value.forEach((formDataValue, formDataKey) => {
         if (typeof formDataValue === 'string') {
           const hiddenInput = createHiddenInput(ref, this);

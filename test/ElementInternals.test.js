@@ -355,12 +355,17 @@ describe('The ElementInternals polyfill', () => {
       expect(document.activeElement).to.equal(el);
     });
 
-    if('will accept non strings', async () => {
+    it('will accept non strings', async () => {
       internals.setFormValue(['a', 'b']);
       expect(
         new FormData(internals.form).get('foo')
       ).to.equal('a,b');
     });
+
+    it('will accept empty strings', () => {
+      internals.setFormValue('');
+      expect(new FormData(internals.form).get('foo')).to.equal('');
+    })
   });
 
   describe('closed shadow root element', () => {
