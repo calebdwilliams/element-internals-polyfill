@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.7...v0.1.8) (2021-02-19)
+
+
+### Bug Fixes
+
+* **setFormValue:** accept empty strings like Chrome ([#23](https://github.com/calebdwilliams/element-internals-polyfill/issues/23)) ([8f41892](https://github.com/calebdwilliams/element-internals-polyfill/commit/8f41892f6de7c494be880bcf193870a3c519ee5c))
+
 ### [0.1.7](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.6...v0.1.7) (2021-02-11)
 
 
