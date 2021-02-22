@@ -166,10 +166,14 @@ export class ElementInternals implements IElementInternals {
     }
     validationAnchorMap.set(this, anchor);
     const validity = validityMap.get(this);
-    if (Object.keys(validityChanges).length === 0) {
+    const validityChangesObj = {};
+    for (const key in validityChanges) {
+      validityChangesObj[key] = validityChanges[key];
+    }
+    if (Object.keys(validityChangesObj).length === 0) {
       setValid(validity);
     }
-    const check = { ...validity, ...validityChanges };
+    const check = { ...validity, ...validityChangesObj };
     delete check.valid;
     const { valid } = reconcileValidty(validity, check);
 
