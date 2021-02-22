@@ -345,13 +345,24 @@ describe('The ElementInternals polyfill', () => {
 
     it('saves a reference to all shadow roots', () => {
       expect(internals.shadowRoot).to.equal(el.shadowRoot);
-    });;
+    });
 
     it('will focus the element if validated with anchor', async () => {
       internals.setValidity({
         customError: true
       }, 'Error message', el.input);
       internals.reportValidity();
+      expect(document.activeElement).to.equal(el);
+    });
+
+    it('will focus anchor elements in document order on form submission failure', () => {
+      internals.setValidity({
+        customError: true
+      }, 'Error message', el.input);
+      noname.internals.setValidity({
+        customError: true
+      }, 'Error message', noname.input);
+      button.click();
       expect(document.activeElement).to.equal(el);
     });
 
