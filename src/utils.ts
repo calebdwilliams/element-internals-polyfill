@@ -186,3 +186,15 @@ export const findParentForm = (elem) => {
   }
   return parent;
 };
+
+/**
+ * Throw an error if the element ref is not form associated
+ * @param ref {ICustomElement} - The element to check if it is form associated
+ * @param message {string} - The error message to throw
+ * @param ErrorType {any} - The error type to throw, defaults to DOMException
+ */
+export const throwIfNotFormAssociated = (ref: ICustomElement, message: string, ErrorType: any = DOMException): void => {
+  if (!ref.constructor['formAssociated']) {
+    throw new ErrorType(message);
+  }
+}

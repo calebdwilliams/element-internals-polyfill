@@ -6,11 +6,10 @@ class Address extends HTMLElement {
     return true;
   }
 
-  internals = this.attachInternals();
-
   connectedCallback() {
     const root = this.attachShadow({ mode: 'open' });
     root.adoptedStyleSheets = [addressSheet];
+    this.internals = this.attachInternals();
     const form = document.createElement('form');
     form.innerHTML = `
     <fieldset>

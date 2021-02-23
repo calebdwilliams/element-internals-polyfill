@@ -104,8 +104,8 @@ describe('The ElementInternals polyfill', () => {
     });
   });
 
-  describe('inside a custom element without a form', () => {
-    let el, internals;
+  describe('Non-formAssociated elements', () => {
+    let element, internals;
 
     class NotFormAssociated extends HTMLElement {
       constructor() {
@@ -113,24 +113,21 @@ describe('The ElementInternals polyfill', () => {
         this.internals = this.attachInternals();
       }
     }
+
     customElements.define('not-associated', NotFormAssociated);
 
     beforeEach(async () => {
-      el = await fixture(html`<test-el></test-el>`);
-      internals = el.internals;
+      element = await fixture(html`<not-associated></not-associated>`);
     });
 
-    afterEach(async () => fixtureCleanup(el));
+    afterEach(async () => await fixtureCleanup(element));
 
     it('will attach an object to internals even if not form associated', async () => {
-      const nonAssociated = await fixture(html`
-        <not-associated></not-associated>`
-      );
-      expect(nonAssociated.internals).to.exist;
+      expect(element.internals).to.exist;
     });
 
-    it('will return undefined from setFormValue', async () => {
-      expect(internals.setFormValue('foo')).to.equal(undefined);
+    it('will throw from setFormValue', async () => {
+      expect(() => element.internals.setFormValue('foo')).to.throw();
     });
   });
 
