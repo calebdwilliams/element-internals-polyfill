@@ -3,10 +3,8 @@ class XArray extends HTMLElement {
     return true;
   }
 
-  internals = this.attachInternals();
-
   connectedCallback() {
-    console.log(this.internals);
+    this.internals = this.attachInternals();
     this.internals.setFormValue({a:1,b:2});
 
     console.log(this.getAttribute('name'),

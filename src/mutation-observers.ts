@@ -11,7 +11,7 @@ export function observerCallback(mutationList) {
 
     added.forEach(node => {
       /** Allows for dynamic addition of elements to forms */
-      if (internalsMap.has(node)) {
+      if (internalsMap.has(node) && node.constructor['formAssociated']) {
         const internals = internalsMap.get(node);
         const { form } = internals;
 
