@@ -102,6 +102,7 @@ export const formSubmitCallback = (event: Event) => {
     const nodes = Array.from(elements);
     /** Check the internals.checkValidity() of all nodes */
     const validityList = nodes
+      .reverse()
       .map(node => {
         const internals = internalsMap.get(node);
         return internals.reportValidity();
