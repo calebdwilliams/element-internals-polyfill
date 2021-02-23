@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.8...v0.1.9) (2021-02-23)
+
+
+### Features
+
+* add error messages ([1d7c716](https://github.com/calebdwilliams/element-internals-polyfill/commit/1d7c716f5be9b0c9734ae0935e2ea60e34a5983c))
+
+
+### Bug Fixes
+
+* anchor element focus order on form submission reversed compared to Chrome ([#24](https://github.com/calebdwilliams/element-internals-polyfill/issues/24)) ([8346b2f](https://github.com/calebdwilliams/element-internals-polyfill/commit/8346b2fd357bd22b1f5ef725ad0a4de18db3a97c))
+* **setValidity:** Added support for setting ValidityState from a native input as Chrome allows this ([#25](https://github.com/calebdwilliams/element-internals-polyfill/issues/25)) ([dbb3c1a](https://github.com/calebdwilliams/element-internals-polyfill/commit/dbb3c1a742044b04a5e81c9855fb9c775831114e))
+
 ### [0.1.8](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.7...v0.1.8) (2021-02-19)
 
 
