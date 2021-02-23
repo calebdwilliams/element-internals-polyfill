@@ -232,6 +232,13 @@ describe('The ElementInternals polyfill', () => {
       }).to.throw();
     });
 
+    it ('will accept ValidityState from a native form input', () => {
+      el.input.required = true;
+      el.input.reportValidity();
+      internals.setValidity(el.input.validity, el.input.validationMessage, el.input);
+      expect(internals.validity.valueMissing).to.be.true;
+    });
+
     it('will return true for willValidate if the field can participate in the form', () => {
       expect(internals.willValidate).to.be.true;
     });
