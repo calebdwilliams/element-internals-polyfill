@@ -2,6 +2,69 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.8...v0.1.9) (2021-02-23)
+
+
+### Features
+
+* add error messages ([1d7c716](https://github.com/calebdwilliams/element-internals-polyfill/commit/1d7c716f5be9b0c9734ae0935e2ea60e34a5983c))
+
+
+### Bug Fixes
+
+* anchor element focus order on form submission reversed compared to Chrome ([#24](https://github.com/calebdwilliams/element-internals-polyfill/issues/24)) ([8346b2f](https://github.com/calebdwilliams/element-internals-polyfill/commit/8346b2fd357bd22b1f5ef725ad0a4de18db3a97c))
+* **setValidity:** Added support for setting ValidityState from a native input as Chrome allows this ([#25](https://github.com/calebdwilliams/element-internals-polyfill/issues/25)) ([dbb3c1a](https://github.com/calebdwilliams/element-internals-polyfill/commit/dbb3c1a742044b04a5e81c9855fb9c775831114e))
+
+### [0.1.8](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.7...v0.1.8) (2021-02-19)
+
+
+### Bug Fixes
+
+* **setFormValue:** accept empty strings like Chrome ([#23](https://github.com/calebdwilliams/element-internals-polyfill/issues/23)) ([8f41892](https://github.com/calebdwilliams/element-internals-polyfill/commit/8f41892f6de7c494be880bcf193870a3c519ee5c))
+
+### [0.1.7](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.6...v0.1.7) (2021-02-11)
+
+
+### Bug Fixes
+
+* polyfill accepts non-string values like Chrome ([9ac948e](https://github.com/calebdwilliams/element-internals-polyfill/commit/9ac948e78a6ee7403f0d3515c5c8181b34bc366e))
+
+### [0.1.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.5...v0.1.6) (2021-02-10)
+
+
+### Bug Fixes
+
+* **formSubmitCallback:** elements now report validity when a form is submitted ([01b2499](https://github.com/calebdwilliams/element-internals-polyfill/commit/01b249956f3874f54e3b59db5184c0012ee8c324))
+
+### [0.1.5](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.4...v0.1.5) (2021-02-10)
+
+
+### Features
+
+* **validation anchor:** add validation anchor behavior ([4cc4631](https://github.com/calebdwilliams/element-internals-polyfill/commit/4cc4631cf0f97d5f57554c555689457bb227b4bf))
+
+### [0.1.4](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.3...v0.1.4) (2021-02-09)
+
+
+### Features
+
+* add shadowRoot to internals ([2477eb2](https://github.com/calebdwilliams/element-internals-polyfill/commit/2477eb2e9a244eedae54809b270fd0d18d58f88f))
+
+### [0.1.3](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.2...v0.1.3) (2021-02-09)
+
+
+### Features
+
+* **setFormValue:** Add support for FormData to allow settings multiple form values ([a0b2890](https://github.com/calebdwilliams/element-internals-polyfill/commit/a0b2890365ccbc8d2c79073bdf32f1679e60aa0f))
+
+### [0.1.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.1...v0.1.2) (2021-02-06)
+
+
+### Bug Fixes
+
+* **formAssociatedCallback:** make sure internals are available when formAssociatedCallback is called ([df9effa](https://github.com/calebdwilliams/element-internals-polyfill/commit/df9effa3d01c4b88a1de5ece45acdddc7df4e983))
+* **setValidity:** added missing anchor in method signature. ([0290325](https://github.com/calebdwilliams/element-internals-polyfill/commit/029032515dc1ba3ea250fb140f9df3eb67cbb476))
+
 ### [0.1.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.0...v0.1.1) (2020-11-18)
 
 

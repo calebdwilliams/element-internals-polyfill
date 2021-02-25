@@ -1,21 +1,24 @@
 import {
-  refMap,
-  validityMap,
   internalsMap,
-  validationMessageMap,
-  shadowHostsMap,
-  formElementsMap,
+  refMap,
   refValueMap,
-  hiddenInputMap,
+  shadowHostsMap,
+  shadowRootMap,
+  validationAnchorMap,
+  validityMap,
+  validationMessageMap,
 } from "./maps";
-import { initAom } from "./aom";
 import {
-  getHostRoot,
-  initRef,
-  initLabels,
-  initForm,
+  createHiddenInput,
   findParentForm,
+  getHostRoot,
+  initForm,
+  initLabels,
+  initRef,
+  removeHiddenInputs,
+  throwIfNotFormAssociated,
 } from "./utils";
+import { initAom } from "./aom";
 import { ValidityState, reconcileValidty, setValid } from "./ValidityState";
 import { observerCallback, observerConfig } from "./mutation-observers";
 import { IElementInternals, ICustomElement, LabelsList } from "./types";
@@ -70,21 +73,27 @@ export class ElementInternals implements IElementInternals {
     refMap.set(this, ref);
     validityMap.set(this, validity);
     internalsMap.set(ref, this);
-    const { labels, form } = this;
     initAom(ref, this);
+    initRef(ref, this);
     Object.seal(this);
 
-    initRef(ref, this);
-    initLabels(ref, labels);
-    initForm(ref, form, this);
+    if (ref.constructor["formAssociated"]) {
+      const { labels, form } = this;
+      initLabels(ref, labels);
+      initForm(ref, form, this);
+    }
   }
 
   /**
    * Will return true if the element is in a valid state
    */
   checkValidity(): boolean {
-    const validity = validityMap.get(this);
     const ref = refMap.get(this);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to execute 'checkValidity' on 'ElementInternals': The target element is not a form-associated custom element.`
+    );
+    const validity = validityMap.get(this);
     if (!validity.valid) {
       const validityEvent = new Event("invalid", {
         bubbles: false,
@@ -99,6 +108,10 @@ export class ElementInternals implements IElementInternals {
   /** The form element the custom element is associated with */
   get form(): HTMLFormElement {
     const ref = refMap.get(this);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'form' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     let form;
     if (ref.constructor["formAssociated"] === true) {
       form = findParentForm(ref);
@@ -109,6 +122,10 @@ export class ElementInternals implements IElementInternals {
   /** A list of all relative form labels for this element */
   get labels(): LabelsList {
     const ref = refMap.get(this);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'labels' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     const id = ref.getAttribute("id");
     const hostRoot = getHostRoot(ref);
     if (hostRoot && id) {
@@ -119,24 +136,48 @@ export class ElementInternals implements IElementInternals {
 
   /** Will report the elements validity state */
   reportValidity(): boolean {
-    return this.checkValidity();
+    const ref = refMap.get(this);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to execute 'reportValidity' on 'ElementInternals': The target element is not a form-associated custom element.`
+    );
+    const valid = this.checkValidity();
+    const anchor = validationAnchorMap.get(this);
+    if (anchor && !ref.constructor["formAssociated"]) {
+      throw new DOMException(
+        `Failed to execute 'setValidity' on 'ElementInternals': The target element is not a form-associated custom element.`
+      );
+    }
+    if (!valid && anchor) {
+      ref.focus();
+      anchor.focus();
+    }
+    return valid;
   }
 
   /** Sets the element's value within the form */
-  setFormValue(value: string | null): void {
-    const hiddenInput = hiddenInputMap.get(this);
-    if (hiddenInput) {
-      hiddenInput.value = value;
-    }
-    if (!this.form) {
-      return undefined;
-    }
+  setFormValue(value: string | FormData): void {
     const ref = refMap.get(this);
-    if (value === null) {
-      refValueMap.delete(ref);
-    } else {
-      refValueMap.set(ref, value);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to execute 'setFormValue' on 'ElementInternals': The target element is not a form-associated custom element.`
+    );
+    removeHiddenInputs(this);
+    if (value != null && !(value instanceof FormData)) {
+      if (ref.getAttribute("name")) {
+        const hiddenInput = createHiddenInput(ref, this);
+        hiddenInput.value = value;
+      }
+    } else if (value != null && value instanceof FormData) {
+      value.forEach((formDataValue, formDataKey) => {
+        if (typeof formDataValue === "string") {
+          const hiddenInput = createHiddenInput(ref, this);
+          hiddenInput.name = formDataKey;
+          hiddenInput.value = formDataValue;
+        }
+      });
     }
+    refValueMap.set(ref, value);
   }
 
   /**
@@ -148,19 +189,29 @@ export class ElementInternals implements IElementInternals {
    */
   setValidity(
     validityChanges: Partial<globalThis.ValidityState>,
-    validationMessage?: string
+    validationMessage?: string,
+    anchor?: HTMLElement
   ) {
     const ref = refMap.get(this);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to execute 'setValidity' on 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     if (!validityChanges) {
       throw new TypeError(
         "Failed to execute 'setValidity' on 'ElementInternals': 1 argument required, but only 0 present."
       );
     }
+    validationAnchorMap.set(this, anchor);
     const validity = validityMap.get(this);
-    if (Object.keys(validityChanges).length === 0) {
+    const validityChangesObj = {};
+    for (const key in validityChanges) {
+      validityChangesObj[key] = validityChanges[key];
+    }
+    if (Object.keys(validityChangesObj).length === 0) {
       setValid(validity);
     }
-    const check = { ...validity, ...validityChanges };
+    const check = { ...validity, ...validityChangesObj };
     delete check.valid;
     const { valid } = reconcileValidty(validity, check);
 
@@ -173,13 +224,32 @@ export class ElementInternals implements IElementInternals {
     ref.setAttribute("aria-invalid", `${!valid}`);
   }
 
+  get shadowRoot(): ShadowRoot | null {
+    const ref = refMap.get(this);
+    const shadowRoot = shadowRootMap.get(ref);
+    if (shadowRoot) {
+      return shadowRootMap.get(ref);
+    }
+    return null;
+  }
+
   /** The element's validation message set during a call to ElementInternals.setValidity */
   get validationMessage(): string {
+    const ref = refMap.get(this);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'validationMessage' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     return validationMessageMap.get(this);
   }
 
   /** The current validity state of the object */
   get validity(): globalThis.ValidityState {
+    const ref = refMap.get(this);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'validity' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     const validity = validityMap.get(this);
     return validity;
   }
@@ -187,7 +257,10 @@ export class ElementInternals implements IElementInternals {
   /** If true the element will participate in a form's constraint validation. */
   get willValidate(): boolean {
     const ref = refMap.get(this);
-
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'willValidate' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     if (ref.disabled || ref.hasAttribute("disabled")) {
       return false;
     }
@@ -207,6 +280,7 @@ if (!window.ElementInternals) {
   function attachShadowObserver(...args) {
     const shadowRoot = attachShadow.apply(this, args);
     const observer = new MutationObserver(observerCallback);
+    shadowRootMap.set(this, shadowRoot);
     observer.observe(shadowRoot, observerConfig);
     shadowHostsMap.set(this, observer);
     return shadowRoot;
@@ -234,30 +308,4 @@ if (!window.ElementInternals) {
 
   const documentObserver = new MutationObserver(observerCallback);
   documentObserver.observe(document.documentElement, observerConfig);
-
-  const FormDataOriginal = window.FormData;
-
-  class FormData {
-    constructor(form?: HTMLFormElement) {
-      const data = new FormDataOriginal(form);
-      if (form && formElementsMap.has(form)) {
-        const refs = formElementsMap.get(form);
-        refs.forEach((ref) => {
-          if (ref.getAttribute("name")) {
-            const value = refValueMap.get(ref);
-            if (refValueMap.has(ref)) {
-              data.set(ref.getAttribute("name"), value);
-            } else {
-              // remove the formData from Firefox if setFormValue is null
-              data.delete(ref.getAttribute("name"));
-            }
-          }
-        });
-      }
-      return data;
-    }
-  }
-
-  // @ts-ignore
-  window.FormData = FormData;
 }

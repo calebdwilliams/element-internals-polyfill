@@ -12,7 +12,7 @@ export const refMap = new WeakMap<IElementInternals, ICustomElement>();
 export const validityMap = new WeakMap<IElementInternals, ValidityState>();
 
 /** Use an ElementInternals instance to get its attached input[type="hidden"] */
-export const hiddenInputMap = new WeakMap<IElementInternals, HTMLInputElement>();
+export const hiddenInputMap = new WeakMap<IElementInternals, HTMLInputElement[]>();
 
 /** Use a custom element to get its attached ElementInternals instance */
 export const internalsMap = new WeakMap<ICustomElement, IElementInternals>();
@@ -34,3 +34,9 @@ export const refValueMap = new WeakMap<ICustomElement, any>();
 
 /** Elements that need to be upgraded once added to the DOM */
 export const upgradeMap = new WeakMap<Element, IElementInternals>();
+
+/** Save references to shadow roots for inclusion in internals instance */
+export const shadowRootMap = new WeakMap<ICustomElement, ShadowRoot>();
+
+/** Save a refernce to the internals' validation anchor */
+export const validationAnchorMap = new WeakMap<IElementInternals, HTMLElement>();

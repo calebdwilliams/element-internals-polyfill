@@ -1,11 +1,11 @@
 import {
   aTimeout,
-  elementUpdated,
   expect,
   fixture,
   fixtureCleanup,
   html,
 } from '@open-wc/testing';
+import { spy } from 'sinon';
 import '../dist/index.js';
 
 describe('ElementInternals polyfill behavior', () => {
@@ -59,6 +59,13 @@ describe('ElementInternals polyfill behavior', () => {
       constructor() {
         super();
         this.internals = this.attachInternals();
+      }
+
+      connectedCallback() {
+        this.tabIndex = -1;
+        const root = this.attachShadow({ mode: 'open' });
+        root.innerHTML = `<input />`;
+        this.input = root.querySelector('input');
       }
     }
 
