@@ -60,4 +60,8 @@ export interface ICustomElement extends HTMLElement {
   disabled?: boolean;
 }
 
+export interface ILitElement extends ICustomElement {
+  updateComplete: Promise<void>;
+}
+
 export type LabelsList = NodeListOf<HTMLLabelElement>|[];
