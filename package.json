@@ -1,6 +1,6 @@
 {
   "name": "@simplex/element-internals-polyfill",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "A polyfill for the element internals specification",
   "main": "dist/index.js",
   "module": "dist/index.js",
