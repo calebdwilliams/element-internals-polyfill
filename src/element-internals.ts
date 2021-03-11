@@ -142,7 +142,7 @@ export class ElementInternals implements IElementInternals {
   }
 
   /** Sets the element's value within the form */
-  setFormValue(value: string | FormData): void {
+  setFormValue(value: string | FormData | null): void {
     const ref = refMap.get(this);
     throwIfNotFormAssociated(ref, `Failed to execute 'setFormValue' on 'ElementInternals': The target element is not a form-associated custom element.`);
     removeHiddenInputs(this);

@@ -40,17 +40,25 @@ export interface IAom {
 export interface IElementInternals extends IAom {
   checkValidity: () => boolean;
   form: HTMLFormElement;
-  labels: NodeListOf<HTMLLabelElement>|[];
+  labels: NodeListOf<HTMLLabelElement> | [];
   reportValidity: () => boolean;
-  setFormValue: (value: string | FormData) => void;
-  setValidity: (validityChanges: Partial<globalThis.ValidityState>, validationMessage?: string, anchor?: HTMLElement) => void;
+  setFormValue: (value: string | FormData | null) => void;
+  setValidity: (
+    validityChanges: Partial<globalThis.ValidityState>,
+    validationMessage?: string,
+    anchor?: HTMLElement
+  ) => void;
   validationMessage: string;
   validity: globalThis.ValidityState;
   willValidate: boolean;
 }
 
 export interface ICustomElement extends HTMLElement {
-  attributeChangedCallback?: (name: string, oldValue: any, newValue: any) => void;
+  attributeChangedCallback?: (
+    name: string,
+    oldValue: any,
+    newValue: any
+  ) => void;
   connectedCallback?: () => void;
   disconnectedCallback?: () => void;
   attachedCallback?: () => void;
@@ -60,4 +68,8 @@ export interface ICustomElement extends HTMLElement {
   disabled?: boolean;
 }
 
-export type LabelsList = NodeListOf<HTMLLabelElement>|[];
+export interface ILitElement extends ICustomElement {
+  updateComplete: Promise<void>;
+}
+
+export type LabelsList = NodeListOf<HTMLLabelElement> | [];
