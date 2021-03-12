@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.15](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.9...v0.1.15) (2021-03-12)
+
+
+### Bug Fixes
+
+* add hidden input for lit-element after render completes ([#27](https://github.com/calebdwilliams/element-internals-polyfill/issues/27)) ([ebbb8ef](https://github.com/calebdwilliams/element-internals-polyfill/commit/ebbb8efe15fc923e4828091973739a7a8df1ed0a))
+
 ### [0.1.14](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.13...v0.1.14) (2021-03-08)
 
 ### [0.1.13](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.12...v0.1.13) (2021-03-08)
