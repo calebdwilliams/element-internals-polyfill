@@ -1,6 +1,6 @@
 {
   "name": "element-internals-polyfill",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "description": "A polyfill for the element internals specification",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -18,9 +18,6 @@
     "prerelease": "npm run build",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master; npm publish"
-  },
-  "publishConfig": {
-    "registry": "https://pkgs.dev.azure.com/daimler-mic/_packaging/mercedes-developer-experience/npm/registry/"
   },
   "repository": {
     "type": "git",
