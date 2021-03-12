@@ -19,9 +19,6 @@
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master; npm publish"
   },
-  "publishConfig": {
-    "registry": "https://pkgs.dev.azure.com/daimler-mic/_packaging/mercedes-developer-experience/npm/registry/"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/calebdwilliams/element-internals-polyfill.git"
