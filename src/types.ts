@@ -1,3 +1,5 @@
+import { ElementInternals } from "./element-internals";
+
 export interface IAom {
   ariaAtomic: string;
   ariaAutoComplete: string;
@@ -48,12 +50,14 @@ export interface IElementInternals extends IAom {
     validationMessage?: string,
     anchor?: HTMLElement
   ) => void;
+  shadowRoot: ShadowRoot;
   validationMessage: string;
   validity: globalThis.ValidityState;
   willValidate: boolean;
 }
 
 export interface ICustomElement extends HTMLElement {
+  constructor: (...args: any[]) => HTMLElement;
   attributeChangedCallback?: (
     name: string,
     oldValue: any,
@@ -62,6 +66,7 @@ export interface ICustomElement extends HTMLElement {
   connectedCallback?: () => void;
   disconnectedCallback?: () => void;
   attachedCallback?: () => void;
+  attachInternals: () => IElementInternals;
   formDisabledCallback?: (isDisabled: boolean) => void;
   formResetCallback?: () => void;
   formAssociatedCallback?: (form: HTMLFormElement) => void;
