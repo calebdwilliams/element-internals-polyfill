@@ -66,7 +66,7 @@ export interface ICustomElement extends HTMLElement {
   connectedCallback?: () => void;
   disconnectedCallback?: () => void;
   attachedCallback?: () => void;
-  attachInternals: () => IElementInternals;
+  attachInternals: () => ElementInternals;
   formDisabledCallback?: (isDisabled: boolean) => void;
   formResetCallback?: () => void;
   formAssociatedCallback?: (form: HTMLFormElement) => void;
