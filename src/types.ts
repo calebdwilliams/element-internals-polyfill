@@ -58,18 +58,18 @@ export interface IElementInternals extends IAom {
 
 export interface ICustomElement extends HTMLElement {
   constructor: (...args: any[]) => HTMLElement;
-  attributeChangedCallback?: (
+  attributeChangedCallback(
     name: string,
     oldValue: any,
     newValue: any
-  ) => void;
-  connectedCallback?: () => void;
-  disconnectedCallback?: () => void;
-  attachedCallback?: () => void;
-  attachInternals: () => ElementInternals;
-  formDisabledCallback?: (isDisabled: boolean) => void;
-  formResetCallback?: () => void;
-  formAssociatedCallback?: (form: HTMLFormElement) => void;
+  ): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
+  attachedCallback(): void;
+  attachInternals(): ElementInternals;
+  formDisabledCallback(isDisabled: boolean): void;
+  formResetCallback(): void;
+  formAssociatedCallback(form: HTMLFormElement): void;
   disabled?: boolean;
 }
 
