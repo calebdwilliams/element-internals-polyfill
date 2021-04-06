@@ -11,6 +11,6 @@ declare global {
      * Attaches an ElementInternals instance to a custom element. Calling this method
      * on a built-in element will throw an error.
      */
-    attachInternals: () => ElementInternals
+    attachInternals?: () => ElementInternals
   }
 }
