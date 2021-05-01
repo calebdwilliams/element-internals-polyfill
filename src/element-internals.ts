@@ -178,7 +178,7 @@ export class ElementInternals implements IElementInternals {
     }
     validationAnchorMap.set(this, anchor);
     const validity = validityMap.get(this);
-    const validityChangesObj = {};
+    const validityChangesObj: Partial<ValidityState> = {};
     for (const key in validityChanges) {
       validityChangesObj[key] = validityChanges[key];
     }

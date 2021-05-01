@@ -1,6 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
+import cleanup from 'rollup-plugin-cleanup';
 
 const plugins = [typescript({
   rootDir: 'src'
@@ -30,6 +31,10 @@ if (process.env.BUILD === 'dev') {
       watch: 'dist'
     })
   );
+} else {
+  plugins.push(cleanup({
+    extensions: [ '.ts', '.js' ]
+  }))
 }
 
 export default config;
