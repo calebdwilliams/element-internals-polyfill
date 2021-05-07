@@ -131,6 +131,7 @@ In addition to form controls, `ElementInternals` will also surface several acces
 
 - Right now providing a cross-browser compliant version of `ElementInternals.reportValidity` is not supported. The method essentially behaves as a proxy for `ElementInternals.checkValidity`.
 - The polyfill does support the outcomes of the [Accessibility Object Model](https://wicg.github.io/aom/explainer.html#) for applying accessibility rules on the DOM object. However, the spec states that updates using AOM will not be reflected by DOM attributes, but only on the element's accesibility object. However, to emulate this behavior before it is fully supported, it is necessary to use the attributes. If you choose to use this feature, please note that behavior in polyfilled browsers and non-polyfilled browsers will be different; however, the outcome for users will be the same.
+- It is currently impossible to set form states to `:invalid` and `:valid` so this polyfill replaces those with the `[internals-invalid]` and `[internals-valid]` attributes on the host element. The proper selector for invalid elements will be `:host(:invalid), :host([internals-invalid])`.
 
 ## A note about versioning
 
