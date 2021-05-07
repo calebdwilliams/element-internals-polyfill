@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.33](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.32...v0.1.33) (2021-05-07)
+
+
+### Bug Fixes
+
+* **polyfill:** polyfill now updates form checkValidity and reportValidity methods ([9830aba](https://github.com/calebdwilliams/element-internals-polyfill/commit/9830aba1862c5939414d99796493ed71dbbfa299))
+
 ### [0.1.32](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.31...v0.1.32) (2021-05-01)
 
 ### [0.1.31](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.30...v0.1.31) (2021-05-01)
