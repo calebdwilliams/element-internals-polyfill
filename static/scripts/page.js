@@ -1,6 +1,7 @@
 import 'https://cdn.skypack.dev/construct-style-sheets-polyfill';
 import './x-array.js';
 import './address.js';
+import './issue30.js';
 
 const form = document.getElementById('form');
 

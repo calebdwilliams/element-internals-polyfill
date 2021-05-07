@@ -380,7 +380,17 @@ describe('The ElementInternals polyfill', () => {
     it('will accept empty strings', () => {
       internals.setFormValue('');
       expect(new FormData(internals.form).get('foo')).to.equal('');
-    })
+    });
+
+    it('will set the form to the proper validity state', async () => {
+      internals.setValidity({ valueMissing: true }, 'Error message');
+      expect(form.checkValidity()).to.be.false;
+      expect(form.reportValidity()).to.be.false;
+
+      internals.setValidity({});
+      expect(form.checkValidity()).to.be.true;
+      expect(form.reportValidity()).to.be.true;
+    });
   });
 
   describe('closed shadow root element', () => {

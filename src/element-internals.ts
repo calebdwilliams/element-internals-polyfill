@@ -1,4 +1,5 @@
 import {
+  formElementsMap,
   internalsMap,
   refMap,
   refValueMap,
@@ -15,6 +16,7 @@ import {
   initForm,
   initLabels,
   initRef,
+  overrideFormMethod,
   removeHiddenInputs,
   throwIfNotFormAssociated
 } from './utils';
@@ -193,6 +195,8 @@ export class ElementInternals implements IElementInternals {
       throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The second argument should not be empty if one or more flags in the first argument are true.`);
     }
     validationMessageMap.set(this, valid ? '' : validationMessage);
+    ref.toggleAttribute('internals-invalid', !valid);
+    ref.toggleAttribute('internals-valid', valid);
     ref.setAttribute('aria-invalid', `${!valid}`);
   }
 
@@ -240,6 +244,7 @@ declare global {
 if (!window.ElementInternals) {
   window.ElementInternals = ElementInternals;
 
+
   function attachShadowObserver(...args) {
     const shadowRoot = attachShadow.apply(this, args);
     const observer = new MutationObserver(observerCallback);
@@ -247,6 +252,16 @@ if (!window.ElementInternals) {
     observer.observe(shadowRoot, observerConfig);
     shadowHostsMap.set(this, observer);
     return shadowRoot;
+  }
+
+  function checkValidityOverride(...args): boolean {
+    let returnValue = checkValidity.apply(this, args);
+    return overrideFormMethod(this, returnValue, 'checkValidity');
+  }
+
+  function reportValidityOverride(...args): boolean {
+    let returnValue = reportValidity.apply(this, args);
+    return overrideFormMethod(this, returnValue, 'reportValidity');
   }
 
   /**
@@ -269,4 +284,10 @@ if (!window.ElementInternals) {
 
   const documentObserver = new MutationObserver(observerCallback);
   documentObserver.observe(document.documentElement, observerConfig);
+
+  const checkValidity = HTMLFormElement.prototype.checkValidity;
+  HTMLFormElement.prototype.checkValidity = checkValidityOverride;
+
+  const reportValidity = HTMLFormElement.prototype.reportValidity;
+  HTMLFormElement.prototype.reportValidity = reportValidityOverride;
 }

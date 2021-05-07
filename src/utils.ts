@@ -202,3 +202,24 @@ export const throwIfNotFormAssociated = (ref: ICustomElement, message: string, E
     throw new ErrorType(message);
   }
 }
+
+/**
+ * Called for each HTMLFormElement.checkValidity|reportValidity
+ * will loop over a form's added components and call the respective
+ * method modifying the default return value if needed
+ * @param form {HTMLFormElement} - The form element to run the method on
+ * @param returnValue {boolean} - The initial result of the original method
+ * @param method {'checkValidity'|'reportValidity'} - The original method
+ * @returns {boolean} The form's validity state
+ */
+export const overrideFormMethod = (form: HTMLFormElement, returnValue: boolean, method: 'checkValidity'|'reportValidity'): boolean => {
+  const elements = formElementsMap.get(form);
+  elements.forEach(element => {
+    const internals = internalsMap.get(element);
+    const valid = internals[method]();
+    if (!valid) {
+      returnValue = false;
+    }
+  });
+  return returnValue;
+}
