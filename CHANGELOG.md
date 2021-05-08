@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.34](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.33...v0.1.34) (2021-05-08)
+
+
+### Bug Fixes
+
+* form-associated elements inserted from DocumentFragment now upgrade properly ([cc6e690](https://github.com/calebdwilliams/element-internals-polyfill/commit/cc6e690f173b30e9933c4f68143d9b9e1153ab8d))
+
 ### [0.1.33](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.32...v0.1.33) (2021-05-07)
 
 
