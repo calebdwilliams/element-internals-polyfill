@@ -1,5 +1,6 @@
-import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
+import { hiddenInputMap, formsMap, formElementsMap, internalsMap, documentFragmentMap } from './maps.js';
 import { ICustomElement, IElementInternals, ILitElement, LabelsList } from './types.js';
+import { fragmentObserverCallback } from './mutation-observers';
 
 const observerConfig: MutationObserverInit = { attributes: true };
 
@@ -222,4 +223,19 @@ export const overrideFormMethod = (form: HTMLFormElement, returnValue: boolean, 
     }
   });
   return returnValue;
-}
+};
+
+/**
+ * Will upgrade an ElementInternals instance by initializing the
+ * instance's form and labels. This is called when the element is
+ * either constructed or appended from a DocumentFragment
+ * @param ref {ICustomElement} - The custom element to upgrade
+ */
+export const upgradeInternals = (ref: ICustomElement) => {
+  if (ref.constructor['formAssociated']) {
+    const internals = internalsMap.get(ref);
+    const { labels, form } = internals;
+    initLabels(ref, labels);
+    initForm(ref, form, internals);
+  }
+};

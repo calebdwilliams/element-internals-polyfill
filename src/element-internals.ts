@@ -1,5 +1,4 @@
 import {
-  formElementsMap,
   internalsMap,
   refMap,
   refValueMap,
@@ -7,22 +6,21 @@ import {
   shadowRootMap,
   validationAnchorMap,
   validityMap,
-  validationMessageMap
+  validationMessageMap,
 } from './maps';
 import {
   createHiddenInput,
   findParentForm,
   getHostRoot,
-  initForm,
-  initLabels,
   initRef,
   overrideFormMethod,
   removeHiddenInputs,
-  throwIfNotFormAssociated
+  throwIfNotFormAssociated,
+  upgradeInternals
 } from './utils';
 import { initAom } from './aom';
 import { ValidityState, reconcileValidty, setValid } from './ValidityState';
-import { observerCallback, observerConfig } from './mutation-observers';
+import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers';
 import { IElementInternals, ICustomElement, LabelsList } from './types';
 
 export class ElementInternals implements IElementInternals {
@@ -71,6 +69,7 @@ export class ElementInternals implements IElementInternals {
     if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
       throw new TypeError('Illegal constructor');
     }
+    const rootNode = ref.getRootNode();
     const validity = new ValidityState();
     refMap.set(this, ref);
     validityMap.set(this, validity);
@@ -79,10 +78,14 @@ export class ElementInternals implements IElementInternals {
     initRef(ref, this);
     Object.seal(this);
 
-    if (ref.constructor['formAssociated']) {
-      const { labels, form } = this;
-      initLabels(ref, labels);
-      initForm(ref, form, this);
+    upgradeInternals(ref);
+
+    /**
+     * If appended from a DocumentFragment, wait until it is connected
+     * before attempting to upgrade the internals instance
+     */
+    if (rootNode instanceof DocumentFragment) {
+      deferUpgrade(rootNode);
     }
   }
 

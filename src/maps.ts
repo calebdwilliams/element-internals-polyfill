@@ -40,3 +40,6 @@ export const shadowRootMap = new WeakMap<ICustomElement, ShadowRoot>();
 
 /** Save a refernce to the internals' validation anchor */
 export const validationAnchorMap = new WeakMap<IElementInternals, HTMLElement>();
+
+/** Map DocumentFragments to their MutationObservers so we can disconnect once elements are removed */
+export const documentFragmentMap = new WeakMap<DocumentFragment, MutationObserver>();

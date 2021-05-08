@@ -1,3 +1,5 @@
+import { html, render } from 'https://cdn.skypack.dev/lit';
+
 const sheet = new CSSStyleSheet();
 sheet.replace(`:host {
   display: block;
@@ -26,9 +28,11 @@ class MyComponent extends HTMLElement {
     root.adoptedStyleSheets = [sheet];
     root.append(template.content.cloneNode(true));
     this._count = root.querySelector('.count');
+    // console.log({constructed: this.getAttribute('name'), internals: this.internals.form });
   }
 
   connectedCallback() {
+    // console.log({connected: this.getAttribute('name')});
     this.internals.setValidity({ valueMissing: true }, 'aaaa');
     this.render(0);
   }
@@ -53,3 +57,14 @@ const reportValidity = document.querySelector('#reportValidity').addEventListene
 const checkValidity = document.querySelector('#checkValidity').addEventListener('click', (e)=>{
   alert(form.checkValidity());
 });
+
+render(
+  html`<form>
+  ${html`<my-component name="indirect1"></my-component>`}
+  <my-component name="direct1"></my-component>
+  <my-component name="direct2"></my-component>
+  ${html`<my-component name="indirect2"></my-component>`}
+  <input type="submit" value="submit"/>
+</form>`,
+  document.getElementById('test')
+);
