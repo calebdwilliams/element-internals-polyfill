@@ -1,9 +1,11 @@
 import { ElementInternals } from './element-internals';
 import './element-internals';
+import { CustomStateSet } from './CustomStateSet';
 export * from './types';
 
 declare global {
   interface Window {
+    CustomStateSet: typeof CustomStateSet;
     ElementInternals: typeof ElementInternals;
   }
   interface Element {

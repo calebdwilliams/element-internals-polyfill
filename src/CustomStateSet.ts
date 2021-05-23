@@ -6,6 +6,9 @@ const customStateMap = new WeakMap<CustomStateSet, ICustomElement>();
 export class CustomStateSet extends Set<string> {
   constructor(ref: ICustomElement) {
     super();
+    if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
+      throw new TypeError('Illegal constructor');
+    }
 
     customStateMap.set(this, ref);
   }

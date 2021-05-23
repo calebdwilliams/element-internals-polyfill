@@ -248,6 +248,10 @@ declare global {
   }
 }
 
+if (!window.CustomStateSet) {
+  window.CustomStateSet = CustomStateSet;
+}
+
 if (!window.ElementInternals) {
   window.ElementInternals = ElementInternals;
 

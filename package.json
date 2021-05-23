@@ -10,7 +10,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "pretest": "npm run build",
-    "test": "web-test-runner test/*.test.js --node-resolve --playwright --browsers chromium firefox webkit",
+    "test": "web-test-runner test/*.test.* --node-resolve --playwright --browsers chromium firefox webkit",
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
     "start": "rollup -c --watch --environment BUILD:dev",
