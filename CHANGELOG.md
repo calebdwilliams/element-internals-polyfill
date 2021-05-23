@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.36](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.35...v0.1.36) (2021-05-23)
+
+
+### Bug Fixes
+
+* **CustomStateSet:** added to window and will throw illegal constructor by default ([73821d8](https://github.com/calebdwilliams/element-internals-polyfill/commit/73821d8ca05d577a855f2621d75b6893f09aa068))
+
 ### [0.1.35](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.34...v0.1.35) (2021-05-23)
 
 
