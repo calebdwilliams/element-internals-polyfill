@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.35](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.34...v0.1.35) (2021-05-23)
+
+
+### Features
+
+* add CustomStateSet ([2e4c1ad](https://github.com/calebdwilliams/element-internals-polyfill/commit/2e4c1adcdb7d2456fb66e1a552923ee096d36c54))
+
 ### [0.1.34](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.33...v0.1.34) (2021-05-08)
 
 
