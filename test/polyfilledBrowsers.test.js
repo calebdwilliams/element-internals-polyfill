@@ -1,11 +1,9 @@
 import {
-  aTimeout,
   expect,
   fixture,
   fixtureCleanup,
   html,
 } from '@open-wc/testing';
-import { spy } from 'sinon';
 import '../dist/index.js';
 
 describe('ElementInternals polyfill behavior', () => {

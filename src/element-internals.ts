@@ -22,6 +22,7 @@ import { initAom } from './aom';
 import { ValidityState, reconcileValidty, setValid } from './ValidityState';
 import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers';
 import { IElementInternals, ICustomElement, LabelsList } from './types';
+import { CustomStateSet } from './CustomStateSet';
 
 export class ElementInternals implements IElementInternals {
   ariaAtomic: string;
@@ -61,6 +62,8 @@ export class ElementInternals implements IElementInternals {
   ariaValueNow: string;
   ariaValueText: string;
 
+  states: CustomStateSet;
+
   static get isPolyfilled() {
     return true;
   }
@@ -71,6 +74,7 @@ export class ElementInternals implements IElementInternals {
     }
     const rootNode = ref.getRootNode();
     const validity = new ValidityState();
+    this.states = new CustomStateSet(ref);
     refMap.set(this, ref);
     validityMap.set(this, validity);
     internalsMap.set(ref, this);

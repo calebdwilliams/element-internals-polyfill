@@ -27,6 +27,11 @@ yarn:
 yarn add element-internals-polyfill
 ```
 
+skypack:
+```javascript
+import 'https://cdn.skypack.dev/element-internals-polyfill';
+```
+
 unpkg:
 ```javascript
 import 'https://unpkg.com/element-internals-polyfill';
@@ -126,6 +131,38 @@ In addition to form controls, `ElementInternals` will also surface several acces
 - `ariaValueMin`: 'aria-valuemin'
 - `ariaValueNow`: 'aria-valuenow'
 - `ariaValueText`: 'aria-valuetext'
+
+### State API
+
+`ElementInternals` exposes an API for creating custom states on an element. For instance if a developer wanted to signify to users that an element was in state `foo`, they could call `internals.states.set('--foo')`. This would make the element match the selector `:--foo`. Unfortunately in non-supporting browsers this is an invalid selector and will throw an error in JS and would cause the parsing of a CSS rule to fail. As a result, this polyfill will add states using the `state--foo` attribute to the host element.
+
+In order to properly select these elements in CSS, you will need to duplicate your rule as follows:
+
+```css
+/** Supporting browsers */
+:--foo { 
+  color: rebeccapurple;
+}
+
+/** Polyfilled browsers */
+[state--foo] {
+  color: rebeccapurple;
+}
+```
+
+Trying to combine selectors like `:--foo, [state--foo]` will cause the parsing of the rule to fail because `:--foo` is an invalid selector. As a potential optimization, you can use CSS `@supports` as follows:
+
+```css
+@supports selector(:--foo) {
+  /** Native supporting code here */
+}
+
+@supports not selector([state--foo]) {
+  /** Code for polyfilled browsers here */
+}
+```
+
+Be sure to understand how your supported browsers work with CSS `@supports` before using the above strategy.
 
 ## Current limitations
 
