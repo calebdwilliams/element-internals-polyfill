@@ -1,3 +1,4 @@
+import { CustomStateSet } from "./CustomStateSet";
 import { ElementInternals } from "./element-internals";
 
 export interface IAom {
@@ -51,6 +52,7 @@ export interface IElementInternals extends IAom {
     anchor?: HTMLElement
   ) => void;
   shadowRoot: ShadowRoot;
+  states: CustomStateSet;
   validationMessage: string;
   validity: globalThis.ValidityState;
   willValidate: boolean;
