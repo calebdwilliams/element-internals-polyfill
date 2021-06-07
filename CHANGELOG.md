@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.38](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.37...v0.1.38) (2021-06-07)
+
+
+### Bug Fixes
+
+* add attribute filter to disabled observer ([329a620](https://github.com/calebdwilliams/element-internals-polyfill/commit/329a6204186e8d916dd94302eadeed2d3f265ad7))
+
 ### [0.1.37](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.36...v0.1.37) (2021-05-27)
 
 
