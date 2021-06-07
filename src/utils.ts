@@ -1,15 +1,13 @@
 import { hiddenInputMap, formsMap, formElementsMap, internalsMap, documentFragmentMap } from './maps.js';
 import { ICustomElement, IElementInternals, ILitElement, LabelsList } from './types.js';
-import { fragmentObserverCallback } from './mutation-observers';
 
-const observerConfig: MutationObserverInit = { attributes: true };
+const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
 
 const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
   for (const mutation of mutationsList) {
-    const attributeName = mutation.attributeName;
     const target = mutation.target as ICustomElement;
 
-    if (attributeName === 'disabled' && target.constructor['formAssociated']) {
+    if (target.constructor['formAssociated']) {
       if (target.formDisabledCallback) {
         target.formDisabledCallback.apply(target, [target.hasAttribute('disabled')]);
       }
