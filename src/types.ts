@@ -51,7 +51,7 @@ export interface IElementInternals extends IAom {
     validationMessage?: string,
     anchor?: HTMLElement
   ) => void;
-  shadowRoot: ShadowRoot;
+  shadowRoot: ShadowRoot|null;
   states: CustomStateSet;
   validationMessage: string;
   validity: globalThis.ValidityState;

@@ -44,7 +44,7 @@ export function observerCallback(mutationList: MutationRecord[]) {
         observer.disconnect();
       }
     });
-  })
+  });
 }
 
 /**
