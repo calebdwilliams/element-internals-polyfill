@@ -129,12 +129,15 @@ export const formResetCallback = (event: Event) => {
   /** Get the Set of elements attached to this form */
   const elements = formElementsMap.get(event.target as HTMLFormElement);
 
-  /** Loop over the elements and call formResetCallback if applicable */
-  elements.forEach(element => {
-    if ((element.constructor as any).formAssociated && element.formResetCallback) {
-      element.formResetCallback.apply(element);
-    }
-  });
+  /** Some forms won't contain form associated custom elements */
+  if (elements && elements.size) {
+    /** Loop over the elements and call formResetCallback if applicable */
+    elements.forEach(element => {
+      if ((element.constructor as any).formAssociated && element.formResetCallback) {
+        element.formResetCallback.apply(element);
+      }
+    });
+  }
 };
 
 /**
@@ -213,13 +216,17 @@ export const throwIfNotFormAssociated = (ref: ICustomElement, message: string, E
  */
 export const overrideFormMethod = (form: HTMLFormElement, returnValue: boolean, method: 'checkValidity'|'reportValidity'): boolean => {
   const elements = formElementsMap.get(form);
-  elements.forEach(element => {
-    const internals = internalsMap.get(element);
-    const valid = internals[method]();
-    if (!valid) {
-      returnValue = false;
-    }
-  });
+
+  /** Some forms won't contain form associated custom elements */
+  if (elements && elements.size) {
+    elements.forEach(element => {
+      const internals = internalsMap.get(element);
+      const valid = internals[method]();
+      if (!valid) {
+        returnValue = false;
+      }
+    });
+  }
   return returnValue;
 };
 
