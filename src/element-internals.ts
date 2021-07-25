@@ -11,7 +11,6 @@ import {
 import {
   createHiddenInput,
   findParentForm,
-  getHostRoot,
   initRef,
   overrideFormMethod,
   removeHiddenInputs,
@@ -127,7 +126,7 @@ export class ElementInternals implements IElementInternals {
     const ref = refMap.get(this);
     throwIfNotFormAssociated(ref, `Failed to read the 'labels' property from 'ElementInternals': The target element is not a form-associated custom element.`);
     const id = ref.getAttribute('id');
-    const hostRoot = getHostRoot(ref);
+    const hostRoot = ref.getRootNode() as Element;
     if (hostRoot && id) {
       return hostRoot ? hostRoot.querySelectorAll(`[for=${id}]`) : [];
     }

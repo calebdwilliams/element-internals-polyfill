@@ -1,5 +1,5 @@
-import { hiddenInputMap, formsMap, formElementsMap, internalsMap, documentFragmentMap } from './maps.js';
-import { ICustomElement, IElementInternals, ILitElement, LabelsList } from './types.js';
+import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
+import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
 const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
 
@@ -14,18 +14,6 @@ const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
     }
   }
 });
-
-/** Recursively get the host root */
-export const getHostRoot = (node: Node): Node&ParentNode => {
-  if (node instanceof Document) {
-    return node;
-  }
-  let parent = node.parentNode;
-  if (parent && parent.toString() !== '[object ShadowRoot]') {
-    parent = getHostRoot(parent);
-  }
-  return parent;
-};
 
 /**
  * Removes all hidden inputs for the given element internals instance
@@ -46,15 +34,11 @@ export const removeHiddenInputs = (internals: IElementInternals): void => {
  * @param {IElementInternals} internals - The element internals instance for the ref
  * @return {HTMLInputElement} The hidden input
  */
-export const createHiddenInput = (ref: ICustomElement | ILitElement, internals: IElementInternals): HTMLInputElement | null => {
+export const createHiddenInput = (ref: ICustomElement, internals: IElementInternals): HTMLInputElement | null => {
   const input = document.createElement('input');
   input.type = 'hidden';
   input.name = ref.getAttribute('name');
-  if ((<ILitElement>ref).updateComplete) {
-    (<ILitElement>ref).updateComplete.then(() => ref.after(input));
-  } else {
-    ref.after(input);
-  }
+  ref.after(input);
   hiddenInputMap.get(internals).push(input);
   return input;
 }

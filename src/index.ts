@@ -1,6 +1,6 @@
 import { ElementInternals } from './element-internals';
-import './element-internals';
 import { CustomStateSet } from './CustomStateSet';
+import './element-internals';
 export * from './types';
 
 declare global {
