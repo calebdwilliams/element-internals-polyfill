@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.41](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.40...v0.1.41) (2021-07-25)
+
+
+### Bug Fixes
+
+* ensure form has elements before trying to process data ([65a51a2](https://github.com/calebdwilliams/element-internals-polyfill/commit/65a51a2230d2c22cb7970134da2eca35ae8b60d0))
+
 ### [0.1.40](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.39...v0.1.40) (2021-06-28)
 
 
