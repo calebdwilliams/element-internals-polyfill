@@ -81,8 +81,15 @@ export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
  * @return {void}
  */
 export const formSubmitCallback = (event: Event) => {
+  const form = event.target as HTMLFormElement;
+
+  /**
+   * If this form does not validate then we're done
+   */
+  if(form.noValidate) return;
+
   /** Get the Set of elements attached to this form */
-  const elements = formElementsMap.get(event.target as HTMLFormElement);
+  const elements = formElementsMap.get(form);
 
   /** If the Set has items, continue */
   if (elements.size) {
