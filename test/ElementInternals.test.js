@@ -10,6 +10,11 @@ import '../dist/index.js';
 let callCount = 0;
 let internalsAvailableInFormAssociatedCallback = false;
 
+window.onFormSubmit = (event) => {
+  event.preventDefault();
+  callCount += 1;
+};
+
 class CustomElement extends HTMLElement {
   static get formAssociated() {
     return true;
@@ -419,6 +424,38 @@ describe('The ElementInternals polyfill', () => {
 
     it('maintains a reference to closed shadow roots', () => {
       expect(internals.shadowRoot).to.equal(shadowRoot);
+    });
+  });
+
+  describe('Forms with onsubmit', () => {
+    let form;
+    let el;
+    let internals;
+    let button;
+
+    beforeEach(async () => {
+      form = await fixture(html`<form onsubmit="onFormSubmit(event)">
+        <test-el></test-el>
+        <button type="submit">Submit</button>
+      </form>`);
+      el = form.querySelector('test-el');
+      internals = el.internals;
+      button = form.querySelector('button');
+      callCount = 0;
+    });
+
+    it('will not call onsubmit if invalid', async () => {
+      expect(callCount).to.equal(0);
+      internals.setValidity({ valueMissing: true }, 'Error message');
+      button.click();
+      expect(callCount).to.equal(0);
+    });
+
+    it('will call onsubmit if valid', async () => {
+      expect(callCount).to.equal(0);
+      internals.setValidity({});
+      button.click();
+      expect(callCount).to.equal(1);
     });
   });
 });

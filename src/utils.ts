@@ -1,4 +1,4 @@
-import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
+import { hiddenInputMap, formsMap, formElementsMap, internalsMap, onSubmitMap } from './maps.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
 const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
@@ -82,7 +82,8 @@ export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
  */
 export const formSubmitCallback = (event: Event) => {
   /** Get the Set of elements attached to this form */
-  const elements = formElementsMap.get(event.target as HTMLFormElement);
+  const form = event.target as HTMLFormElement;
+  const elements = formElementsMap.get(form);
 
   /** If the Set has items, continue */
   if (elements.size) {
@@ -100,6 +101,12 @@ export const formSubmitCallback = (event: Event) => {
       event.stopImmediatePropagation();
       event.stopPropagation();
       event.preventDefault();
+    } else if (onSubmitMap.get(form)) {
+      const callback = onSubmitMap.get(form);
+      const canceled = callback.call(form, event);
+      if (canceled === false) {
+        event.preventDefault();
+      }
     }
   }
 };
@@ -134,6 +141,13 @@ export const formResetCallback = (event: Event) => {
  */
 export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: IElementInternals) => {
   if (form) {
+    /** If the form has an onsubmit function, save it and remove it */
+    if (form.onsubmit) {
+      /** TODO: Find a way to parse arguments better */
+      onSubmitMap.set(form, form.onsubmit.bind(form));
+      form.onsubmit = null;
+    }
+
     /** This will be a WeakMap<HTMLFormElement, Set<HTMLElement> */
     const formElements = formElementsMap.get(form);
 
