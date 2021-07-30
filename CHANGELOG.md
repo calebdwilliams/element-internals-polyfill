@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.43](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.42...v0.1.43) (2021-07-30)
+
+
+### Bug Fixes
+
+* polyfill manages onsubmit attributes set before form is initialized ([0e333a2](https://github.com/calebdwilliams/element-internals-polyfill/commit/0e333a27c8b7acd383ecf513a598f51b9eef7534))
+
 ### [0.1.42](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.41...v0.1.42) (2021-07-25)
 
 
