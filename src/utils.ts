@@ -1,4 +1,4 @@
-import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
+import { hiddenInputMap, formsMap, formElementsMap, internalsMap, onSubmitMap } from './maps.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
 const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
@@ -107,6 +107,12 @@ export const formSubmitCallback = (event: Event) => {
       event.stopImmediatePropagation();
       event.stopPropagation();
       event.preventDefault();
+    } else if (onSubmitMap.get(form)) {
+      const callback = onSubmitMap.get(form);
+      const canceled = callback.call(form, event);
+      if (canceled === false) {
+        event.preventDefault();
+      }
     }
   }
 };
@@ -141,6 +147,13 @@ export const formResetCallback = (event: Event) => {
  */
 export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: IElementInternals) => {
   if (form) {
+    /** If the form has an onsubmit function, save it and remove it */
+    if (form.onsubmit) {
+      /** TODO: Find a way to parse arguments better */
+      onSubmitMap.set(form, form.onsubmit.bind(form));
+      form.onsubmit = null;
+    }
+
     /** This will be a WeakMap<HTMLFormElement, Set<HTMLElement> */
     const formElements = formElementsMap.get(form);
 
