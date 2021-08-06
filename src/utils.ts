@@ -1,13 +1,20 @@
 import { hiddenInputMap, formsMap, formElementsMap, internalsMap, onSubmitMap } from './maps.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
-const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
+const observerConfig: MutationObserverInit = {
+  attributes: true,
+};
 
 const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
   for (const mutation of mutationsList) {
     const target = mutation.target as ICustomElement;
+    const { type, attributeName } = mutation;
 
-    if (target.constructor['formAssociated']) {
+    if (type === 'attributes' && attributeName === 'disabled') {
+      const isDisabled = target.hasAttribute('disabled');
+
+      target.toggleAttribute('internals-disabled', isDisabled);
+    }
       if (target.formDisabledCallback) {
         target.formDisabledCallback.apply(target, [target.hasAttribute('disabled')]);
       }
@@ -52,6 +59,10 @@ export const createHiddenInput = (ref: ICustomElement, internals: IElementIntern
  */
 export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
   hiddenInputMap.set(internals, []);
+
+  const isDisabled = ref.hasAttribute('disabled');
+  ref.toggleAttribute('internals-disabled', isDisabled);
+
   observer.observe(ref, observerConfig);
 };
 
