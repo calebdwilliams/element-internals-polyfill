@@ -1,4 +1,5 @@
 import {
+  aTimeout,
   expect,
   fixture,
   fixtureCleanup,
@@ -83,6 +84,19 @@ describe('ElementInternals polyfill behavior', () => {
 
     it('will set the aria atttributes on label', async () => {
       expect(internals.labels.length).to.equal(1);
+      expect(Array.from(internals.labels)).to.deep.equal([label]);
+    });
+
+    it('will toggle the internals-disabled attribute when disabled is set', async () => {
+      if (ElementInternals.isPolyfilled) {
+        el.setAttribute('disabled', true);
+        el.disabled = true;
+        await aTimeout();
+        expect(el.hasAttribute('internals-disabled')).to.be.true;
+        el.toggleAttribute('disabled', false);
+        await aTimeout();
+        expect(el.hasAttribute('internals-disabled')).to.be.false;
+      }
     });
   });
 });

@@ -8,6 +8,8 @@ const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
     const target = mutation.target as ICustomElement;
 
     if (target.constructor['formAssociated']) {
+      const isDisabled = target.hasAttribute('disabled');
+      target.toggleAttribute('internals-disabled', isDisabled);
       if (target.formDisabledCallback) {
         target.formDisabledCallback.apply(target, [target.hasAttribute('disabled')]);
       }
@@ -52,6 +54,10 @@ export const createHiddenInput = (ref: ICustomElement, internals: IElementIntern
  */
 export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
   hiddenInputMap.set(internals, []);
+
+  const isDisabled = ref.hasAttribute('disabled');
+  ref.toggleAttribute('internals-disabled', isDisabled);
+
   observer.observe(ref, observerConfig);
 };
 
