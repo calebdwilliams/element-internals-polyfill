@@ -308,7 +308,7 @@ if (!isElementInternalsSupported()) {
    * Attaches an ElementInternals instance to a custom element. Calling this method
    * on a built-in element will throw an error.
    */
-  Object.defineProperty(Element.prototype, 'attachInternals', {
+  Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
     get() {
       return () => {
         if (this.tagName.indexOf('-') === -1) {
