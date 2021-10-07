@@ -251,7 +251,37 @@ if (!window.CustomStateSet) {
   window.CustomStateSet = CustomStateSet;
 }
 
-if (!window.ElementInternals) {
+export function isElementInternalsSupported(): boolean {
+  if (!window.ElementInternals) {
+    return false;
+  }
+
+  class ElementInternalsFeatureDetection extends HTMLElement {
+    internals: IElementInternals;
+
+    constructor() {
+      super();
+      this.internals = this.attachInternals();
+    }
+  }
+  const randomName = `element-internals-feature-detection-${Math.random().toString(36).replace(/[^a-z]+/g, '')}`
+  customElements.define(randomName, ElementInternalsFeatureDetection);
+  return [
+    "shadowRoot",
+    "form",
+    "states",
+    "willValidate",
+    "validity",
+    "validationMessage",
+    "labels",
+    "setFormValue",
+    "setValidity",
+    "checkValidity",
+    "reportValidity"
+  ].every(prop => prop in new ElementInternalsFeatureDetection().internals)
+}
+
+if (!isElementInternalsSupported()) {
   window.ElementInternals = ElementInternals;
 
 
