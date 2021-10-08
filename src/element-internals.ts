@@ -264,8 +264,9 @@ export function isElementInternalsSupported(): boolean {
       this.internals = this.attachInternals();
     }
   }
-  const randomName = `element-internals-feature-detection-${Math.random().toString(36).replace(/[^a-z]+/g, '')}`
+  const randomName = `element-internals-feature-detection-${Math.random().toString(36).replace(/[^a-z]+/g, '')}`;
   customElements.define(randomName, ElementInternalsFeatureDetection);
+  const featureDetectionElement = new ElementInternalsFeatureDetection();
   return [
     "shadowRoot",
     "form",
@@ -278,7 +279,7 @@ export function isElementInternalsSupported(): boolean {
     "setValidity",
     "checkValidity",
     "reportValidity"
-  ].every(prop => prop in new ElementInternalsFeatureDetection().internals)
+  ].every(prop => prop in featureDetectionElement.internals);
 }
 
 if (!isElementInternalsSupported()) {
