@@ -38,6 +38,7 @@ export interface IAom {
   ariaValueMin: string;
   ariaValueNow: string;
   ariaValueText: string;
+  role: string;
 }
 
 export interface IElementInternals extends IAom {

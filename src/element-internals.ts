@@ -60,6 +60,7 @@ export class ElementInternals implements IElementInternals {
   ariaValueMin: string;
   ariaValueNow: string;
   ariaValueText: string;
+  role: string;
 
   states: CustomStateSet;
 

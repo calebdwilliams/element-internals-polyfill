@@ -98,5 +98,34 @@ describe('ElementInternals polyfill behavior', () => {
         expect(el.hasAttribute('internals-disabled')).to.be.false;
       }
     });
+
+    it('will reflect internals.role', async () => {
+      if (ElementInternals.isPolyfilled) {
+        el.internals.role = 'button';
+        await aTimeout();
+        expect(el.getAttribute('role')).to.equal('button');
+      }
+    });
+  });
+
+  describe('CustomStateSet', () => {
+    let el;
+    let states;
+
+    class StateSetElement extends HTMLElement {
+      constructor() {
+        super();
+
+        this.internals = this.attachInternals();
+      }
+    }
+
+    customElements.define('state-set-element', StateSetElement);
+
+    beforeEach(async () => {
+      el = await fixture(html`<state-set-element></state-set-element>`);
+      console.log({el})
+      states = el.internals.states;
+    });
   });
 });

@@ -37,7 +37,8 @@ export const aom: IAom = {
   ariaValueMax: 'aria-valuemax',
   ariaValueMin: 'aria-valuemin',
   ariaValueNow: 'aria-valuenow',
-  ariaValueText: 'aria-valuetext'
+  ariaValueText: 'aria-valuetext',
+  role: 'role'
 };
 
 export const initAom = (ref: Element, internals: IElementInternals) => {
