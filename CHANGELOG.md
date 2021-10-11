@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.46](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.45...v0.1.46) (2021-10-11)
+
+
+### Bug Fixes
+
+* add role to aom ([16a1f6c](https://github.com/calebdwilliams/element-internals-polyfill/commit/16a1f6c49d8666276a6b8ef15ec4712b46215853))
+
 ### [0.1.45](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.44...v0.1.45) (2021-10-11)
 
 
