@@ -251,7 +251,38 @@ if (!window.CustomStateSet) {
   window.CustomStateSet = CustomStateSet;
 }
 
-if (!window.ElementInternals) {
+export function isElementInternalsSupported(): boolean {
+  if (!window.ElementInternals) {
+    return false;
+  }
+
+  class ElementInternalsFeatureDetection extends HTMLElement {
+    internals: IElementInternals;
+
+    constructor() {
+      super();
+      this.internals = this.attachInternals();
+    }
+  }
+  const randomName = `element-internals-feature-detection-${Math.random().toString(36).replace(/[^a-z]+/g, '')}`;
+  customElements.define(randomName, ElementInternalsFeatureDetection);
+  const featureDetectionElement = new ElementInternalsFeatureDetection();
+  return [
+    "shadowRoot",
+    "form",
+    "states",
+    "willValidate",
+    "validity",
+    "validationMessage",
+    "labels",
+    "setFormValue",
+    "setValidity",
+    "checkValidity",
+    "reportValidity"
+  ].every(prop => prop in featureDetectionElement.internals);
+}
+
+if (!isElementInternalsSupported()) {
   window.ElementInternals = ElementInternals;
 
 
@@ -278,7 +309,7 @@ if (!window.ElementInternals) {
    * Attaches an ElementInternals instance to a custom element. Calling this method
    * on a built-in element will throw an error.
    */
-  Object.defineProperty(Element.prototype, 'attachInternals', {
+  Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
     get() {
       return () => {
         if (this.tagName.indexOf('-') === -1) {
