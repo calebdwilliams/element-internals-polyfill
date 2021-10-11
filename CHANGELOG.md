@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.45](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.44...v0.1.45) (2021-10-11)
+
+
+### Bug Fixes
+
+* Improve feature detection to support Firefox 93 ([#46](https://github.com/calebdwilliams/element-internals-polyfill/issues/46)) ([850e835](https://github.com/calebdwilliams/element-internals-polyfill/commit/850e8354d7a10fd561ed2aead52c82faf9167249))
+
 ### [0.1.44](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.43...v0.1.44) (2021-09-01)
 
 
