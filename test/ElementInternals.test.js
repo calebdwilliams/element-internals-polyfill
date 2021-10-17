@@ -80,11 +80,53 @@ class CustomElement extends HTMLElement {
   formResetCallback() {
     callCount += 1;
   }
+
+  checkValidity() { return this.internals.checkValidity(); }
+  reportValidity() { return this.internals.reportValidity(); }
 }
 
 customElements.define('test-el', CustomElement);
 
 describe('The ElementInternals polyfill', () => {
+  describe('form validity', () => {
+    let form, input;
+    const simulateInput = (value = undefined) => {
+      input.value = value;
+      input.required = input.required;
+      input.dispatchEvent(new Event("input", {"bubbles":true, "cancelable":false}));
+    }
+    
+    beforeEach(async () => {
+      form = await fixture(`<form><test-el></test-el></form>`);
+      input = form.querySelector('test-el');
+      input.required = true;
+      simulateInput();
+    });
+  
+    afterEach(async () => {
+      await fixtureCleanup(form);
+    });
+  
+    it('form should be invalid when form-associated custom element is invalid', () => {
+      expect(form.checkValidity()).to.equal(false);
+    });
+
+    it('form should match form:invalid CSS selector when form-associated custom element is invalid', () => {
+      expect(form.matches('form:is(:invalid, [internals-invalid])')).to.equal(true);
+    });
+
+    it('form should be valid when all inputs are invalid', () => {
+      simulateInput('test');
+      expect(form.checkValidity()).to.equal(true);
+    });
+
+    it('form should match form:valid CSS selector when all inputs are valid', () => {
+      simulateInput('test');
+      expect(form.matches('form:is(:valid:not([internals-invalid]), [internals-valid])')).to.equal(true);
+    });
+
+  });
+
   describe('outside the proper context', () => {
     let el, internals;
 
