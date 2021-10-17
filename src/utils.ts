@@ -81,6 +81,28 @@ export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
 };
 
 /**
+ * Sets the internals-valid and internals-invalid attributes
+ * based on form validity.
+ * @param {HTMLFormElement} - The target form
+ * @return {void}
+ */
+export const setFormValidity = (form: HTMLFormElement) => {
+  const valid = form.checkValidity();
+  form.toggleAttribute('internals-invalid', !valid);
+  form.toggleAttribute('internals-valid', valid);
+}
+
+/**
+ * The global form input callback. Updates the form's validity
+ * attributes on input.
+ * @param {Event} - The form input event
+ * @return {void}
+ */
+export const formInputCallback = (event: Event) => {
+  setFormValidity(findParentForm(event.target));
+};
+
+/**
  * The global form submit callback. We need to cancel any submission
  * if a nested internals is invalid.
  * @param {Event} - The form submit event
@@ -169,6 +191,7 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
       /** Add listeners to emulate validation and reset behavior */
       form.addEventListener('submit', formSubmitCallback);
       form.addEventListener('reset', formResetCallback);
+      form.addEventListener('input', formInputCallback);
     }
 
     formsMap.set(form, { ref, internals });
@@ -179,6 +202,7 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
         ref.formAssociatedCallback.apply(ref, [form]);
       }, 0);
     }
+    setFormValidity(form);
   }
 };
 
