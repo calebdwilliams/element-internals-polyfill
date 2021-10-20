@@ -351,12 +351,12 @@ if (!isElementInternalsSupported()) {
 }
 
 function namedItemFind(node){
-  const {name} = this;
-  return node.matches && node.matches(`[id="${name}}], [name="${name}"]`);
+  const {cssSelector} = this;
+  return node.matches && node.matches(cssSelector);
 }
 
 function namedItem(name){
-  const nodes = this.filter(namedItemFind, {name});
+  const nodes = Array.from(this).filter(namedItemFind, {cssSelector: `[id="${name}"], [name="${name}"]`});
   if(nodes.length){
     if(nodes[0].type==='radio'){
       return nodes;
