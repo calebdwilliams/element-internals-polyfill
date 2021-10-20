@@ -313,12 +313,28 @@ if (!isElementInternalsSupported()) {
   Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
     get() {
       return () => {
-        if (this.tagName.indexOf('-') === -1) {
+        const { localName } = this;
+        if(localName.includes('-')) {
+          this.customElementTagList.add( localName );
+        }else{
           throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
         }
         return new ElementInternals(this);
       };
     }
+  });
+
+  const elements = Object.getOwnPropertyDescriptor(HTMLFormElement.prototype, 'elements').get;
+  Object.defineProperties(HTMLFormElement.prototype, {
+    _elements: {get: elements},
+    // @note {@link https://developer.mozilla.org/docs/Web/API/HTMLFormElement/elements} NOTE specific tags
+    customElementTagList: {value: new Set(['button', 'fieldset', 'input:not([type="image"])', 'object', 'output', 'select', 'textarea'])},
+    elements: {get: function(){
+      const { customElementTagList } = this;
+      const nodes = this.querySelectorAll(Array.from(customElementTagList).join(', '));
+
+      return new Proxy(nodes, HTMLFormControlsCollectionEmulation);
+    }}
   });
 
   const attachShadow = Element.prototype.attachShadow;
@@ -332,4 +348,34 @@ if (!isElementInternalsSupported()) {
 
   const reportValidity = HTMLFormElement.prototype.reportValidity;
   HTMLFormElement.prototype.reportValidity = reportValidityOverride;
+}
+
+function namedItemFind(node){
+  const {name} = this;
+  return node.matches && node.matches(`[id="${name}}], [name="${name}"]`);
+}
+
+function namedItem(name){
+  const nodes = this.filter(namedItemFind, {name});
+  if(nodes.length){
+    if(nodes[0].type==='radio'){
+      return nodes;
+    }else{
+      return nodes[0];
+    }
+  }
+  return null;
+}
+
+// @ref {@link https://developer.mozilla.org/docs/Web/API/HTMLFormControlsCollection} general behavior
+const HTMLFormControlsCollectionEmulation  = {
+  get: function(collection, prop){
+    if('namedItem'===prop){
+      return namedItem;
+    }
+    if(!/^[0-9]+$/.test(prop)){
+	 return namedItem.call(collection, prop);
+    }
+    return Reflect.get(collection, prop);
+  }
 }
