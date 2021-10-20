@@ -357,7 +357,7 @@ if (!isElementInternalsSupported()) {
 function decorateNamedCollection(node, name){
   const { type } = node;
   if(type === 'radio'){
-    if(this[name] === undefined){
+    if(this[name] === undefined || !Array.isArray(this[name])){
       this[name] = [];
     }
     this[name].push(node);
