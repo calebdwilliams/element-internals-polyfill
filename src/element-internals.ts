@@ -333,7 +333,11 @@ if (!isElementInternalsSupported()) {
       const { customElementTagList } = this;
       const nodes = this.querySelectorAll(Array.from(customElementTagList).join(', '));
 
-      return new Proxy(nodes, HTMLFormControlsCollectionEmulation);
+      // @ref {@link https://developer.mozilla.org/docs/Web/API/HTMLFormControlsCollection} general behavior
+      nodes.forEach(decorateNamedItemsCollection, nodes);
+      nodes.namedItem = namedItem;
+
+      return nodes;
     }}
   });
 
@@ -350,32 +354,28 @@ if (!isElementInternalsSupported()) {
   HTMLFormElement.prototype.reportValidity = reportValidityOverride;
 }
 
-function namedItemFind(node){
-  const {cssSelector} = this;
-  return node.matches && node.matches(cssSelector);
+function decorateNamedCollection(node, name){
+  const { type } = node;
+  if(type === 'radio'){
+    if(this[name] === undefined){
+      this[name] = [];
+    }
+    this[name].push(node);
+  }else{
+    this[name] = node;
+  }
+}
+function decorateNamedItemsCollection(node){
+  const { name, id } = node;
+  if(name){
+    decorateNamed.call(this, node, name);
+  }
+  if(id){
+    decorateNamed.call(this, node, id);
+  }
 }
 
 function namedItem(name){
-  const nodes = Array.from(this).filter(namedItemFind, {cssSelector: `[id="${name}"], [name="${name}"]`});
-  if(nodes.length){
-    if(nodes[0].type==='radio'){
-      return nodes;
-    }else{
-      return nodes[0];
-    }
-  }
-  return null;
+  return this[name] || null;
 }
 
-// @ref {@link https://developer.mozilla.org/docs/Web/API/HTMLFormControlsCollection} general behavior
-const HTMLFormControlsCollectionEmulation  = {
-  get: function(collection, prop){
-    if('namedItem'===prop){
-      return namedItem;
-    }
-    if(!/^[0-9]+$/.test(prop)){
-	 return namedItem.call(collection, prop);
-    }
-    return Reflect.get(collection, prop);
-  }
-}
