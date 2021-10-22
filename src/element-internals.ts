@@ -368,10 +368,10 @@ function decorateNamedCollection(node, name){
 function decorateNamedItemsCollection(node){
   const { name, id } = node;
   if(name){
-    decorateNamed.call(this, node, name);
+    decorateNamedCollection.call(this, node, name);
   }
   if(id){
-    decorateNamed.call(this, node, id);
+    decorateNamedCollection.call(this, node, id);
   }
 }
 
