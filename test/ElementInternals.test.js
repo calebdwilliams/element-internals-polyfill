@@ -90,17 +90,17 @@ customElements.define('test-el', CustomElement);
 describe('The ElementInternals polyfill', () => {
   describe('form validity', () => {
     let form, input;
-    const simulateInput = (value = undefined) => {
+    const simultateEvent = (eventType, value = undefined, options = {"bubbles":true, "cancelable":false}) => {
       input.value = value;
       input.required = input.required;
-      input.dispatchEvent(new Event("input", {"bubbles":true, "cancelable":false}));
+      input.dispatchEvent(new Event(eventType, options));
     }
     
     beforeEach(async () => {
       form = await fixture(`<form><test-el></test-el></form>`);
       input = form.querySelector('test-el');
       input.required = true;
-      simulateInput();
+      simultateEvent('input');
     });
   
     afterEach(async () => {
@@ -108,21 +108,31 @@ describe('The ElementInternals polyfill', () => {
     });
   
     it('form should be invalid when form-associated custom element is invalid', () => {
-      expect(form.checkValidity()).to.equal(false);
+      expect(form.checkValidity()).to.be.false;
     });
 
     it('form should match form:invalid CSS selector when form-associated custom element is invalid', () => {
-      expect(form.matches('form:is(:invalid, [internals-invalid])')).to.equal(true);
+      expect(form.matches('form:is(:invalid, [internals-invalid])')).to.be.true;
     });
 
-    it('form should be valid when all inputs are invalid', () => {
-      simulateInput('test');
-      expect(form.checkValidity()).to.equal(true);
+    it('After input event, form should be valid if all inputs are invalid', () => {
+      simultateEvent('input', 'test');
+      expect(form.checkValidity()).to.be.true;
     });
 
-    it('form should match form:valid CSS selector when all inputs are valid', () => {
-      simulateInput('test');
-      expect(form.matches('form:is(:valid:not([internals-invalid]), [internals-valid])')).to.equal(true);
+    it('After input event, form should match form:valid CSS selector if all inputs are valid', () => {
+      simultateEvent('input', 'test');
+      expect(form.matches('form:is(:valid:not([internals-invalid]), [internals-valid])')).to.be.true;
+    });
+
+    it('After change event, form should be valid if all inputs are invalid', () => {
+      simultateEvent('change', 'test');
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it('After change event, form should match form:valid CSS selector if all inputs are valid', () => {
+      simultateEvent('change', 'test');
+      expect(form.matches('form:is(:valid:not([internals-invalid]), [internals-valid])')).to.be.true;
     });
 
   });
