@@ -103,6 +103,16 @@ export const formInputCallback = (event: Event) => {
 };
 
 /**
+ * The global form change callback. Updates the form's validity
+ * attributes on change.
+ * @param {Event} - The form change event
+ * @return {void}
+ */
+ export const formChangeCallback = (event: Event) => {
+  setFormValidity(findParentForm(event.target));
+};
+
+/**
  * The global form submit callback. We need to cancel any submission
  * if a nested internals is invalid.
  * @param {Event} - The form submit event
@@ -192,6 +202,7 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
       form.addEventListener('submit', formSubmitCallback);
       form.addEventListener('reset', formResetCallback);
       form.addEventListener('input', formInputCallback);
+      form.addEventListener('change', formChangeCallback);
     }
 
     formsMap.set(form, { ref, internals });
