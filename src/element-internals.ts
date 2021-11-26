@@ -285,6 +285,7 @@ export function isElementInternalsSupported(): boolean {
 }
 
 if (!isElementInternalsSupported()) {
+  /** @ts-expect-error: we need to replace the default ElementInternals */
   window.ElementInternals = ElementInternals;
 
 
@@ -313,11 +314,11 @@ if (!isElementInternalsSupported()) {
    */
   Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
     get() {
-      return () => {
+      return (): IElementInternals => {
         if (this.tagName.indexOf('-') === -1) {
           throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
         }
-        return new ElementInternals(this);
+        return new ElementInternals(this) as IElementInternals;
       };
     }
   });
