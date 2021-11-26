@@ -43,7 +43,7 @@ export const setValid = (validityObject: ValidityState): ValidityState => {
  * @param {Object} - A partial ValidityState object to override the original
  * @return {ValidityState} - The updated ValidityState object
  */
-export const reconcileValidty = (validityObject: ValidityState, newState: Partial<ValidityState>): ValidityState => {
+export const reconcileValidity = (validityObject: ValidityState, newState: Partial<ValidityState>): ValidityState => {
   validityObject.valid = isValid(newState);
   Object.keys(newState).forEach(key => validityObject[key] = newState[key]);
   return validityObject;

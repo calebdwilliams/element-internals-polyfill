@@ -18,7 +18,7 @@ import {
   upgradeInternals
 } from './utils';
 import { initAom } from './aom';
-import { ValidityState, reconcileValidty, setValid } from './ValidityState';
+import { ValidityState, reconcileValidity, setValid } from './ValidityState';
 import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers';
 import { IElementInternals, ICustomElement, LabelsList } from './types';
 import { CustomStateSet } from './CustomStateSet';
@@ -197,7 +197,7 @@ export class ElementInternals implements IElementInternals {
     }
     const check = { ...validity, ...validityChangesObj };
     delete check.valid;
-    const { valid } = reconcileValidty(validity, check);
+    const { valid } = reconcileValidity(validity, check);
 
     if (!valid && !validationMessage) {
       throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The second argument should not be empty if one or more flags in the first argument are true.`);
