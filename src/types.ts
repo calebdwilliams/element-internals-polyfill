@@ -78,3 +78,9 @@ export interface ICustomElement extends HTMLElement {
 }
 
 export type LabelsList = NodeListOf<HTMLLabelElement> | [];
+
+declare global {
+  interface HTMLElement {
+    attachInternals(): IElementInternals;
+  }
+}

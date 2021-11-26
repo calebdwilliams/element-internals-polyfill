@@ -176,7 +176,7 @@ export class ElementInternals implements IElementInternals {
   /**
    * Sets the element's validity. The first argument is a partial ValidityState object
    * reflecting the changes to be made to the element's validity. If the element is invalid,
-   * the second argument sets the element's validition message.
+   * the second argument sets the element's validation message.
    *
    * If the field is valid and a message is specified, the method will throw a TypeError.
    */
