@@ -55,6 +55,7 @@ export class ElementInternals implements IElementInternals {
   ariaRowIndex: string;
   ariaRowSpan: string;
   ariaSelected: string;
+  ariaSetSize: string;
   ariaSort: string;
   ariaValueMax: string;
   ariaValueMin: string;
@@ -129,7 +130,7 @@ export class ElementInternals implements IElementInternals {
     const id = ref.getAttribute('id');
     const hostRoot = ref.getRootNode() as Element;
     if (hostRoot && id) {
-      return hostRoot ? hostRoot.querySelectorAll(`[for=${id}]`) : [];
+      return hostRoot ? hostRoot.querySelectorAll(`[for=${id}]`) as unknown as LabelsList : [];
     }
     return [];
   }

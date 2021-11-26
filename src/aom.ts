@@ -33,6 +33,7 @@ export const aom: IAom = {
   ariaRowIndex: 'aria-rowindex',
   ariaRowSpan: 'aria-rowspan',
   ariaSelected: 'aria-selected',
+  ariaSetSize: 'aria-setsize',
   ariaSort: 'aria-sort',
   ariaValueMax: 'aria-valuemax',
   ariaValueMin: 'aria-valuemin',

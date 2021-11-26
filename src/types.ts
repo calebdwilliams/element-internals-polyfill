@@ -33,6 +33,7 @@ export interface IAom {
   ariaRowIndex: string;
   ariaRowSpan: string;
   ariaSelected: string;
+  ariaSetSize: string;
   ariaSort: string;
   ariaValueMax: string;
   ariaValueMin: string;
