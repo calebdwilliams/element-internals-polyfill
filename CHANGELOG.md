@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.47](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.46...v0.1.47) (2021-11-26)
+
+
+### Bug Fixes
+
+* add ariaSetSize to AomMixin ([c11fcae](https://github.com/calebdwilliams/element-internals-polyfill/commit/c11fcae78a31c142bb876e63d0c7fbd3db9bde9b))
+* correct typescript@^4.5.0 types ([68d41a4](https://github.com/calebdwilliams/element-internals-polyfill/commit/68d41a42244bd424aff62a34b5fb2c39fcbe677d))
+* fix reconcileValidity spelling error ([2d2ca18](https://github.com/calebdwilliams/element-internals-polyfill/commit/2d2ca189e1b8ac722eb1fae995bddf465f776e97))
+* update project to work with built-in ElementInternals types ([392703b](https://github.com/calebdwilliams/element-internals-polyfill/commit/392703b510ec808ff0ef059506edbb6acf2324f7))
+
 ### [0.1.46](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.45...v0.1.46) (2021-10-11)
 
 
