@@ -132,6 +132,13 @@ export const formSubmitCallback = (event: Event) => {
   const form = event.target as HTMLFormElement;
   const elements = formElementsMap.get(form);
 
+  /**
+   * If this form does not validate then we're done
+   */
+  if (form.noValidate) {
+    return;
+  }
+
   /** If the Set has items, continue */
   if (elements.size) {
     const nodes = Array.from(elements);

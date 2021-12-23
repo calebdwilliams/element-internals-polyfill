@@ -510,4 +510,25 @@ describe('The ElementInternals polyfill', () => {
       expect(callCount).to.equal(1);
     });
   });
+
+  describe('Forms with novalidate', () => {
+    it('will not block submit', async () => {
+      let submitCount = 0;
+      const onSubmit = (event) => {
+        event.preventDefault();
+        submitCount += 1;
+      }
+      const form = await fixture(html`<form novalidate @submit="${onSubmit}">
+        <test-el name="foo" id="foo"></test-el>
+        <button type="submit">Submit</button>
+      </form>`);
+      const testEl = form.querySelector('test-el');
+      const button = form.querySelector('button');
+      testEl.internals.setValidity({
+        customError: true
+      }, 'error message');
+      button.click();
+      expect(submitCount).to.equal(1);
+    });
+  });
 });
