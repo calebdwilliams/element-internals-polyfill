@@ -132,6 +132,24 @@ In addition to form controls, `ElementInternals` will also surface several acces
 - `ariaValueNow`: 'aria-valuenow'
 - `ariaValueText`: 'aria-valuetext'
 
+For example, if you are creating a control that has a checked property, you will likely could set the `internals.ariaChecked` property to `'true'`. In polyfilled browsers, this will result in adding `aria-checked="true"` to the host's attributes. In fully-supported browsers, this attribute will not be reflected although the checked property will be reflected in the accessibility object model.
+
+```javascript
+class CheckedControl extends HTMLElement {
+  #checked = false;
+  #internals = this.attachInternals();
+
+  get checked() {
+    return this.#checked;
+  }
+
+  set checked(isChecked) {
+    this.#checked = isChecked;
+    this.#internals.ariaChecked = isChecked.toString();
+  }
+}
+```
+
 ### State API
 
 `ElementInternals` exposes an API for creating custom states on an element. For instance if a developer wanted to signify to users that an element was in state `foo`, they could call `internals.states.set('--foo')`. This would make the element match the selector `:--foo`. Unfortunately in non-supporting browsers this is an invalid selector and will throw an error in JS and would cause the parsing of a CSS rule to fail. As a result, this polyfill will add states using the `state--foo` attribute to the host element.
