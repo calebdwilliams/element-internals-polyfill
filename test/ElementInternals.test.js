@@ -95,18 +95,18 @@ describe('The ElementInternals polyfill', () => {
       input.required = input.required;
       input.dispatchEvent(new Event(eventType, options));
     }
-    
+
     beforeEach(async () => {
       form = await fixture(`<form><test-el></test-el></form>`);
       input = form.querySelector('test-el');
       input.required = true;
       simultateEvent('input');
     });
-  
+
     afterEach(async () => {
       await fixtureCleanup(form);
     });
-  
+
     it('form should be invalid when form-associated custom element is invalid', () => {
       expect(form.checkValidity()).to.be.false;
     });

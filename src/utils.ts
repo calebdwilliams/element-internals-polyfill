@@ -87,9 +87,18 @@ export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
  * @return {void}
  */
 export const setFormValidity = (form: HTMLFormElement) => {
-  const valid = form.checkValidity();
-  form.toggleAttribute('internals-invalid', !valid);
-  form.toggleAttribute('internals-valid', valid);
+  const nativeControlValidity = Array.from(form.elements)
+    .map(
+      (element: Element & { validity: ValidityState }) => element.validity.valid
+    );
+  const polyfilledVaidity = Array.from(formElementsMap.get(form))
+    .filter(control => control.isConnected)
+    .map((control: ICustomElement) =>
+      internalsMap.get(control).validity.valid
+    );
+  const hasInvalid = [...nativeControlValidity, ...polyfilledVaidity].includes(false);
+  form.toggleAttribute('internals-invalid', hasInvalid);
+  form.toggleAttribute('internals-valid', !hasInvalid);
 }
 
 /**
