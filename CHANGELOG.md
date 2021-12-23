@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.51](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.50...v0.1.51) (2021-12-23)
+
+
+### Bug Fixes
+
+* respect novalidate ([ff33b37](https://github.com/calebdwilliams/element-internals-polyfill/commit/ff33b37f957e85a34ab4009da79201e9203b296b))
+
 ### [0.1.50](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.49...v0.1.50) (2021-12-23)
 
 
