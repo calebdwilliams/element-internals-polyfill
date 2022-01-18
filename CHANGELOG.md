@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.52](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.51...v0.1.52) (2022-01-18)
+
+
+### Bug Fixes
+
+* **findParentForm:** fixed inconsistency with how Chrome finds forms outside of closed custom elements ([ec7c394](https://github.com/calebdwilliams/element-internals-polyfill/commit/ec7c394cf73efe954a3f007b5f96bebc8184fbe9))
+
 ### [0.1.51](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.50...v0.1.51) (2021-12-23)
 
 
