@@ -531,4 +531,24 @@ describe('The ElementInternals polyfill', () => {
       expect(submitCount).to.equal(1);
     });
   });
+
+  describe('forms outside closed custom elements', () => {
+    it('will not find forms outside of closed custom element', async () => {
+      class ClosedElementWithCustomFormElement extends HTMLElement {
+        constructor() {
+          super();
+          this.renderRoot = this.attachShadow({ mode: 'closed' });
+          this.renderRoot.innerHTML = `<test-el name="foo" id="foo"></test-el>`;
+        }
+      }
+      customElements.define('closed-element-with-custom-form-element', ClosedElementWithCustomFormElement);
+
+      const form = await fixture(html`<form>
+        <closed-element-with-custom-form-element></closed-element-with-custom-form-element>
+      </form>`);
+      const shadowElement = form.querySelector('closed-element-with-custom-form-element');
+      const testEl = shadowElement.renderRoot.querySelector("test-el")
+      expect(testEl.internals.form).to.be.null;
+    });
+  });
 });
