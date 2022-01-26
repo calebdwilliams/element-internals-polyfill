@@ -312,16 +312,15 @@ if (!isElementInternalsSupported()) {
    * Attaches an ElementInternals instance to a custom element. Calling this method
    * on a built-in element will throw an error.
    */
-  Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
-    get() {
-      return (): IElementInternals => {
-        if (this.tagName.indexOf('-') === -1) {
-          throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
-        }
-        return new ElementInternals(this) as IElementInternals;
-      };
+  HTMLElement.prototype.attachInternals = function(): IElementInternals {
+    if (this.tagName.indexOf('-') === -1) {
+      throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
     }
-  });
+    if (internalsMap.has(this)) {
+      throw new DOMException(`DOMException: Failed to execute 'attachInternals' on 'HTMLElement': ElementInternals for the specified element was already attached.`);
+    }
+    return new ElementInternals(this) as IElementInternals;
+  }
 
   const attachShadow = Element.prototype.attachShadow;
   Element.prototype.attachShadow = attachShadowObserver;
