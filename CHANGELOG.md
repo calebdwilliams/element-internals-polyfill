@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.53](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.52...v0.1.53) (2022-01-26)
+
+
+### Bug Fixes
+
+* **polyfill:** change attachInternals to not be a getter ([b249f36](https://github.com/calebdwilliams/element-internals-polyfill/commit/b249f362d7c2dd1863d8fc43fc61084d36fb5bc2))
+
 ### [0.1.52](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.51...v0.1.52) (2022-01-18)
 
 
