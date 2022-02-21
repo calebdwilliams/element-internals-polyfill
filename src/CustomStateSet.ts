@@ -14,7 +14,7 @@ export class CustomStateSet extends Set<string> {
   }
 
   add(state: string) {
-    if (!/^--/.exec(state) || typeof state !== 'string') {
+    if (!/^--/.test(state) || typeof state !== 'string') {
       throw new DOMException(`Failed to execute 'add' on 'CustomStateSet': The specified value ${state} must start with '--'.`);
     }
     const result = super.add(state);
