@@ -212,7 +212,7 @@ export class ElementInternals implements IElementInternals {
     const ref = refMap.get(this);
     const shadowRoot = shadowRootMap.get(ref);
     if (shadowRoot) {
-      return shadowRootMap.get(ref);
+      return shadowRoot;
     }
     return null;
   }
