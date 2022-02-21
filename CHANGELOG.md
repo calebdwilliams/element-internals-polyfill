@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.55](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.54...v0.1.55) (2022-02-21)
+
+
+### Features
+
+* reflect custom states as shadow parts in addition to attributes ([641cac2](https://github.com/calebdwilliams/element-internals-polyfill/commit/641cac268d3b4371fcfee2bb9ee09c152486e5ed)), closes [#62](https://github.com/calebdwilliams/element-internals-polyfill/issues/62)
+
 ### [0.1.54](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.53...v0.1.54) (2022-01-27)
 
 
