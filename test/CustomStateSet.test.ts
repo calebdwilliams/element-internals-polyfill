@@ -7,7 +7,7 @@ describe('CustomStateSet polyfill', () => {
   let set: CustomStateSet;
 
   beforeEach(async () => {
-    el = await fixture(html`<div></div>`);
+    el = await fixture(html`<c-e></c-e>`);
     set = new CustomStateSet(el as ICustomElement);
   });
 
@@ -15,7 +15,7 @@ describe('CustomStateSet polyfill', () => {
     fixtureCleanup();
   });
 
-  describe('it will add attributes and parts', async () => {
+  it('will add attributes and parts', async () => {
     set.add('--foo');
     expect(el.hasAttribute('state--foo')).to.be.true;
     if (el.part) {
@@ -23,7 +23,7 @@ describe('CustomStateSet polyfill', () => {
     }
   });
 
-  describe('it will remove attributes and parts', async () => {
+  it('will remove attributes and parts', async () => {
     set.add('--foo');
     expect(el.hasAttribute('state--foo')).to.be.true;
     if (el.part) {
@@ -37,7 +37,7 @@ describe('CustomStateSet polyfill', () => {
     }
   });
 
-  describe('it will clear all attributes and parts', async () => {
+  it('will clear all attributes and parts', async () => {
     set.add('--foo');
     set.add('--bar');
 
