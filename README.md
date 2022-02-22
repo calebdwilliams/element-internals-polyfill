@@ -152,7 +152,7 @@ class CheckedControl extends HTMLElement {
 
 ### State API
 
-`ElementInternals` exposes an API for creating custom states on an element. For instance if a developer wanted to signify to users that an element was in state `foo`, they could call `internals.states.set('--foo')`. This would make the element match the selector `:--foo`. Unfortunately in non-supporting browsers this is an invalid selector and will throw an error in JS and would cause the parsing of a CSS rule to fail. As a result, this polyfill will add states using the `state--foo` attribute to the host element.
+`ElementInternals` exposes an API for creating custom states on an element. For instance if a developer wanted to signify to users that an element was in state `foo`, they could call `internals.states.set('--foo')`. This would make the element match the selector `:--foo`. Unfortunately in non-supporting browsers this is an invalid selector and will throw an error in JS and would cause the parsing of a CSS rule to fail. As a result, this polyfill will add states using the `state--foo` attribute to the host element, as well as a `state--foo` shadow part in supporting browsers.
 
 In order to properly select these elements in CSS, you will need to duplicate your rule as follows:
 
@@ -164,6 +164,20 @@ In order to properly select these elements in CSS, you will need to duplicate yo
 
 /** Polyfilled browsers */
 [state--foo] {
+  color: rebeccapurple;
+}
+```
+
+The shadow part allows matching the custom state from _outside_ a shadow tree, with similarly duplicated rules:
+
+```css
+/** Supporting browsers */
+::part(bar):--foo {
+  color: rebeccapurple;
+}
+
+/** Polyfilled browsers (that however support shadow parts) */
+::part(bar state--foo) {
   color: rebeccapurple;
 }
 ```
@@ -187,6 +201,7 @@ Be sure to understand how your supported browsers work with CSS `@supports` befo
 - Right now providing a cross-browser compliant version of `ElementInternals.reportValidity` is not supported. The method essentially behaves as a proxy for `ElementInternals.checkValidity`.
 - The polyfill does support the outcomes of the [Accessibility Object Model](https://wicg.github.io/aom/explainer.html#) for applying accessibility rules on the DOM object. However, the spec states that updates using AOM will not be reflected by DOM attributes, but only on the element's accesibility object. However, to emulate this behavior before it is fully supported, it is necessary to use the attributes. If you choose to use this feature, please note that behavior in polyfilled browsers and non-polyfilled browsers will be different; however, the outcome for users will be the same.
 - It is currently impossible to set form states to `:invalid` and `:valid` so this polyfill replaces those with the `[internals-invalid]` and `[internals-valid]` attributes on the host element. The proper selector for invalid elements will be `:host(:invalid), :host([internals-invalid])`.
+- Exposing custom states as shadow parts means that any element using custom states in a shadow tree can be matched using `::part(state--foo)` in polyfilled browsers, even if the author didn't intend to expose it. This was deemed an acceptable trade-off, compared to tracking explicitly exposed elements using a mutation observer.
 
 ## A note about versioning
 
