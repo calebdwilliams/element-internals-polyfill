@@ -100,6 +100,10 @@ export class ElementInternals implements IElementInternals {
   checkValidity(): boolean {
     const ref = refMap.get(this);
     throwIfNotFormAssociated(ref, `Failed to execute 'checkValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
+    /** If the element will not validate, it is necessarily valid by default */
+    if (!this.willValidate) {
+      return true;
+    }
     const validity = validityMap.get(this);
     if (!validity.valid) {
       const validityEvent = new Event('invalid', {
@@ -139,6 +143,10 @@ export class ElementInternals implements IElementInternals {
   reportValidity(): boolean {
     const ref = refMap.get(this);
     throwIfNotFormAssociated(ref, `Failed to execute 'reportValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
+    /** If the element will not validate, it is valid by default */
+    if (!this.willValidate) {
+      return true;
+    }
     const valid =  this.checkValidity();
     const anchor = validationAnchorMap.get(this);
     if (anchor && !ref.constructor['formAssociated']) {

@@ -111,6 +111,11 @@ describe('The ElementInternals polyfill', () => {
       expect(form.checkValidity()).to.be.false;
     });
 
+    it('checkValidity will be true if the element is disabled', () => {
+      input.toggleAttribute('disabled', true);
+      expect(input.checkValidity()).to.be.true;
+    });
+
     it('form should match form:invalid CSS selector when form-associated custom element is invalid', () => {
       expect(form.matches('form:is(:invalid, [internals-invalid])')).to.be.true;
     });
