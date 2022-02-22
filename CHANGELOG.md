@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.0.1...v1.0.2) (2022-02-22)
+
+
+### Bug Fixes
+
+* polyfill now respects willValidate for check and report validity ([366c43c](https://github.com/calebdwilliams/element-internals-polyfill/commit/366c43cb43e6ad947466267f75be3ce1ab652a1a))
+
 ### [1.0.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.0.0...v1.0.1) (2022-02-22)
 
 ## [1.0.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v0.1.55...v1.0.0) (2022-02-21)
