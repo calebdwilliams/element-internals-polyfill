@@ -21,7 +21,7 @@ export class CustomStateSet extends Set<string> {
     const ref = customStateMap.get(this);
     ref.toggleAttribute(`state${state}`, true);
     if (ref.part) {
-      ref.part.add(`state--${state}`);
+      ref.part.add(`state${state}`);
     }
     return result;
   }
@@ -38,7 +38,7 @@ export class CustomStateSet extends Set<string> {
     const ref = customStateMap.get(this);
     ref.toggleAttribute(`state${state}`, false);
     if (ref.part) {
-      ref.part.remove(`state--${state}`);
+      ref.part.remove(`state${state}`);
     }
     return result;
   }
