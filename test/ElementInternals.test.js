@@ -116,6 +116,14 @@ describe('The ElementInternals polyfill', () => {
       expect(input.checkValidity()).to.be.true;
     });
 
+    it('checkValidity will be true if the element is readOnly', async () => {
+      input.toggleAttribute('readonly', true);
+      /** Inconsistent behavior in Chrome version, bug reported */
+      if (ElementInternals.isPolyfilled) {
+        expect(input.checkValidity()).to.be.true;
+      }
+    });
+
     it('form should match form:invalid CSS selector when form-associated custom element is invalid', () => {
       expect(form.matches('form:is(:invalid, [internals-invalid])')).to.be.true;
     });

@@ -244,7 +244,10 @@ export class ElementInternals implements IElementInternals {
   get willValidate(): boolean {
     const ref = refMap.get(this);
     throwIfNotFormAssociated(ref, `Failed to read the 'willValidate' property from 'ElementInternals': The target element is not a form-associated custom element.`);
-    if (ref.disabled || ref.hasAttribute('disabled')) {
+    if (
+      (ref.disabled || ref.hasAttribute('disabled')) ||
+      ref.hasAttribute('readonly')
+    ) {
       return false;
     }
     return true;
