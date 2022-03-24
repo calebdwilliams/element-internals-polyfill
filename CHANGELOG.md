@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.0.4...v1.1.0) (2022-03-24)
+
+
+### Features
+
+* removing most polyfilled features due to Firefox support, adding only CustomStateSet to Firefox ([b4b0dee](https://github.com/calebdwilliams/element-internals-polyfill/commit/b4b0dee2ee3c7516551891544a809735dabd3198))
+
 ### [1.0.4](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.0.3...v1.0.4) (2022-03-24)
 
 
