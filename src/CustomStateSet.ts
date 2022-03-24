@@ -4,6 +4,9 @@ import { ICustomElement } from "./types";
 const customStateMap = new WeakMap<CustomStateSet, ICustomElement>();
 
 export class CustomStateSet extends Set<string> {
+  static get isPolyfilled() {
+    return true;
+  }
   constructor(ref: ICustomElement) {
     super();
     if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {

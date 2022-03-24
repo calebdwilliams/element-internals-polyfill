@@ -260,10 +260,6 @@ declare global {
   }
 }
 
-if (!window.CustomStateSet) {
-  window.CustomStateSet = CustomStateSet;
-}
-
 export function isElementInternalsSupported(): boolean {
   if (!window.ElementInternals) {
     return false;
@@ -281,17 +277,16 @@ export function isElementInternalsSupported(): boolean {
   customElements.define(randomName, ElementInternalsFeatureDetection);
   const featureDetectionElement = new ElementInternalsFeatureDetection();
   return [
-    "shadowRoot",
-    "form",
-    "states",
-    "willValidate",
-    "validity",
-    "validationMessage",
-    "labels",
-    "setFormValue",
-    "setValidity",
-    "checkValidity",
-    "reportValidity"
+    'shadowRoot',
+    'form',
+    'willValidate',
+    'validity',
+    'validationMessage',
+    'labels',
+    'setFormValue',
+    'setValidity',
+    'checkValidity',
+    'reportValidity'
   ].every(prop => prop in featureDetectionElement.internals);
 }
 
@@ -344,4 +339,13 @@ if (!isElementInternalsSupported()) {
 
   const reportValidity = HTMLFormElement.prototype.reportValidity;
   HTMLFormElement.prototype.reportValidity = reportValidityOverride;
+}
+if (!window.CustomStateSet) {
+  window.CustomStateSet = CustomStateSet;
+  const attachInternals = HTMLElement.prototype.attachInternals;
+  HTMLElement.prototype.attachInternals = function(...args) {
+    const internals = attachInternals.call(this, args);
+    internals.states = new CustomStateSet(this);
+    return internals;
+  }
 }
