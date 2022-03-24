@@ -339,8 +339,11 @@ if (!isElementInternalsSupported()) {
 
   const reportValidity = HTMLFormElement.prototype.reportValidity;
   HTMLFormElement.prototype.reportValidity = reportValidityOverride;
-}
-if (!window.CustomStateSet) {
+
+  if (!window.CustomStateSet) {
+    window.CustomStateSet = CustomStateSet;
+  }
+} else if (!window.CustomStateSet) {
   window.CustomStateSet = CustomStateSet;
   const attachInternals = HTMLElement.prototype.attachInternals;
   HTMLElement.prototype.attachInternals = function(...args) {
