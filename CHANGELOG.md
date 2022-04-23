@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.2...v1.1.3) (2022-04-23)
+
+
+### Bug Fixes
+
+* attach observers to this if window.ShadyDOM exists ([4bb51bb](https://github.com/calebdwilliams/element-internals-polyfill/commit/4bb51bb2a2660514d1c10b66256520d70f603746))
+
 ### [1.1.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.1...v1.1.2) (2022-03-24)
 
 ### [1.1.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.0...v1.1.1) (2022-03-24)
