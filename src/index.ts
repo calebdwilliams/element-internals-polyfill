@@ -8,6 +8,7 @@ declare global {
   interface Window {
     CustomStateSet: typeof CustomStateSet;
     ElementInternals: typeof ElementInternals;
+    ShadyDOM: any;
   }
   interface HTMLElement {
     /**

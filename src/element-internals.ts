@@ -299,7 +299,11 @@ if (!isElementInternalsSupported()) {
     const shadowRoot = attachShadow.apply(this, args);
     const observer = new MutationObserver(observerCallback);
     shadowRootMap.set(this, shadowRoot);
-    observer.observe(shadowRoot, observerConfig);
+    if (window.ShadyDOM) {
+      observer.observe(this, observerConfig);
+    } else {
+      observer.observe(shadowRoot, observerConfig);
+    }
     shadowHostsMap.set(this, observer);
     return shadowRoot;
   }
