@@ -77,7 +77,7 @@ export interface ICustomElement extends HTMLElement {
   disabled?: boolean;
 }
 
-export type LabelsList = NodeList & [];
+export type LabelsList = NodeListOf<HTMLLabelElement>;
 
 declare global {
   interface HTMLElement {
