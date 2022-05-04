@@ -45,7 +45,7 @@ export interface IAom {
 export interface IElementInternals extends IAom {
   checkValidity: () => boolean;
   form: HTMLFormElement;
-  labels: NodeListOf<HTMLLabelElement> | [];
+  labels: LabelsList;
   reportValidity: () => boolean;
   setFormValue: (value: string | FormData | null) => void;
   setValidity: (
@@ -77,7 +77,7 @@ export interface ICustomElement extends HTMLElement {
   disabled?: boolean;
 }
 
-export type LabelsList = NodeListOf<HTMLLabelElement> | [];
+export type LabelsList = NodeList & [];
 
 declare global {
   interface HTMLElement {
