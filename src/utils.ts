@@ -92,12 +92,12 @@ export const setFormValidity = (form: HTMLFormElement) => {
     .map(
       (element: Element & { validity: ValidityState }) => element.validity.valid
     );
-  const polyfilledVaidity = Array.from(formElementsMap.get(form))
+  const polyfilledValidity = Array.from(formElementsMap.get(form))
     .filter(control => control.isConnected)
     .map((control: ICustomElement) =>
       internalsMap.get(control).validity.valid
     );
-  const hasInvalid = [...nativeControlValidity, ...polyfilledVaidity].includes(false);
+  const hasInvalid = [...nativeControlValidity, ...polyfilledValidity].includes(false);
   form.toggleAttribute('internals-invalid', hasInvalid);
   form.toggleAttribute('internals-valid', !hasInvalid);
 }
