@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.3...v1.1.4) (2022-05-04)
+
+
+### Bug Fixes
+
+* fix error message ([f216022](https://github.com/calebdwilliams/element-internals-polyfill/commit/f2160227361bd1aaec2685c2a2700d14a6374753))
+* fix form initialization ([6cd1b6d](https://github.com/calebdwilliams/element-internals-polyfill/commit/6cd1b6dfa80d3db6a8892b5b1685fd5fa9e9f423))
+* fix types for labels ([574ff66](https://github.com/calebdwilliams/element-internals-polyfill/commit/574ff669c9da98b0debaa999d052ea21a85da1c6))
+* fix typo in variable name ([d2552e7](https://github.com/calebdwilliams/element-internals-polyfill/commit/d2552e74e2a8dc97b33c78d3025a399a2b2be318))
+
 ### [1.1.3](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.2...v1.1.3) (2022-04-23)
 
 
