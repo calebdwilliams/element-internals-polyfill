@@ -150,7 +150,7 @@ export class ElementInternals implements IElementInternals {
     const valid =  this.checkValidity();
     const anchor = validationAnchorMap.get(this);
     if (anchor && !ref.constructor['formAssociated']) {
-      throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
+      throw new DOMException(`Failed to execute 'reportValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
     }
     if (!valid && anchor) {
       ref.focus();
