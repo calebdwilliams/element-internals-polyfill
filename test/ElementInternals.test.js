@@ -314,6 +314,9 @@ describe('The ElementInternals polyfill', () => {
       el.disabled = true;
       await elementUpdated(el);
       expect(internals.willValidate).to.be.false;
+      if (ElementInternals.isPolyfilled) {
+        expect(el.getAttribute('aria-disabled')).to.equal('true');
+      }
     });
 
     it('will participate in forms', async () => {

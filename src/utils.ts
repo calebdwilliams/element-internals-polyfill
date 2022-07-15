@@ -10,6 +10,11 @@ const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
     if (target.constructor['formAssociated']) {
       const isDisabled = target.hasAttribute('disabled');
       target.toggleAttribute('internals-disabled', isDisabled);
+      if (isDisabled) {
+        target.setAttribute('aria-disabled', 'true');
+      } else {
+        target.removeAttribute('aria-disabled');
+      }
       if (target.formDisabledCallback) {
         target.formDisabledCallback.apply(target, [target.hasAttribute('disabled')]);
       }
