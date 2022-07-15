@@ -16,7 +16,7 @@ const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
         target.removeAttribute('aria-disabled');
       }
       if (target.formDisabledCallback) {
-        target.formDisabledCallback.apply(target, [target.hasAttribute('disabled')]);
+        target.formDisabledCallback.apply(target, [isDisabled]);
       }
     }
   }
