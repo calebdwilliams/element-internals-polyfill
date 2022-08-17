@@ -420,6 +420,16 @@ describe('The ElementInternals polyfill', () => {
       expect(output.get('formdata')).to.equal('works');
     });
 
+    it('will append FormData in correct order', () => {
+      const formData = new FormData();
+      formData.append('one', '1')
+      formData.append('two', '2')
+      noname.internals.setFormValue(formData);
+      const output = new FormData(form);
+
+      expect(Array.from(output.keys())).to.eql(['one', 'two'])
+    });
+
     it('saves a reference to all shadow roots', () => {
       expect(internals.shadowRoot).to.equal(el.shadowRoot);
     });

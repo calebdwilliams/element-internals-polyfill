@@ -170,7 +170,7 @@ export class ElementInternals implements IElementInternals {
         hiddenInput.value = value;
       }
     } else if (value != null && value instanceof FormData) {
-      value.forEach((formDataValue, formDataKey) => {
+      Array.from(value).reverse().forEach(([formDataKey, formDataValue]) => {
         if (typeof formDataValue === 'string') {
           const hiddenInput = createHiddenInput(ref, this);
           hiddenInput.name = formDataKey;
