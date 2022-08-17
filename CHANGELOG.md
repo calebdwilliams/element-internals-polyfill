@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.7](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.6...v1.1.7) (2022-08-17)
+
+
+### Bug Fixes
+
+* don't append FormData element in reverse order ([7f9cd4c](https://github.com/calebdwilliams/element-internals-polyfill/commit/7f9cd4c4a1c969d5ae4b4f62eb00b0e058f8ec3b))
+
 ### [1.1.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.5...v1.1.6) (2022-07-15)
 
 ### [1.1.5](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.4...v1.1.5) (2022-07-15)
