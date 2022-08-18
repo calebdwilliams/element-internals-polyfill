@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Appended via tree test</title>
+    <script type="module">
+      import './index.js';
+
+      customElements.define('my-form-control', class extends HTMLElement {
+        static get formAssociated() {
+          return true;
+        }
+
+        internals = this.attachInternals();
+
+        connectedCallback() {
+          this.internals.setValidity({ customError: true }, 'sdf'); // fails
+        }
+      });
+
+      // ------------------------------------------
+
+      const form = document.createElement('form');
+      form.append(document.createElement('my-form-control'));
+      document.body.appendChild(form);
+    </script>
+  </head>
+  <body></body>
+</html>

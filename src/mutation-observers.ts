@@ -1,7 +1,14 @@
-import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap } from './maps.js';
+import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap } from './maps.js';
 import { aom } from './aom.js';
 import { removeHiddenInputs, initForm, initLabels, upgradeInternals } from './utils.js';
 import { ICustomElement } from './types.js';
+
+function initNode(node: ICustomElement): void {
+  const internals = internalsMap.get(node);
+  const { form } = internals;
+  initForm(node, form, internals);
+  initLabels(node, internals.labels);
+}
 
 export function observerCallback(mutationList: MutationRecord[]) {
   mutationList.forEach(mutationRecord => {
@@ -12,11 +19,7 @@ export function observerCallback(mutationList: MutationRecord[]) {
     added.forEach(node => {
       /** Allows for dynamic addition of elements to forms */
       if (internalsMap.has(node) && node.constructor['formAssociated']) {
-        const internals = internalsMap.get(node);
-        const { form } = internals;
-
-        initForm(node, form, internals);
-        initLabels(node, internals.labels);
+        initNode(node);
       }
 
       /** Upgrade the accessibility information on any previously connected */
@@ -29,6 +32,23 @@ export function observerCallback(mutationList: MutationRecord[]) {
             node.setAttribute(aom[key], internals[key]);
           });
         upgradeMap.delete(node);
+      }
+
+      /** If the node that's added is a form, check the validity */
+      if (node.localName === 'form') {
+        const formElements = formElementsMap.get(node as unknown as HTMLFormElement);
+        const walker = document.createTreeWalker(node, 1, {
+          acceptNode(node: ICustomElement): number {
+            return internalsMap.has(node) && !formElements?.has(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+
+        let current = walker.nextNode() as ICustomElement;
+
+        while (current) {
+          initNode(current);
+          current = walker.nextNode() as ICustomElement;
+        }
       }
     });
 
