@@ -37,9 +37,10 @@ export function observerCallback(mutationList: MutationRecord[]) {
       /** If the node that's added is a form, check the validity */
       if (node.localName === 'form') {
         const formElements = formElementsMap.get(node as unknown as HTMLFormElement);
-        const walker = document.createTreeWalker(node, 1, {
+        const walker = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT, {
           acceptNode(node: ICustomElement): number {
-            return internalsMap.has(node) && !formElements?.has(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+            return internalsMap.has(node) && !formElements?.has(node) ?
+              NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
           }
         });
 
