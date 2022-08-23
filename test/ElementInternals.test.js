@@ -287,10 +287,6 @@ describe('The ElementInternals polyfill', () => {
       expect(internals.validity.valid).to.be.true;
     });
 
-    it('will throw if setValidity is called without arguments', () => {
-      expect(() => internals.setValidity()).to.throw();
-    });
-
     it('will throw if setValidity is called with a flag and no validation message', () => {
       expect(() => {
         internals.setValidity({
