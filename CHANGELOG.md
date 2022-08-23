@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.10](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.9...v1.1.10) (2022-08-23)
+
+
+### Bug Fixes
+
+* fix nodes added in a tree in Safari ([d72172c](https://github.com/calebdwilliams/element-internals-polyfill/commit/d72172c3997440f4e594639a31b3589a4b9913d1))
+
 ### [1.1.9](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.8...v1.1.9) (2022-08-18)
 
 ### [1.1.8](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.7...v1.1.8) (2022-08-18)
