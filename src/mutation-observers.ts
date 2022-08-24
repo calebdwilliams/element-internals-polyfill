@@ -39,7 +39,7 @@ export function observerCallback(mutationList: MutationRecord[]) {
         const formElements = formElementsMap.get(node as unknown as HTMLFormElement);
         const walker = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT, {
           acceptNode(node: ICustomElement): number {
-            return internalsMap.has(node) && !formElements?.has(node) ?
+            return internalsMap.has(node) && !formElements && !formElements.has(node) ?
               NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
           }
         });
