@@ -3,10 +3,13 @@ import { ICustomElement } from "./types";
 /** Save a reference to the ref for teh CustomStateSet */
 const customStateMap = new WeakMap<CustomStateSet, ICustomElement>();
 
-export class CustomStateSet extends Set<string> {
+export type CustomState = `--${string}`;
+
+export class CustomStateSet extends Set<CustomState> {
   static get isPolyfilled() {
     return true;
   }
+
   constructor(ref: ICustomElement) {
     super();
     if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
@@ -16,7 +19,7 @@ export class CustomStateSet extends Set<string> {
     customStateMap.set(this, ref);
   }
 
-  add(state: string) {
+  add(state: CustomState) {
     if (!/^--/.test(state) || typeof state !== 'string') {
       throw new DOMException(`Failed to execute 'add' on 'CustomStateSet': The specified value ${state} must start with '--'.`);
     }
@@ -36,7 +39,7 @@ export class CustomStateSet extends Set<string> {
     super.clear();
   }
 
-  delete(state: string) {
+  delete(state: CustomState) {
     const result = super.delete(state);
     const ref = customStateMap.get(this);
     ref.toggleAttribute(`state${state}`, false);
