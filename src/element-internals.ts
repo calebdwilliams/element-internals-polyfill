@@ -134,7 +134,7 @@ export class ElementInternals implements IElementInternals {
     const id = ref.getAttribute('id');
     const hostRoot = ref.getRootNode() as Element;
     if (hostRoot && id) {
-      return hostRoot.querySelectorAll<HTMLLabelElement>(`[for="${id}]"`) as unknown as LabelsList;
+      return hostRoot.querySelectorAll<HTMLLabelElement>(`[for="${id}"]`) as unknown as LabelsList;
     }
     return [] as unknown as LabelsList;
   }
