@@ -1,4 +1,4 @@
-import { hiddenInputMap, formsMap, formElementsMap, internalsMap, onSubmitMap } from './maps.js';
+import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
 const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
@@ -131,46 +131,49 @@ export const formInputCallback = (event: Event) => {
 /**
  * The global form submit callback. We need to cancel any submission
  * if a nested internals is invalid.
- * @param {Event} - The form submit event
+ * @param {HTMLFormElement} - The form element
  * @return {void}
  */
-export const formSubmitCallback = (event: Event) => {
-  /** Get the Set of elements attached to this form */
-  const form = event.target as HTMLFormElement;
-  const elements = formElementsMap.get(form);
+export const wireSubmitLogic = (form: HTMLFormElement) => {
+  const SUBMIT_BUTTON_SELECTOR = ':is(:is(button, input)[type=submit], button:not([type])):not([disabled])';
+  let submitButtonSelector = `${SUBMIT_BUTTON_SELECTOR}:not([form])`;
 
-  /**
-   * If this form does not validate then we're done
-   */
-  if (form.noValidate) {
-    return;
+  if (form.id) {
+    submitButtonSelector += `,${SUBMIT_BUTTON_SELECTOR}[form='${form.id}']`;
   }
 
-  /** If the Set has items, continue */
-  if (elements.size) {
-    const nodes = Array.from(elements);
-    /** Check the internals.checkValidity() of all nodes */
-    const validityList = nodes
-      .reverse()
-      .map(node => {
-        const internals = internalsMap.get(node);
-        return internals.reportValidity();
-      });
+  form.addEventListener('click', event => {
+    const target = event.target as Element;
+    if (target.closest(submitButtonSelector)) {
+      // validate
+      const elements = formElementsMap.get(form);
 
-    /** If any node is false, stop the event */
-    if (validityList.includes(false)) {
-      event.stopImmediatePropagation();
-      event.stopPropagation();
-      event.preventDefault();
-    } else if (onSubmitMap.get(form)) {
-      const callback = onSubmitMap.get(form);
-      const canceled = callback.call(form, event);
-      if (canceled === false) {
-        event.preventDefault();
+      /**
+       * If this form does not validate then we're done
+       */
+      if (form.noValidate) {
+        return;
+      }
+
+      /** If the Set has items, continue */
+      if (elements.size) {
+        const nodes = Array.from(elements);
+        /** Check the internals.checkValidity() of all nodes */
+        const validityList = nodes
+          .reverse()
+          .map(node => {
+            const internals = internalsMap.get(node);
+            return internals.reportValidity();
+          });
+
+        /** If any node is false, stop the event */
+        if (validityList.includes(false)) {
+          event.preventDefault();
+        }
       }
     }
-  }
-};
+  });
+}
 
 /**
  * The global form reset callback. This will loop over added
@@ -202,13 +205,6 @@ export const formResetCallback = (event: Event) => {
  */
 export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: IElementInternals) => {
   if (form) {
-    /** If the form has an onsubmit function, save it and remove it */
-    if (form.onsubmit) {
-      /** TODO: Find a way to parse arguments better */
-      onSubmitMap.set(form, form.onsubmit.bind(form));
-      form.onsubmit = null;
-    }
-
     /** This will be a WeakMap<HTMLFormElement, Set<HTMLElement> */
     const formElements = formElementsMap.get(form);
 
@@ -222,7 +218,7 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
       formElementsMap.set(form, initSet);
 
       /** Add listeners to emulate validation and reset behavior */
-      form.addEventListener('submit', formSubmitCallback);
+      wireSubmitLogic(form);
       form.addEventListener('reset', formResetCallback);
       form.addEventListener('input', formInputCallback);
       form.addEventListener('change', formChangeCallback);
