@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.14](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.13...v1.1.14) (2022-09-22)
+
+
+### Bug Fixes
+
+* fix feature detection ([0775126](https://github.com/calebdwilliams/element-internals-polyfill/commit/07751269a344e703ddf3831c7cee7cf5abf07fe9))
+
 ### [1.1.13](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.9...v1.1.13) (2022-09-15)
 
 
