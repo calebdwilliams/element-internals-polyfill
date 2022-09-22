@@ -261,7 +261,7 @@ declare global {
 }
 
 export function isElementInternalsSupported(): boolean {
-  if (!window.ElementInternals) {
+  if (!window.ElementInternals || !HTMLElement.prototype.attachInternals) {
     return false;
   }
 
