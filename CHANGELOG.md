@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.15](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.14...v1.1.15) (2022-10-18)
+
+
+### Bug Fixes
+
+* element internals in the LitSSR environment ([5bc5e3e](https://github.com/calebdwilliams/element-internals-polyfill/commit/5bc5e3ef760acc8c1d035aefa0cf46abc2d73074))
+
 ### [1.1.14](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.13...v1.1.14) (2022-09-22)
 
 
