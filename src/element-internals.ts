@@ -323,7 +323,10 @@ if (!isElementInternalsSupported()) {
    * on a built-in element will throw an error.
    */
   HTMLElement.prototype.attachInternals = function(): IElementInternals {
-    if (this.tagName.indexOf('-') === -1) {
+    if (!this.tagName) {
+      /** This happens in the LitSSR environment. Here we can generally ignore internals for now */
+      return {} as unknown as IElementInternals;
+    } else if (this.tagName.indexOf('-') === -1) {
       throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
     }
     if (internalsMap.has(this)) {
