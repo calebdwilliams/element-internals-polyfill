@@ -75,7 +75,7 @@ export const initRef = (ref: ICustomElement, internals: IElementInternals): void
 export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
   if (labels.length) {
     Array.from(labels).forEach(label =>
-      label.addEventListener('click', ref.focus.bind(ref)));
+      label.addEventListener('click', ref.click.bind(ref)));
     let firstLabelId = labels[0].id;
     if (!labels[0].id) {
       firstLabelId = `${labels[0].htmlFor}_Label`;
