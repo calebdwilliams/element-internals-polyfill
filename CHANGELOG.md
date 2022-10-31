@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.16](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.14...v1.1.16) (2022-10-31)
+
+
+### Bug Fixes
+
+* click references in label click ([89967dd](https://github.com/calebdwilliams/element-internals-polyfill/commit/89967dd91d0a04726067ca6f36382ac6714eccd5)), closes [#85](https://github.com/calebdwilliams/element-internals-polyfill/issues/85)
+* element internals in the LitSSR environment ([5bc5e3e](https://github.com/calebdwilliams/element-internals-polyfill/commit/5bc5e3ef760acc8c1d035aefa0cf46abc2d73074))
+* fixes condition in mutation observer ([3b8ece9](https://github.com/calebdwilliams/element-internals-polyfill/commit/3b8ece99c24d4b70f8f32b3b4ee9d8d72d35dd59))
+
 ### [1.1.15](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.14...v1.1.15) (2022-10-18)
 
 
