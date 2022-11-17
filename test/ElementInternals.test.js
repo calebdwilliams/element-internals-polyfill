@@ -473,7 +473,7 @@ describe('The ElementInternals polyfill', () => {
   });
 
   describe('inside a custom element with a form and containing fieldset', () => {
-    let form, el, internals, fieldset;
+    let form, els, fieldset;
 
     beforeEach(async () => {
       form = await fixture(html`
@@ -482,17 +482,20 @@ describe('The ElementInternals polyfill', () => {
             <label>Label text
               <test-el name="foo" id="foo"></test-el>
             </label>
+            <label for="bar">Label text</label>
+            <test-el name="bar" id="bar"></test-el>
           </fieldset>
         </form>
-      `);
+        `);
       fieldset = form.querySelector('fieldset');
-      el = form.querySelector('test-el[id=foo]');
-      internals = el.internals;
+      els = form.querySelectorAll('test-el');
     });
 
     it('sets aria-disabled when the fieldset is disabled', function() {
       fieldset.toggleAttribute('disabled', true);
-      expect(el.getAttribute('aria-disabled')).to.equal('true');
+      for (const el of els) {
+        expect(el.getAttribute('aria-disabled')).to.equal('true');
+      }
     });
 
     afterEach(async () => {
