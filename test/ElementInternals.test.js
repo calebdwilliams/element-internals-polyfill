@@ -295,7 +295,7 @@ describe('The ElementInternals polyfill', () => {
       }).to.throw();
     });
 
-    it ('will accept ValidityState from a native form input', () => {
+    it('will accept ValidityState from a native form input', () => {
       el.input.required = true;
       el.input.reportValidity();
       internals.setValidity(el.input.validity, el.input.validationMessage, el.input);
@@ -469,6 +469,34 @@ describe('The ElementInternals polyfill', () => {
       internals.setValidity({});
       expect(form.checkValidity()).to.be.true;
       expect(form.reportValidity()).to.be.true;
+    });
+  });
+
+  describe('inside a custom element with a form and containing fieldset', () => {
+    let form, el, internals, fieldset;
+
+    beforeEach(async () => {
+      form = await fixture(html`
+        <form id="form">
+          <fieldset id="fieldset">
+            <label>Label text
+              <test-el name="foo" id="foo"></test-el>
+            </label>
+          </fieldset>
+        </form>
+      `);
+      fieldset = form.querySelector('fieldset');
+      el = form.querySelector('test-el[id=foo]');
+      internals = el.internals;
+    });
+
+    it('sets aria-disabled when the fieldset is disabled', function() {
+      fieldset.toggleAttribute('disabled', true);
+      expect(el.getAttribute('aria-disabled')).to.equal('true');
+    });
+
+    afterEach(async () => {
+      fixtureCleanup(form)
     });
   });
 
