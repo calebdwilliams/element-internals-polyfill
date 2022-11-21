@@ -1,4 +1,4 @@
-import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
+import { hiddenInputMap, formsMap, formElementsMap, internalsMap, fieldsetElementsMap } from './maps.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
 const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
@@ -20,6 +20,10 @@ const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
       }
     }
   }
+});
+
+const fieldsetObserver = new MutationObserver(records => {
+  records.forEach(({ target }) => setFieldsetDisabledState(target as HTMLFieldSetElement));
 });
 
 /**
@@ -106,6 +110,15 @@ export const setFormValidity = (form: HTMLFormElement) => {
   const hasInvalid = [...nativeControlValidity, ...polyfilledValidity].includes(false);
   form.toggleAttribute('internals-invalid', hasInvalid);
   form.toggleAttribute('internals-valid', !hasInvalid);
+}
+
+/**
+ * Sets the disabled state for form-associated children of a fieldset
+ * @param fieldset - The target fieldset
+ */
+export const setFieldsetDisabledState = (fieldset: HTMLFieldSetElement): void => {
+  for (const element of fieldsetElementsMap.get(fieldset) || [])
+    internalsMap.get(element).ariaDisabled = String(fieldset.disabled);
 }
 
 /**
@@ -233,6 +246,28 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
       }, 0);
     }
     setFormValidity(form);
+  }
+};
+
+/**
+ * Initialize the fieldset.
+ * @param ref - The element ref that includes internals
+ * @param fieldset - The form the ref belongs to
+ */
+export const initFieldset = (ref: ICustomElement, fieldset: HTMLFieldSetElement): void => {
+  if (fieldset) {
+    const fieldsetElements = fieldsetElementsMap.get(fieldset);
+    if (fieldsetElements) {
+      /** If formElements exists, add to it */
+      fieldsetElements.add(ref);
+    } else {
+      /** If fieldsetElements doesn't exist, create it and add to it */
+      const initSet = new Set<ICustomElement>();
+      initSet.add(ref);
+      fieldsetElementsMap.set(fieldset, initSet);
+    }
+    setFieldsetDisabledState(fieldset);
+    fieldsetObserver.observe(fieldset, { attributes: true, attributeFilter: ['disabled'] });
   }
 };
 

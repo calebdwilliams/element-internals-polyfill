@@ -1,6 +1,6 @@
-import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap } from './maps.js';
+import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap, fieldsetElementsMap } from './maps.js';
 import { aom } from './aom.js';
-import { removeHiddenInputs, initForm, initLabels, upgradeInternals } from './utils.js';
+import { removeHiddenInputs, initForm, initLabels, upgradeInternals, initFieldset } from './utils.js';
 import { ICustomElement } from './types.js';
 
 function initNode(node: ICustomElement): void {
@@ -48,6 +48,27 @@ export function observerCallback(mutationList: MutationRecord[]) {
 
         while (current) {
           initNode(current);
+          current = walker.nextNode() as ICustomElement;
+        }
+      }
+
+      /**
+       * If the node that's added is a fieldset, ensure it's form-associated children
+       * receive it's disabled state
+       */
+      if (node.localName === 'fieldset') {
+        const fieldsetElements = fieldsetElementsMap.get(node as unknown as HTMLFieldSetElement);
+        const walker = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT, {
+          acceptNode(node: ICustomElement): number {
+            return internalsMap.has(node) && !(fieldsetElements && fieldsetElements.has(node)) ?
+              NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+          }
+        });
+
+        let current = walker.nextNode() as ICustomElement;
+
+        while (current) {
+          initFieldset(current, node as unknown as HTMLFieldSetElement);
           current = walker.nextNode() as ICustomElement;
         }
       }

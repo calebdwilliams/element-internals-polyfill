@@ -29,6 +29,9 @@ export const shadowHostsMap = new WeakMap<ICustomElement, MutationObserver>();
 /** Use a form element to get a set of attached custom elements */
 export const formElementsMap = new WeakMap<HTMLFormElement, Set<ICustomElement>>();
 
+/** Use a fieldset element to get a set of child custom elements */
+export const fieldsetElementsMap = new WeakMap<HTMLFieldSetElement, Set<ICustomElement>>();
+
 /** Use an ElementInternals instance to get a reference to an element's value */
 export const refValueMap = new WeakMap<ICustomElement, any>();
 
