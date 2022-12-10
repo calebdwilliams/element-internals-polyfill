@@ -246,6 +246,10 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
       }, 0);
     }
     setFormValidity(form);
+    for (const element of form.elements) {
+      if (element instanceof HTMLFieldSetElement)
+        initFieldset(ref, element);
+    }
   }
 };
 
