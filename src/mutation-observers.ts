@@ -1,6 +1,6 @@
 import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap } from './maps.js';
 import { aom } from './aom.js';
-import { removeHiddenInputs, initForm, initLabels, upgradeInternals } from './utils.js';
+import { removeHiddenInputs, initForm, initLabels, setDisabled, upgradeInternals } from './utils.js';
 import { ICustomElement } from './types.js';
 
 function initNode(node: ICustomElement): void {
@@ -8,6 +8,11 @@ function initNode(node: ICustomElement): void {
   const { form } = internals;
   initForm(node, form, internals);
   initLabels(node, internals.labels);
+
+  if (node.hasAttribute('disabled')) {
+    setDisabled(node, true);
+  }
+
 }
 
 export function observerCallback(mutationList: MutationRecord[]) {
