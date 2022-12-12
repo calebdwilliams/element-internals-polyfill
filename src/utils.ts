@@ -1,7 +1,24 @@
 import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
-const setDisabled = (ref: ICustomElement, disabled: boolean): void => {
+const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
+
+const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
+  for (const mutation of mutationsList) {
+    const target = mutation.target as ICustomElement;
+
+    if (target.constructor['formAssociated']) {
+      setDisabled(target, target.hasAttribute('disabled'));
+    }
+  }
+});
+
+/**
+ * Toggle's the disabled state (attributes & callback) on the given element
+ * @param {ICustomElement} ref - The custom element instance
+ * @param {boolean} disabled - The disabled state
+ */
+export const setDisabled = (ref: ICustomElement, disabled: boolean): void => {
   ref.toggleAttribute('internals-disabled', disabled);
 
   if (disabled) {
@@ -14,18 +31,6 @@ const setDisabled = (ref: ICustomElement, disabled: boolean): void => {
     ref.formDisabledCallback.apply(ref, [disabled]);
   }
 };
-
-const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
-
-const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
-  for (const mutation of mutationsList) {
-    const target = mutation.target as ICustomElement;
-
-    if (target.constructor['formAssociated']) {
-      setDisabled(target, target.hasAttribute('disabled'));
-    }
-  }
-});
 
 /**
  * Removes all hidden inputs for the given element internals instance
@@ -64,12 +69,6 @@ export const createHiddenInput = (ref: ICustomElement, internals: IElementIntern
  */
 export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
   hiddenInputMap.set(internals, []);
-
-  const isDisabled = ref.hasAttribute('disabled');
-  if (isDisabled) {
-    setDisabled(ref, isDisabled);
-  }
-
   observer.observe(ref, observerConfig);
 };
 
