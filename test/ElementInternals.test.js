@@ -573,4 +573,46 @@ describe('The ElementInternals polyfill', () => {
       expect(testEl.internals.form).to.be.null;
     });
   });
+
+  describe('disabled custom element', () => {
+    class DisabledElement extends HTMLElement {
+      static formAssociated = true;
+
+      order = [];
+
+      constructor() {
+        super();
+
+        this.attachShadow({ mode: 'open' });
+        this.attachInternals();
+
+        this.order.push('constructor');
+      }
+
+      connectedCallback() {
+        this.order.push('connectedCallback');
+      }
+
+      formDisabledCallback() {
+        this.order.push('formDisabledCallback');
+      }
+    }
+
+    customElements.define('test-disabled', DisabledElement);
+    
+    let el;
+
+    beforeEach(async () => {
+      el = await fixture(html`<test-disabled disabled></test-disabled>`);
+    });
+
+    it('should have called the callbacks in the correct order', async () => {
+      await el.updateComplete;
+
+      expect(el.order.length).to.equal(3);
+      expect(el.order[0]).to.equal('constructor');
+      expect(el.order[1]).to.equal('formDisabledCallback');
+      expect(el.order[2]).to.equal('connectedCallback');
+    });
+  });
 });
