@@ -609,10 +609,7 @@ describe('The ElementInternals polyfill', () => {
     it('should have called the callbacks in the correct order', async () => {
       await el.updateComplete;
 
-      expect(el.order.length).to.equal(3);
-      expect(el.order[0]).to.equal('constructor');
-      expect(el.order[1]).to.equal('formDisabledCallback');
-      expect(el.order[2]).to.equal('connectedCallback');
+      expect(el.order).to.eql(['constructor', 'formDisabledCallback', 'connectedCallback']);
     });
   });
 });
