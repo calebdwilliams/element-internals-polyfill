@@ -8,11 +8,6 @@ function initNode(node: ICustomElement): void {
   const { form } = internals;
   initForm(node, form, internals);
   initLabels(node, internals.labels);
-
-  if (node.hasAttribute('disabled')) {
-    setDisabled(node, true);
-  }
-
 }
 
 export function observerCallback(mutationList: MutationRecord[]) {

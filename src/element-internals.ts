@@ -14,6 +14,7 @@ import {
   initRef,
   overrideFormMethod,
   removeHiddenInputs,
+  setDisabled,
   throwIfNotFormAssociated,
   upgradeInternals
 } from './utils';
@@ -255,6 +256,10 @@ export class ElementInternals implements IElementInternals {
 }
 
 declare global {
+  interface CustomElementConstructor {
+    formAssociated?: boolean;
+  } 
+
   interface Window {
     ElementInternals: typeof ElementInternals
   }
@@ -294,6 +299,21 @@ if (!isElementInternalsSupported()) {
   /** @ts-expect-error: we need to replace the default ElementInternals */
   window.ElementInternals = ElementInternals;
 
+  const define = customElements.define;
+  customElements.define = function (name, constructor, options) {
+    if (constructor.formAssociated) {
+      const connectedCallback = constructor.prototype.connectedCallback;
+      constructor.prototype.connectedCallback = function () {
+        if (this.hasAttribute('disabled')) {
+          setDisabled(this, true);
+        }
+
+        connectedCallback.apply(this);
+      };
+    }
+
+    define.apply(customElements, [name, constructor, options]);
+  }
 
   function attachShadowObserver(...args) {
     const shadowRoot = attachShadow.apply(this, args);
