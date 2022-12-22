@@ -308,7 +308,7 @@ if (!isElementInternalsSupported()) {
           setDisabled(this, true);
         }
 
-        connectedCallback.apply(this);
+        connectedCallback?.apply(this);
       };
     }
 
