@@ -117,8 +117,9 @@ export const setFormValidity = (form: HTMLFormElement) => {
  * @param fieldset - The target fieldset
  */
 export const setFieldsetDisabledState = (fieldset: HTMLFieldSetElement): void => {
-  for (const element of fieldsetElementsMap.get(fieldset) || [])
-    internalsMap.get(element).ariaDisabled = String(fieldset.disabled);
+  for (const element of fieldsetElementsMap.get(fieldset) ?? []) {
+    internalsMap.get(element).ariaDisabled = String(!!fieldset.disabled);
+  }
 }
 
 /**
@@ -267,9 +268,9 @@ export const initFieldset = (ref: ICustomElement, fieldset: HTMLFieldSetElement)
     } else {
       /** If fieldsetElements doesn't exist, create it and add to it */
       const initSet = new Set<ICustomElement>();
-      initSet.add(ref);
       fieldsetElementsMap.set(fieldset, initSet);
     }
+    fieldsetElementsMap.get(fieldset).add(ref);
     setFieldsetDisabledState(fieldset);
     fieldsetObserver.observe(fieldset, { attributes: true, attributeFilter: ['disabled'] });
   }
