@@ -491,10 +491,11 @@ describe('The ElementInternals polyfill', () => {
       els = form.querySelectorAll('test-el');
     });
 
-    it('sets aria-disabled when the fieldset is disabled', function() {
+    it('sets ariaDisabled when the fieldset is disabled', async function() {
       fieldset.toggleAttribute('disabled', true);
+      await new Promise(requestAnimationFrame);
       for (const el of els) {
-        expect(el.getAttribute('aria-disabled')).to.equal('true');
+        expect(el.internals.ariaDisabled).to.equal('true');
       }
     });
 
