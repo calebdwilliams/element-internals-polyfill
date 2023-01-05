@@ -8,12 +8,14 @@ export interface IAom {
   ariaChecked: string;
   ariaColCount: string;
   ariaColIndex: string;
+  ariaColIndexText: string;
   ariaColSpan: string;
   ariaCurrent: string;
   ariaDisabled: string;
   ariaExpanded: string;
   ariaHasPopup: string;
   ariaHidden: string;
+  ariaInvalid: string;
   ariaKeyShortcuts: string;
   ariaLabel: string;
   ariaLevel: string;
@@ -31,6 +33,7 @@ export interface IAom {
   ariaRoleDescription: string;
   ariaRowCount: string;
   ariaRowIndex: string;
+  ariaRowIndexText: string;
   ariaRowSpan: string;
   ariaSelected: string;
   ariaSetSize: string;
