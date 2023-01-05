@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.18](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.17...v1.1.18) (2023-01-05)
+
+
+### Bug Fixes
+
+* add missing aria attributes ([01bc332](https://github.com/calebdwilliams/element-internals-polyfill/commit/01bc33267e1814ed6e84009e7f758f73cd1c155d))
+
 ### [1.1.17](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.14...v1.1.17) (2022-12-09)
 
 
