@@ -31,12 +31,14 @@ export class ElementInternals implements IElementInternals {
   ariaChecked: string;
   ariaColCount: string;
   ariaColIndex: string;
+  ariaColIndexText: string;
   ariaColSpan: string;
   ariaCurrent: string;
   ariaDisabled: string;
   ariaExpanded: string;
   ariaHasPopup: string;
   ariaHidden: string;
+  ariaInvalid: string;
   ariaKeyShortcuts: string;
   ariaLabel: string;
   ariaLevel: string;
@@ -54,6 +56,7 @@ export class ElementInternals implements IElementInternals {
   ariaRoleDescription: string;
   ariaRowCount: string;
   ariaRowIndex: string;
+  ariaRowIndexText: string;
   ariaRowSpan: string;
   ariaSelected: string;
   ariaSetSize: string;
