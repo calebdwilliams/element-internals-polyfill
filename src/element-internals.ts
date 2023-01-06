@@ -1,4 +1,5 @@
 import {
+  connectedCallbackMap,
   internalsMap,
   refMap,
   refValueMap,
@@ -307,8 +308,12 @@ if (!isElementInternalsSupported()) {
     if (constructor.formAssociated) {
       const connectedCallback = constructor.prototype.connectedCallback;
       constructor.prototype.connectedCallback = function () {
-        if (this.hasAttribute('disabled')) {
-          setDisabled(this, true);
+        if (!connectedCallbackMap.has(this)) {
+          connectedCallbackMap.set(this, true);
+
+          if (this.hasAttribute('disabled')) {
+            setDisabled(this, true);
+          }
         }
 
         connectedCallback?.apply(this);

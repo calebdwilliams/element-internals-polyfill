@@ -593,6 +593,10 @@ describe('The ElementInternals polyfill', () => {
         this.order.push('connectedCallback');
       }
 
+      disconnectedCallback() {
+        this.order.push('disconnectedCallback');
+      }
+
       formDisabledCallback() {
         this.order.push('formDisabledCallback');
       }
@@ -610,6 +614,22 @@ describe('The ElementInternals polyfill', () => {
       await el.updateComplete;
 
       expect(el.order).to.eql(['constructor', 'formDisabledCallback', 'connectedCallback']);
+    });
+    
+    it('should only call formDisabledCallback once', async () => {
+      await el.updateComplete;
+      
+      const container = el.parentElement;
+      container.removeChild(el);
+      container.appendChild(el);
+
+      expect(el.order).to.eql([
+        'constructor', 
+        'formDisabledCallback', 
+        'connectedCallback', 
+        'disconnectedCallback', 
+        'connectedCallback'
+      ]);
     });
   });
 });
