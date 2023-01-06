@@ -38,8 +38,11 @@ export const upgradeMap = new WeakMap<Element, IElementInternals>();
 /** Save references to shadow roots for inclusion in internals instance */
 export const shadowRootMap = new WeakMap<ICustomElement, ShadowRoot>();
 
-/** Save a refernce to the internals' validation anchor */
+/** Save a reference to the internals' validation anchor */
 export const validationAnchorMap = new WeakMap<IElementInternals, HTMLElement>();
 
 /** Map DocumentFragments to their MutationObservers so we can disconnect once elements are removed */
 export const documentFragmentMap = new WeakMap<DocumentFragment, MutationObserver>();
+
+/** Whether connectedCallback has already been called. */
+export const connectedCallbackMap = new WeakMap<ICustomElement, boolean>();
