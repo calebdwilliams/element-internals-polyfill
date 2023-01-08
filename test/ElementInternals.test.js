@@ -497,6 +497,7 @@ describe('The ElementInternals polyfill', () => {
 
     describe('setting disabled on the fieldset', function() {
       beforeEach(function() {
+        disabledCallCount = 0;
         fieldset.toggleAttribute('disabled', true);
       });
       it('calls formDisabledCallback', function() {
@@ -505,6 +506,7 @@ describe('The ElementInternals polyfill', () => {
     });
 
     afterEach(async () => {
+      disabledCallCount = 0;
       fixtureCleanup(form)
     });
   });
