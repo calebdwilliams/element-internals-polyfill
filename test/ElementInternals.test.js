@@ -8,6 +8,7 @@ import {
 import '../dist/index.js';
 
 let callCount = 0;
+let disabledCallCount = 0;
 let internalsAvailableInFormAssociatedCallback = false;
 
 window.onFormSubmit = (event) => {
@@ -76,6 +77,7 @@ class CustomElement extends HTMLElement {
 
   formDisabledCallback() {
     callCount += 1;
+    disabledCallCount += 1;
   }
   formResetCallback() {
     callCount += 1;
@@ -214,6 +216,7 @@ describe('The ElementInternals polyfill', () => {
         </form>
       `);
       callCount = 0;
+      disabledCallCount = 0;
       label = form.querySelector('label');
       el = form.querySelector('test-el[id=foo]');
       noname = form.querySelector('test-el[id=noname]');
@@ -476,6 +479,7 @@ describe('The ElementInternals polyfill', () => {
     let form, els, fieldset;
 
     beforeEach(async () => {
+      disabledCallCount = 0;
       form = await fixture(html`
         <form id="form">
           <fieldset id="fieldset">
@@ -491,12 +495,13 @@ describe('The ElementInternals polyfill', () => {
       els = form.querySelectorAll('test-el');
     });
 
-    it('sets ariaDisabled when the fieldset is disabled', async function() {
-      fieldset.toggleAttribute('disabled', true);
-      await new Promise(requestAnimationFrame);
-      for (const el of els) {
-        expect(el.internals.ariaDisabled).to.equal('true');
-      }
+    describe('setting disabled on the fieldset', function() {
+      beforeEach(function() {
+        fieldset.toggleAttribute('disabled', true);
+      });
+      it('calls formDisabledCallback', function() {
+        expect(disabledCallCount).to.equal(2);
+      });
     });
 
     afterEach(async () => {

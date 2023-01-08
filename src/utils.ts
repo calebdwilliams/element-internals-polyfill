@@ -118,7 +118,7 @@ export const setFormValidity = (form: HTMLFormElement) => {
  */
 export const setFieldsetDisabledState = (fieldset: HTMLFieldSetElement): void => {
   for (const element of fieldsetElementsMap.get(fieldset) ?? []) {
-    internalsMap.get(element).ariaDisabled = String(!!fieldset.disabled);
+    element.formDisabledCallback?.(fieldset.disabled);
   }
 }
 
