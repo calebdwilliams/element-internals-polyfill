@@ -1,5 +1,6 @@
 import {
   connectedCallbackMap,
+  formElementsMap,
   internalsMap,
   refMap,
   refValueMap,
@@ -24,6 +25,7 @@ import { ValidityState, reconcileValidity, setValid } from './ValidityState';
 import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers';
 import { IElementInternals, ICustomElement, LabelsList } from './types';
 import { CustomStateSet } from './CustomStateSet';
+import { HTMLFormInternalsCollection } from './HTMLFormInternalsCollection';
 
 export class ElementInternals implements IElementInternals {
   ariaAtomic: string;
@@ -262,7 +264,7 @@ export class ElementInternals implements IElementInternals {
 declare global {
   interface CustomElementConstructor {
     formAssociated?: boolean;
-  } 
+  }
 
   interface Window {
     ElementInternals: typeof ElementInternals
@@ -374,6 +376,57 @@ if (!isElementInternalsSupported()) {
 
   const reportValidity = HTMLFormElement.prototype.reportValidity;
   HTMLFormElement.prototype.reportValidity = reportValidityOverride;
+
+  const { get } = Object.getOwnPropertyDescriptor(HTMLFormElement.prototype, 'elements');
+  Object.defineProperty(HTMLFormElement.prototype, 'elements', {
+    get(...args) {
+      const elements = get.call(this, ...args);
+      const polyfilledElements = Array.from(formElementsMap.get(this) || []);
+      if (polyfilledElements.length === 0) {
+        return elements;
+      }
+
+      const sortedPolyfilledElements = polyfilledElements.sort((a, b) => {
+        return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? 1 : -1;
+      });
+
+      let pointer = 0;
+      const orderedElements = [];
+
+      function compare(element) {
+        const polyfilledElement = sortedPolyfilledElements[pointer];
+        if (
+          polyfilledElement &&
+          element.compareDocumentPosition(polyfilledElement) === Node.DOCUMENT_POSITION_FOLLOWING
+        ) {
+          // Element is before
+          orderedElements.push(element);
+        } else if (polyfilledElement) {
+          // Polyfill is before
+          orderedElements.push(polyfilledElement);
+          pointer += 1;
+
+          // Recursively check polyfill list until its after element
+          compare(element);
+        } else {
+          // Elements only remaining
+          orderedElements.push(element);
+        }
+      }
+
+      // Loop through all native elements
+      for (let element of elements) {
+        compare(element);
+      }
+
+      // Add any remaining polyfilled elements
+      for (; pointer < sortedPolyfilledElements.length; pointer++) {
+        orderedElements.push(sortedPolyfilledElements[pointer]);
+      }
+
+      return new HTMLFormInternalsCollection(orderedElements);
+    },
+  });
 
   if (!window.CustomStateSet) {
     window.CustomStateSet = CustomStateSet;
