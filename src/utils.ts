@@ -1,17 +1,6 @@
 import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
+import { disabledObserver, disabledObserverConfig } from './mutation-observers.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
-
-const observerConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
-
-const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
-  for (const mutation of mutationsList) {
-    const target = mutation.target as ICustomElement;
-
-    if (target.constructor['formAssociated']) {
-      setDisabled(target, target.hasAttribute('disabled'));
-    }
-  }
-});
 
 /**
  * Toggle's the disabled state (attributes & callback) on the given element
@@ -69,7 +58,7 @@ export const createHiddenInput = (ref: ICustomElement, internals: IElementIntern
  */
 export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
   hiddenInputMap.set(internals, []);
-  observer.observe(ref, observerConfig);
+  disabledObserver.observe(ref, disabledObserverConfig);
 };
 
 /**
