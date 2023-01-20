@@ -5,7 +5,8 @@
     "declaration": true,
     "declarationDir": "dist",
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "moduleResolution": "Node"
   },
   "lib": ["dom", "ESNext"],
   "include": ["./src/**/*"],
