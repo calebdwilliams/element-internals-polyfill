@@ -25,7 +25,7 @@ import { ValidityState, reconcileValidity, setValid } from './ValidityState';
 import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers';
 import { IElementInternals, ICustomElement, LabelsList } from './types';
 import { CustomStateSet } from './CustomStateSet';
-import { HTMLFormInternalsCollection } from './HTMLFormInternalsCollection';
+import { HTMLFormControlsCollection } from './HTMLFormControlsCollection';
 
 export class ElementInternals implements IElementInternals {
   ariaAtomic: string;
@@ -382,49 +382,22 @@ if (!isElementInternalsSupported()) {
     get(...args) {
       const elements = get.call(this, ...args);
       const polyfilledElements = Array.from(formElementsMap.get(this) || []);
+
+      // If there are no polyfilled elements, return the native elements collection
       if (polyfilledElements.length === 0) {
         return elements;
       }
 
-      const sortedPolyfilledElements = polyfilledElements.sort((a, b) => {
-        return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? 1 : -1;
+      // Merge the native elements with the polyfilled elements
+      // and order them by their position in the DOM
+      const orderedElements = Array.from(elements).concat(polyfilledElements).sort((a: Element, b: Element) => {
+        if (a.compareDocumentPosition) {
+          return a.compareDocumentPosition(b) & 2 ? 1 : -1;
+        }
+        return 0;
       });
 
-      let pointer = 0;
-      const orderedElements = [];
-
-      function compare(element) {
-        const polyfilledElement = sortedPolyfilledElements[pointer];
-        if (
-          polyfilledElement &&
-          element.compareDocumentPosition(polyfilledElement) === Node.DOCUMENT_POSITION_FOLLOWING
-        ) {
-          // Element is before
-          orderedElements.push(element);
-        } else if (polyfilledElement) {
-          // Polyfill is before
-          orderedElements.push(polyfilledElement);
-          pointer += 1;
-
-          // Recursively check polyfill list until its after element
-          compare(element);
-        } else {
-          // Elements only remaining
-          orderedElements.push(element);
-        }
-      }
-
-      // Loop through all native elements
-      for (let element of elements) {
-        compare(element);
-      }
-
-      // Add any remaining polyfilled elements
-      for (; pointer < sortedPolyfilledElements.length; pointer++) {
-        orderedElements.push(sortedPolyfilledElements[pointer]);
-      }
-
-      return new HTMLFormInternalsCollection(orderedElements);
+      return new HTMLFormControlsCollection(orderedElements);
     },
   });
 
