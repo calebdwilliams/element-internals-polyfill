@@ -1,6 +1,6 @@
 import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap } from './maps.js';
 import { aom } from './aom.js';
-import { removeHiddenInputs, initForm, initLabels, setDisabled, upgradeInternals } from './utils.js';
+import { removeHiddenInputs, initForm, initLabels, upgradeInternals, setDisabled } from './utils.js';
 import { ICustomElement } from './types.js';
 
 function initNode(node: ICustomElement): void {
@@ -9,6 +9,51 @@ function initNode(node: ICustomElement): void {
   initForm(node, form, internals);
   initLabels(node, internals.labels);
 }
+
+/**
+ * If a fieldset's disabled state is toggled, the formDisabledCallback
+ * on any child form-associated cusotm elements.
+ */
+export const walkFieldset = (node: HTMLFieldSetElement, firstRender: boolean = false): void => {
+  const walker = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT, {
+    acceptNode(node: ICustomElement): number {
+      return internalsMap.has(node) ?
+        NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+    }
+  });
+
+  let current = walker.nextNode() as ICustomElement;
+  /**
+   * We don't need to call anything on first render if
+   * the element isn't disabled
+   */
+  const isCallNecessary = (!firstRender || node.disabled)
+
+  while (current) {
+    if (current.formDisabledCallback && isCallNecessary) {
+      setDisabled(current, node.disabled);
+    }
+    current = walker.nextNode() as ICustomElement;
+  }
+};
+
+export const disabledObserverConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
+
+export const disabledObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
+  for (const mutation of mutationsList) {
+    const target = mutation.target as ICustomElement;
+
+    if (target.constructor['formAssociated']) {
+      setDisabled(target, target.hasAttribute('disabled'));
+    } else if (target.localName === 'fieldset') {
+      /**
+       * Repurpose the observer for fieldsets which need
+       * to be walked whenever the disabled attribute is set
+       */
+      walkFieldset(target as unknown as HTMLFieldSetElement);
+    }
+  }
+});
 
 export function observerCallback(mutationList: MutationRecord[]) {
   mutationList.forEach(mutationRecord => {
@@ -50,6 +95,11 @@ export function observerCallback(mutationList: MutationRecord[]) {
           initNode(current);
           current = walker.nextNode() as ICustomElement;
         }
+      }
+
+      if (node.localName === 'fieldset') {
+        disabledObserver.observe(node, disabledObserverConfig);
+        walkFieldset(node as unknown as HTMLFieldSetElement, true);
       }
     });
 
