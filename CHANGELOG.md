@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.20](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.19...v1.1.20) (2023-01-21)
+
+
+### Bug Fixes
+
+* polyfill respects setting disabled on fieldset elements ([ca90197](https://github.com/calebdwilliams/element-internals-polyfill/commit/ca90197dce1c8393400deaaa6b5d304b7e9ac9e9))
+
 ### [1.1.19](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.18...v1.1.19) (2023-01-15)
 
 ### [1.1.18](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.17...v1.1.18) (2023-01-05)
