@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.0...v1.2.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* filtering native elements out of setFormValidity#nativeControlValidity ([80442ed](https://github.com/calebdwilliams/element-internals-polyfill/commit/80442edc500db999ab180060918d75232c07e8cd))
+
 ## [1.2.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.22...v1.2.0) (2023-01-26)
 
 ### [1.1.22](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.1.21...v1.1.22) (2023-01-26)
