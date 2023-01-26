@@ -46,3 +46,6 @@ export const documentFragmentMap = new WeakMap<DocumentFragment, MutationObserve
 
 /** Whether connectedCallback has already been called. */
 export const connectedCallbackMap = new WeakMap<ICustomElement, boolean>();
+
+/** Save a reference to validity state for elements that need to upgrade after being connected */
+export const validityUpgradeMap = new WeakMap<ICustomElement, IElementInternals>();

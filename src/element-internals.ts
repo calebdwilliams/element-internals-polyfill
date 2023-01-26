@@ -8,6 +8,7 @@ import {
   validationAnchorMap,
   validityMap,
   validationMessageMap,
+  validityUpgradeMap,
 } from './maps';
 import {
   createHiddenInput,
@@ -216,9 +217,16 @@ export class ElementInternals implements IElementInternals {
       throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The second argument should not be empty if one or more flags in the first argument are true.`);
     }
     validationMessageMap.set(this, valid ? '' : validationMessage);
-    ref.toggleAttribute('internals-invalid', !valid);
-    ref.toggleAttribute('internals-valid', valid);
-    ref.setAttribute('aria-invalid', `${!valid}`);
+
+    // check to make sure the host element is connected before adding attributes
+    // because safari doesnt allow elements to have attributes added in the constructor
+    if (ref.isConnected) {
+      ref.toggleAttribute('internals-invalid', !valid);
+      ref.toggleAttribute('internals-valid', valid);
+      ref.setAttribute('aria-invalid', `${!valid}`);
+    } else {
+      validityUpgradeMap.set(ref, this);
+    }
   }
 
   get shadowRoot(): ShadowRoot | null {
@@ -262,7 +270,7 @@ export class ElementInternals implements IElementInternals {
 declare global {
   interface CustomElementConstructor {
     formAssociated?: boolean;
-  } 
+  }
 
   interface Window {
     ElementInternals: typeof ElementInternals

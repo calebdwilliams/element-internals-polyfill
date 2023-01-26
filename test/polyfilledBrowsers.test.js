@@ -68,7 +68,15 @@ describe('ElementInternals polyfill behavior', () => {
       }
     }
 
+    class ValidateInConstructor extends FormAssociated {
+      constructor() {
+        super();
+        this.internals.setValidity({ valueMissing: true }, 'Test');
+      }
+    }
+
     customElements.define('form-associated', FormAssociated);
+    customElements.define('validate-in-constructor', ValidateInConstructor);
 
     beforeEach(async () => {
       form = await fixture(html`<form>
@@ -104,6 +112,19 @@ describe('ElementInternals polyfill behavior', () => {
         el.internals.role = 'button';
         await aTimeout();
         expect(el.getAttribute('role')).to.equal('button');
+      }
+    });
+
+    it('will not throw and will upgrade if constructed using document.createElement', async () => {
+      let el;
+      expect(() => {
+        el = document.createElement('validate-in-constructor');
+      }).not.to.throw();
+      document.body.append(el);
+      await aTimeout(0);
+      if (ElementInternals.isPolyfilled) {
+        expect(el.getAttribute('internals-valid')).to.equal('false');
+        expect(el.getAttribute('internals-invalid')).to.equal('true');
       }
     });
   });

@@ -1,4 +1,4 @@
-import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap } from './maps.js';
+import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap, validityUpgradeMap } from './maps.js';
 import { aom } from './aom.js';
 import { removeHiddenInputs, initForm, initLabels, upgradeInternals, setDisabled } from './utils.js';
 import { ICustomElement } from './types.js';
@@ -67,6 +67,7 @@ export function observerCallback(mutationList: MutationRecord[]) {
         initNode(node);
       }
 
+
       /** Upgrade the accessibility information on any previously connected */
       if (upgradeMap.has(node)) {
         const internals = upgradeMap.get(node);
@@ -77,6 +78,15 @@ export function observerCallback(mutationList: MutationRecord[]) {
             node.setAttribute(aom[key], internals[key]);
           });
         upgradeMap.delete(node);
+      }
+
+      /** Upgrade the validity state when the element is connected */
+      if (validityUpgradeMap.has(node)) {
+        const internals = validityUpgradeMap.get(node);
+        node.setAttribute('internals-valid', internals.validity.valid.toString());
+        node.setAttribute('internals-invalid', (!internals.validity.valid).toString());
+        node.setAttribute('aria-invalid', (!internals.validity.valid).toString());
+        validityUpgradeMap.delete(node);
       }
 
       /** If the node that's added is a form, check the validity */
