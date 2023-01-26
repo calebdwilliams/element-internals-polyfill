@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.1...v1.2.2) (2023-01-26)
+
+
+### Bug Fixes
+
+* **utils:** flip order of nativeControlValidity filter predicate check ([#106](https://github.com/calebdwilliams/element-internals-polyfill/issues/106)) ([ce5aea2](https://github.com/calebdwilliams/element-internals-polyfill/commit/ce5aea287259a8aeaf1c1fdc4a2b4edfd101431f))
+
 ### [1.2.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.0...v1.2.1) (2023-01-26)
 
 
