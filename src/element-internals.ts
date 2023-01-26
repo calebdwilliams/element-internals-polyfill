@@ -1,5 +1,6 @@
 import {
   connectedCallbackMap,
+  formElementsMap,
   internalsMap,
   refMap,
   refValueMap,
@@ -25,6 +26,7 @@ import { ValidityState, reconcileValidity, setValid } from './ValidityState';
 import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers';
 import { IElementInternals, ICustomElement, LabelsList } from './types';
 import { CustomStateSet } from './CustomStateSet';
+import { HTMLFormControlsCollection } from './HTMLFormControlsCollection';
 
 export class ElementInternals implements IElementInternals {
   ariaAtomic: string;
@@ -382,6 +384,30 @@ if (!isElementInternalsSupported()) {
 
   const reportValidity = HTMLFormElement.prototype.reportValidity;
   HTMLFormElement.prototype.reportValidity = reportValidityOverride;
+
+  const { get } = Object.getOwnPropertyDescriptor(HTMLFormElement.prototype, 'elements');
+  Object.defineProperty(HTMLFormElement.prototype, 'elements', {
+    get(...args) {
+      const elements = get.call(this, ...args);
+      const polyfilledElements = Array.from(formElementsMap.get(this) || []);
+
+      // If there are no polyfilled elements, return the native elements collection
+      if (polyfilledElements.length === 0) {
+        return elements;
+      }
+
+      // Merge the native elements with the polyfilled elements
+      // and order them by their position in the DOM
+      const orderedElements = Array.from(elements).concat(polyfilledElements).sort((a: Element, b: Element) => {
+        if (a.compareDocumentPosition) {
+          return a.compareDocumentPosition(b) & 2 ? 1 : -1;
+        }
+        return 0;
+      });
+
+      return new HTMLFormControlsCollection(orderedElements);
+    },
+  });
 
   if (!window.CustomStateSet) {
     window.CustomStateSet = CustomStateSet;
