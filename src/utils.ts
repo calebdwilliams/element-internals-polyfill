@@ -88,7 +88,7 @@ export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
  */
 export const setFormValidity = (form: HTMLFormElement) => {
   const nativeControlValidity = Array.from(form.elements)
-    .filter((element: Element & { validity: ValidityState }) => element.validity)
+    .filter((element: Element & { validity: ValidityState }) => element.validity && !element.tagName.includes('-'))
     .map(
       (element: Element & { validity: ValidityState }) => element.validity.valid
     );
