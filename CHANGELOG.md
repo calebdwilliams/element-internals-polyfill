@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.2...v1.2.3) (2023-02-03)
+
+
+### Bug Fixes
+
+* rollback use of ?? and ?. operators to maintain compatibility with legacy build systems, such as those used in storybook ([#107](https://github.com/calebdwilliams/element-internals-polyfill/issues/107)) ([3fad9fb](https://github.com/calebdwilliams/element-internals-polyfill/commit/3fad9fb3f47a21745b123b5d580b339cfc7349fb))
+
 ### [1.2.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.1...v1.2.2) (2023-01-26)
 
 
