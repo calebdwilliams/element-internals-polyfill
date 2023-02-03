@@ -27,10 +27,10 @@ export class HTMLFormControlsCollection implements globalThis.HTMLFormControlsCo
   }
 
   item(i): Element {
-    return this[i] ?? null;
+    return this[i] == null ? null : this[i];
   }
 
   namedItem(name): Element {
-    return this[name] ?? null;
+    return this[name] == null ? null : this[name];
   }
 }

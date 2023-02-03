@@ -326,7 +326,9 @@ if (!isElementInternalsSupported()) {
           }
         }
 
-        connectedCallback?.apply(this);
+        if (connectedCallback != null) {
+          connectedCallback.apply(this);
+        }
       };
     }
 
