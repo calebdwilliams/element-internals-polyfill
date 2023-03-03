@@ -313,8 +313,8 @@ if (!isElementInternalsSupported()) {
   /** @ts-expect-error: we need to replace the default ElementInternals */
   window.ElementInternals = ElementInternals;
 
-  const define = customElements.define;
-  customElements.define = function (name, constructor, options) {
+  const define = CustomElementRegistry.prototype.define;
+  CustomElementRegistry.prototype.define = function (name, constructor, options) {
     if (constructor.formAssociated) {
       const connectedCallback = constructor.prototype.connectedCallback;
       constructor.prototype.connectedCallback = function () {
@@ -332,7 +332,7 @@ if (!isElementInternalsSupported()) {
       };
     }
 
-    define.apply(customElements, [name, constructor, options]);
+    define.call(this, name, constructor, options);
   }
 
   function attachShadowObserver(...args) {
