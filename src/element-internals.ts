@@ -26,7 +26,7 @@ import { ValidityState, reconcileValidity, setValid } from './ValidityState';
 import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers';
 import { IElementInternals, ICustomElement, LabelsList } from './types';
 import { CustomStateSet } from './CustomStateSet';
-import { HTMLFormControlsCollection } from './HTMLFormControlsCollection';
+import { patchFormPrototype } from './patch-form-prototype';
 
 export class ElementInternals implements IElementInternals {
   ariaAtomic: string;
@@ -348,16 +348,6 @@ if (!isElementInternalsSupported()) {
     return shadowRoot;
   }
 
-  function checkValidityOverride(...args): boolean {
-    let returnValue = checkValidity.apply(this, args);
-    return overrideFormMethod(this, returnValue, 'checkValidity');
-  }
-
-  function reportValidityOverride(...args): boolean {
-    let returnValue = reportValidity.apply(this, args);
-    return overrideFormMethod(this, returnValue, 'reportValidity');
-  }
-
   /**
    * Attaches an ElementInternals instance to a custom element. Calling this method
    * on a built-in element will throw an error.
@@ -365,7 +355,7 @@ if (!isElementInternalsSupported()) {
   HTMLElement.prototype.attachInternals = function(): IElementInternals {
     if (!this.tagName) {
       /** This happens in the LitSSR environment. Here we can generally ignore internals for now */
-      return {} as unknown as IElementInternals;
+      return {} as object as IElementInternals;
     } else if (this.tagName.indexOf('-') === -1) {
       throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
     }
@@ -381,35 +371,13 @@ if (!isElementInternalsSupported()) {
   const documentObserver = new MutationObserver(observerCallback);
   documentObserver.observe(document.documentElement, observerConfig);
 
-  const checkValidity = HTMLFormElement.prototype.checkValidity;
-  HTMLFormElement.prototype.checkValidity = checkValidityOverride;
-
-  const reportValidity = HTMLFormElement.prototype.reportValidity;
-  HTMLFormElement.prototype.reportValidity = reportValidityOverride;
-
-  const { get } = Object.getOwnPropertyDescriptor(HTMLFormElement.prototype, 'elements');
-  Object.defineProperty(HTMLFormElement.prototype, 'elements', {
-    get(...args) {
-      const elements = get.call(this, ...args);
-      const polyfilledElements = Array.from(formElementsMap.get(this) || []);
-
-      // If there are no polyfilled elements, return the native elements collection
-      if (polyfilledElements.length === 0) {
-        return elements;
-      }
-
-      // Merge the native elements with the polyfilled elements
-      // and order them by their position in the DOM
-      const orderedElements = Array.from(elements).concat(polyfilledElements).sort((a: Element, b: Element) => {
-        if (a.compareDocumentPosition) {
-          return a.compareDocumentPosition(b) & 2 ? 1 : -1;
-        }
-        return 0;
-      });
-
-      return new HTMLFormControlsCollection(orderedElements);
-    },
-  });
+  /**
+   * Keeps the polyfill from throwing in environments where HTMLFormElement
+   * is undefined like in a server environment
+   */
+  if (HTMLFormElement) {
+    patchFormPrototype();
+  }
 
   if (!window.CustomStateSet) {
     window.CustomStateSet = CustomStateSet;
