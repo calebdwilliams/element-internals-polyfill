@@ -375,7 +375,7 @@ if (!isElementInternalsSupported()) {
    * Keeps the polyfill from throwing in environments where HTMLFormElement
    * is undefined like in a server environment
    */
-  if (HTMLFormElement) {
+  if (typeof HTMLFormElement !== 'undefined') {
     patchFormPrototype();
   }
 
