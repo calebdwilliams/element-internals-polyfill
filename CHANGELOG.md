@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.5...v1.2.6) (2023-03-06)
+
+
+### Bug Fixes
+
+* fix typeof check for HTMLFormElement ([27c0006](https://github.com/calebdwilliams/element-internals-polyfill/commit/27c0006ccd3ca9045a6ea7dd37d04b0f6f98f1d4))
+
 ### [1.2.5](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.4...v1.2.5) (2023-03-06)
 
 
