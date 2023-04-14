@@ -58,7 +58,7 @@ export const createHiddenInput = (ref: ICustomElement, internals: IElementIntern
  */
 export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
   hiddenInputMap.set(internals, []);
-  disabledObserver.observe(ref, disabledObserverConfig);
+  disabledObserver.observe?.(ref, disabledObserverConfig);
 };
 
 /**
@@ -294,4 +294,13 @@ export const upgradeInternals = (ref: ICustomElement) => {
     initLabels(ref, labels);
     initForm(ref, form, internals);
   }
+};
+
+/**
+ * Check to see if MutationObserver exists in the current
+ * execution context. Will likely return false on the server
+ * @returns {boolean}
+ */
+export function mutationObserverExists(): boolean {
+  return typeof MutationObserver !== 'undefined';
 };

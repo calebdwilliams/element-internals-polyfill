@@ -1,6 +1,6 @@
 import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap, validityUpgradeMap } from './maps.js';
 import { aom } from './aom.js';
-import { removeHiddenInputs, initForm, initLabels, upgradeInternals, setDisabled } from './utils.js';
+import { removeHiddenInputs, initForm, initLabels, upgradeInternals, setDisabled, mutationObserverExists } from './utils.js';
 import { ICustomElement } from './types.js';
 
 function initNode(node: ICustomElement): void {
@@ -39,7 +39,7 @@ export const walkFieldset = (node: HTMLFieldSetElement, firstRender: boolean = f
 
 export const disabledObserverConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
 
-export const disabledObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
+export const disabledObserver = mutationObserverExists() ? new MutationObserver((mutationsList: MutationRecord[]) => {
   for (const mutation of mutationsList) {
     const target = mutation.target as ICustomElement;
 
@@ -53,7 +53,7 @@ export const disabledObserver = new MutationObserver((mutationsList: MutationRec
       walkFieldset(target as unknown as HTMLFieldSetElement);
     }
   }
-});
+}) : {} as MutationObserver;
 
 export function observerCallback(mutationList: MutationRecord[]) {
   mutationList.forEach(mutationRecord => {
@@ -108,7 +108,7 @@ export function observerCallback(mutationList: MutationRecord[]) {
       }
 
       if (node.localName === 'fieldset') {
-        disabledObserver.observe(node, disabledObserverConfig);
+        disabledObserver.observe?.(node, disabledObserverConfig);
         walkFieldset(node as unknown as HTMLFieldSetElement, true);
       }
     });
@@ -153,11 +153,11 @@ export function fragmentObserverCallback(mutationList: MutationRecord[]): void {
  */
  export const deferUpgrade = (fragment: DocumentFragment) => {
   const observer = new MutationObserver(fragmentObserverCallback)
-  observer.observe(fragment, { childList: true });
+  observer.observe?.(fragment, { childList: true });
   documentFragmentMap.set(fragment, observer);
 };
 
-export const observer = new MutationObserver(observerCallback);
+export const observer = mutationObserverExists() ? new MutationObserver(observerCallback) : {} as MutationObserver;
 export const observerConfig: MutationObserverInit = {
   childList: true,
   subtree: true

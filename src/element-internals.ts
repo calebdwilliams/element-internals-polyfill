@@ -15,6 +15,7 @@ import {
   createHiddenInput,
   findParentForm,
   initRef,
+  mutationObserverExists,
   overrideFormMethod,
   removeHiddenInputs,
   setDisabled,
@@ -280,7 +281,7 @@ declare global {
 }
 
 export function isElementInternalsSupported(): boolean {
-  if (!window.ElementInternals || !HTMLElement.prototype.attachInternals) {
+  if (typeof window === 'undefined' || !window.ElementInternals || !HTMLElement.prototype.attachInternals) {
     return false;
   }
 
@@ -310,66 +311,79 @@ export function isElementInternalsSupported(): boolean {
 }
 
 if (!isElementInternalsSupported()) {
-  /** @ts-expect-error: we need to replace the default ElementInternals */
-  window.ElementInternals = ElementInternals;
-
-  const define = CustomElementRegistry.prototype.define;
-  CustomElementRegistry.prototype.define = function (name, constructor, options) {
-    if (constructor.formAssociated) {
-      const connectedCallback = constructor.prototype.connectedCallback;
-      constructor.prototype.connectedCallback = function () {
-        if (!connectedCallbackMap.has(this)) {
-          connectedCallbackMap.set(this, true);
-
-          if (this.hasAttribute('disabled')) {
-            setDisabled(this, true);
-          }
-        }
-
-        if (connectedCallback != null) {
-          connectedCallback.apply(this);
-        }
-      };
-    }
-
-    define.call(this, name, constructor, options);
+  if (typeof window !== 'undefined') {
+    /** @ts-expect-error: we need to replace the default ElementInternals */
+    window.ElementInternals = ElementInternals;
   }
 
-  function attachShadowObserver(...args) {
-    const shadowRoot = attachShadow.apply(this, args);
-    const observer = new MutationObserver(observerCallback);
-    shadowRootMap.set(this, shadowRoot);
-    if (window.ShadyDOM) {
-      observer.observe(this, observerConfig);
-    } else {
-      observer.observe(shadowRoot, observerConfig);
+  if (typeof CustomElementRegistry !== 'undefined') {
+    const define = CustomElementRegistry.prototype.define;
+    CustomElementRegistry.prototype.define = function (name, constructor, options) {
+      if (constructor.formAssociated) {
+        const connectedCallback = constructor.prototype.connectedCallback;
+        constructor.prototype.connectedCallback = function () {
+          if (!connectedCallbackMap.has(this)) {
+            connectedCallbackMap.set(this, true);
+
+            if (this.hasAttribute('disabled')) {
+              setDisabled(this, true);
+            }
+          }
+
+          if (connectedCallback != null) {
+            connectedCallback.apply(this);
+          }
+        };
+      }
+
+      define.call(this, name, constructor, options);
     }
-    shadowHostsMap.set(this, observer);
-    return shadowRoot;
   }
 
   /**
    * Attaches an ElementInternals instance to a custom element. Calling this method
    * on a built-in element will throw an error.
    */
-  HTMLElement.prototype.attachInternals = function(): IElementInternals {
-    if (!this.tagName) {
-      /** This happens in the LitSSR environment. Here we can generally ignore internals for now */
-      return {} as object as IElementInternals;
-    } else if (this.tagName.indexOf('-') === -1) {
-      throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
+  if (typeof HTMLElement !== 'undefined') {
+    HTMLElement.prototype.attachInternals = function(): IElementInternals {
+      if (!this.tagName) {
+        /** This happens in the LitSSR environment. Here we can generally ignore internals for now */
+        return {} as object as IElementInternals;
+      } else if (this.tagName.indexOf('-') === -1) {
+        throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
+      }
+      if (internalsMap.has(this)) {
+        throw new DOMException(`DOMException: Failed to execute 'attachInternals' on 'HTMLElement': ElementInternals for the specified element was already attached.`);
+      }
+      return new ElementInternals(this) as IElementInternals;
     }
-    if (internalsMap.has(this)) {
-      throw new DOMException(`DOMException: Failed to execute 'attachInternals' on 'HTMLElement': ElementInternals for the specified element was already attached.`);
-    }
-    return new ElementInternals(this) as IElementInternals;
   }
 
-  const attachShadow = Element.prototype.attachShadow;
-  Element.prototype.attachShadow = attachShadowObserver;
+  if (typeof Element !== 'undefined') {
+    function attachShadowObserver(...args) {
+      const shadowRoot = attachShadow.apply(this, args);
+      shadowRootMap.set(this, shadowRoot);
 
-  const documentObserver = new MutationObserver(observerCallback);
-  documentObserver.observe(document.documentElement, observerConfig);
+      if (mutationObserverExists()) {
+        const observer = new MutationObserver(observerCallback);
+        if (window.ShadyDOM) {
+          observer.observe(this, observerConfig);
+        } else {
+          observer.observe(shadowRoot, observerConfig);
+        }
+        shadowHostsMap.set(this, observer);
+      }
+      return shadowRoot;
+    }
+
+    const attachShadow = Element.prototype.attachShadow;
+    Element.prototype.attachShadow = attachShadowObserver;
+  }
+
+  if (mutationObserverExists()) {
+    const documentObserver = new MutationObserver(observerCallback);
+    documentObserver.observe(document.documentElement, observerConfig);
+  }
 
   /**
    * Keeps the polyfill from throwing in environments where HTMLFormElement
@@ -379,10 +393,10 @@ if (!isElementInternalsSupported()) {
     patchFormPrototype();
   }
 
-  if (!window.CustomStateSet) {
+  if (typeof window !== 'undefined' && !window.CustomStateSet) {
     window.CustomStateSet = CustomStateSet;
   }
-} else if (!window.CustomStateSet) {
+} else if (typeof window !== 'undefined' && !window.CustomStateSet) {
   window.CustomStateSet = CustomStateSet;
   const attachInternals = HTMLElement.prototype.attachInternals;
   HTMLElement.prototype.attachInternals = function(...args) {
