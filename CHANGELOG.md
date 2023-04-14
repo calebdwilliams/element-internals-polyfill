@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.6...v1.3.0) (2023-04-14)
+
+
+### Features
+
+* works with SSR ([bc68c1f](https://github.com/calebdwilliams/element-internals-polyfill/commit/bc68c1f250bbf0887e41edfffd67412253d5f02b))
+
 ### [1.2.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.2.5...v1.2.6) (2023-03-06)
 
 
