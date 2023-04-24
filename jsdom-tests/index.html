@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test document in JSDOM</title>
+    <!--script>${polyfillContents};console.log(ElementInternals)</script-->
+    <script src="polyfill.js"></script>
+  </head>
+  <body>
+    <script>
+      class TestElement extends HTMLElement {
+        static get formAssociated() {
+          return true;
+        }
+
+        constructor() {
+          super();
+          this.internals = this.attachInternals();
+          this.internals.setFormValue('foo');
+        }
+      }
+
+      customElements.define('test-element', TestElement);
+    </script>
+  </body>
+</html>

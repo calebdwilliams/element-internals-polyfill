@@ -1,5 +1,5 @@
 import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
-import { disabledObserver, disabledObserverConfig } from './mutation-observers.js';
+import { disabledOrNameObserver, disabledOrNameObserverConfig } from './mutation-observers.js';
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
 /**
@@ -58,7 +58,7 @@ export const createHiddenInput = (ref: ICustomElement, internals: IElementIntern
  */
 export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
   hiddenInputMap.set(internals, []);
-  disabledObserver.observe?.(ref, disabledObserverConfig);
+  disabledOrNameObserver.observe?.(ref, disabledOrNameObserverConfig);
 };
 
 /**

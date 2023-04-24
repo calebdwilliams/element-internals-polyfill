@@ -1,4 +1,4 @@
-import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap, validityUpgradeMap } from './maps.js';
+import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap, validityUpgradeMap, refValueMap } from './maps.js';
 import { aom } from './aom.js';
 import { removeHiddenInputs, initForm, initLabels, upgradeInternals, setDisabled, mutationObserverExists } from './utils.js';
 import { ICustomElement } from './types.js';
@@ -37,20 +37,31 @@ export const walkFieldset = (node: HTMLFieldSetElement, firstRender: boolean = f
   }
 };
 
-export const disabledObserverConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled'] };
+export const disabledOrNameObserverConfig: MutationObserverInit = { attributes: true, attributeFilter: ['disabled', 'name'] };
 
-export const disabledObserver = mutationObserverExists() ? new MutationObserver((mutationsList: MutationRecord[]) => {
+export const disabledOrNameObserver = mutationObserverExists() ? new MutationObserver((mutationsList: MutationRecord[]) => {
   for (const mutation of mutationsList) {
     const target = mutation.target as ICustomElement;
 
-    if (target.constructor['formAssociated']) {
-      setDisabled(target, target.hasAttribute('disabled'));
-    } else if (target.localName === 'fieldset') {
-      /**
-       * Repurpose the observer for fieldsets which need
-       * to be walked whenever the disabled attribute is set
-       */
-      walkFieldset(target as unknown as HTMLFieldSetElement);
+    /** Manage changes to the ref's disabled state */
+    if (mutation.attributeName === 'disabled') {
+      if (target.constructor['formAssociated']) {
+        setDisabled(target, target.hasAttribute('disabled'));
+      } else if (target.localName === 'fieldset') {
+        /**
+         * Repurpose the observer for fieldsets which need
+         * to be walked whenever the disabled attribute is set
+         */
+        walkFieldset(target as unknown as HTMLFieldSetElement);
+      }
+    }
+    /** Manage changes to the ref's name */
+    if (mutation.attributeName === 'name') {
+      if (target.constructor['formAssociated']) {
+        const internals = internalsMap.get(target);
+        const value = refValueMap.get(target);
+        internals.setFormValue(value);
+      }
     }
   }
 }) : {} as MutationObserver;
@@ -108,7 +119,7 @@ export function observerCallback(mutationList: MutationRecord[]) {
       }
 
       if (node.localName === 'fieldset') {
-        disabledObserver.observe?.(node, disabledObserverConfig);
+        disabledOrNameObserver.observe?.(node, disabledOrNameObserverConfig);
         walkFieldset(node as unknown as HTMLFieldSetElement, true);
       }
     });
