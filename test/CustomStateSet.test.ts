@@ -1,6 +1,20 @@
-import { fixture, html, expect, fixtureCleanup } from '@open-wc/testing';
+import '../dist/index.js';
+
+import { fixture, html, expect, fixtureCleanup, aTimeout } from '@open-wc/testing';
 import { ICustomElement } from '../dist';
 import { CustomStateSet } from '../src/CustomStateSet';
+
+class CustomElementStateInConstructor extends HTMLElement {
+  internals = this.attachInternals();
+  constructor() {
+    super();
+
+    this.internals.states.add('--foo');
+  }
+}
+
+const tagName = 'custom-element-state-in-constructor'
+customElements.define(tagName, CustomElementStateInConstructor);
 
 describe('CustomStateSet polyfill', () => {
   let el: HTMLElement;
@@ -54,6 +68,20 @@ describe('CustomStateSet polyfill', () => {
     if (el.part) {
       expect(el.part.contains('state--foo')).to.be.false;
       expect(el.part.contains('state--bar')).to.be.false;
+    }
+  });
+
+  it('will use a timeout if a state is added in a constructor', async () => {
+    let el;
+    expect(() => {
+      el = document.createElement(tagName);
+    }).not.to.throw();
+
+    if (window.CustomStateSet.isPolyfilled) {
+      await aTimeout(100);
+      expect(el.matches('[state--foo]')).to.be.true;
+    } else {
+      expect(el.matches(`:--foo`)).to.be.true;
     }
   });
 });

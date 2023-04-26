@@ -3,6 +3,13 @@ import { ICustomElement } from "./types";
 /** Save a reference to the ref for teh CustomStateSet */
 const customStateMap = new WeakMap<CustomStateSet, ICustomElement>();
 
+function addState(ref: ICustomElement, stateName: string): void {
+  ref.toggleAttribute(stateName, true);
+  if (ref.part) {
+    ref.part.add(stateName);
+  }
+}
+
 export type CustomState = `--${string}`;
 
 export class CustomStateSet extends Set<CustomState> {
@@ -25,10 +32,21 @@ export class CustomStateSet extends Set<CustomState> {
     }
     const result = super.add(state);
     const ref = customStateMap.get(this);
-    ref.toggleAttribute(`state${state}`, true);
-    if (ref.part) {
-      ref.part.add(`state${state}`);
+    const stateName = `state${state}`;
+
+    /**
+     * Only add the state immediately if the ref is connected to the DOM;
+     * otherwise, wait a tick because the element is likely being constructed
+     * by document.createElement and would throw otherwise.
+     */
+    if (ref.isConnected) {
+      addState(ref, stateName);
+    } else {
+      setTimeout(() => {
+        addState(ref, stateName);
+      });
     }
+
     return result;
   }
 
