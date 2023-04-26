@@ -4,7 +4,7 @@ import { fixture, html, expect, fixtureCleanup, aTimeout } from '@open-wc/testin
 import { ICustomElement } from '../dist';
 import { CustomStateSet } from '../src/CustomStateSet';
 
-class CustomElementStateInConstructor extends HTMLElement {
+class CustomElementAddStateInConstructor extends HTMLElement {
   internals = this.attachInternals();
   constructor() {
     super();
@@ -13,8 +13,20 @@ class CustomElementStateInConstructor extends HTMLElement {
   }
 }
 
-const tagName = 'custom-element-state-in-constructor'
-customElements.define(tagName, CustomElementStateInConstructor);
+const addStateTagName = 'custom-element-add-state-in-constructor';
+customElements.define(addStateTagName, CustomElementAddStateInConstructor);
+
+class CustomElementDeleteStateInConstructor extends HTMLElement {
+  internals = this.attachInternals();
+  constructor() {
+    super();
+
+    this.internals.states.delete('--foo');
+  }
+}
+
+const deleteStateTagName = 'custom-element-delete-state-in-constructor';
+customElements.define(deleteStateTagName, CustomElementDeleteStateInConstructor);
 
 describe('CustomStateSet polyfill', () => {
   let el: HTMLElement;
@@ -74,7 +86,7 @@ describe('CustomStateSet polyfill', () => {
   it('will use a timeout if a state is added in a constructor', async () => {
     let el;
     expect(() => {
-      el = document.createElement(tagName);
+      el = document.createElement(addStateTagName);
     }).not.to.throw();
 
     if (window.CustomStateSet.isPolyfilled) {
@@ -82,6 +94,20 @@ describe('CustomStateSet polyfill', () => {
       expect(el.matches('[state--foo]')).to.be.true;
     } else {
       expect(el.matches(`:--foo`)).to.be.true;
+    }
+  });
+
+  it('will use a timeout if a state is deleted in a constructor', async () => {
+    let el;
+    expect(() => {
+      el = document.createElement(deleteStateTagName);
+    }).not.to.throw();
+
+    if (window.CustomStateSet.isPolyfilled) {
+      await aTimeout(100);
+      expect(el.matches('[state--foo]')).to.be.false;
+    } else {
+      expect(el.matches(`:--foo`)).to.be.false;
     }
   });
 });
