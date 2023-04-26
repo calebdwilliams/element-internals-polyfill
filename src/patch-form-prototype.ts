@@ -1,6 +1,6 @@
-import { HTMLFormControlsCollection } from './HTMLFormControlsCollection';
-import { formElementsMap } from "./maps";
-import { overrideFormMethod } from "./utils";
+import { HTMLFormControlsCollection } from './HTMLFormControlsCollection.js';
+import { formElementsMap } from './maps.js';
+import { overrideFormMethod } from './utils.js';
 
 /**
  * Patch the HTMLElement prototype

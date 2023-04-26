@@ -1,4 +1,4 @@
-import { ICustomElement } from "./types";
+import { ICustomElement } from "./types.js";
 
 /** Save a reference to the ref for teh CustomStateSet */
 const customStateMap = new WeakMap<CustomStateSet, ICustomElement>();

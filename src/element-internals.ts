@@ -1,6 +1,5 @@
 import {
   connectedCallbackMap,
-  formElementsMap,
   internalsMap,
   refMap,
   refValueMap,
@@ -10,24 +9,23 @@ import {
   validityMap,
   validationMessageMap,
   validityUpgradeMap,
-} from './maps';
+} from './maps.js';
 import {
   createHiddenInput,
   findParentForm,
   initRef,
   mutationObserverExists,
-  overrideFormMethod,
   removeHiddenInputs,
   setDisabled,
   throwIfNotFormAssociated,
   upgradeInternals
-} from './utils';
-import { initAom } from './aom';
-import { ValidityState, reconcileValidity, setValid } from './ValidityState';
-import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers';
-import { IElementInternals, ICustomElement, LabelsList } from './types';
-import { CustomStateSet } from './CustomStateSet';
-import { patchFormPrototype } from './patch-form-prototype';
+} from './utils.js';
+import { initAom } from './aom.js';
+import { ValidityState, reconcileValidity, setValid } from './ValidityState.js';
+import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers.js';
+import { IElementInternals, ICustomElement, LabelsList } from './types.js';
+import { CustomStateSet } from './CustomStateSet.js';
+import { patchFormPrototype } from './patch-form-prototype.js';
 
 export class ElementInternals implements IElementInternals {
   ariaAtomic: string;
