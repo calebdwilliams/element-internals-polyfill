@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.1...v1.3.2) (2023-04-26)
+
+
+### Bug Fixes
+
+* custom states will delay if added in constructor ([f81ef5e](https://github.com/calebdwilliams/element-internals-polyfill/commit/f81ef5ec7f2d9e64866436ca7e21dd0464704fea))
+
 ### [1.3.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.0...v1.3.1) (2023-04-24)
 
 
