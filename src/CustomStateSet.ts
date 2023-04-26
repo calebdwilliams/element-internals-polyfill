@@ -60,10 +60,27 @@ export class CustomStateSet extends Set<CustomState> {
   delete(state: CustomState) {
     const result = super.delete(state);
     const ref = customStateMap.get(this);
-    ref.toggleAttribute(`state${state}`, false);
-    if (ref.part) {
-      ref.part.remove(`state${state}`);
+
+    /**
+     * Only toggle the state/attr immediately if the ref is connected to the DOM;
+     * otherwise, wait a tick because the element is likely being constructed
+     * by document.createElement and would throw otherwise.
+     */
+    if (ref.isConnected) {
+      ref.toggleAttribute(`state${state}`, false);
+      if (ref.part) {
+        ref.part.remove(`state${state}`);
+      }
+    } else {
+      setTimeout(() => {
+        ref.toggleAttribute(`state${state}`, false);
+        if (ref.part) {
+          ref.part.remove(`state${state}`);
+        }
+      });
     }
+
+
     return result;
   }
 }
