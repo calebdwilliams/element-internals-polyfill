@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.3](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.2...v1.3.3) (2023-04-26)
+
+
+### Bug Fixes
+
+* update src import paths ([35ac8d3](https://github.com/calebdwilliams/element-internals-polyfill/commit/35ac8d3d47082ad0db4adee8e55b3ecbe0320f83))
+
 ### [1.3.2](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.1...v1.3.2) (2023-04-26)
 
 
