@@ -138,7 +138,7 @@ export const wireSubmitLogic = (form: HTMLFormElement) => {
   }
 
   form.addEventListener('click', event => {
-    const target = event.currentTarget as Element;
+    const target = event.target as Element;
     if (target.closest(submitButtonSelector)) {
       // validate
       const elements = formElementsMap.get(form);
