@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.5](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.4...v1.3.5) (2023-05-04)
+
+
+### Bug Fixes
+
+* **form submit:** change submit button selector for jsdom compatibility ([ee1269d](https://github.com/calebdwilliams/element-internals-polyfill/commit/ee1269d3b9ddafcf795c67aa74d2de89c492189f))
+
 ### [1.3.4](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.3...v1.3.4) (2023-04-26)
 
 
