@@ -90,19 +90,6 @@ export class ElementInternals implements IElementInternals {
     initRef(ref, this);
     Object.seal(this);
 
-    // upgrade internals instantly only if the element is connected to the DOM
-    // otherwise, wait until the callstack is cleared as the element is most likely
-    // still being constructed and wont have a parent form element yet
-
-    // TODO: should deferUpgrade() be used here?
-    if(ref.isConnected) {
-      upgradeInternals(ref);
-    } else {
-      setTimeout(() => {
-        upgradeInternals(ref);
-      })
-    }
-
     /**
      * If appended from a DocumentFragment, wait until it is connected
      * before attempting to upgrade the internals instance
@@ -342,6 +329,8 @@ if (!isElementInternalsSupported()) {
           if (connectedCallback != null) {
             connectedCallback.apply(this);
           }
+          // always upgradeInternals in connectedCallback instead of constructor
+          upgradeInternals(this);
         };
       }
 
