@@ -130,12 +130,10 @@ export const formInputCallback = (event: Event) => {
  * @return {void}
  */
 export const wireSubmitLogic = (form: HTMLFormElement) => {
-  const SUBMIT_BUTTON_SELECTOR = ':is(button[type=submit], input[type=submit], button:not([type])):not([disabled])';
-  let submitButtonSelector = `${SUBMIT_BUTTON_SELECTOR}:not([form])`;
-
-  if (form.id) {
-    submitButtonSelector += `,${SUBMIT_BUTTON_SELECTOR}[form='${form.id}']`;
-  }
+  const submitButtonSelector = ['button[type=submit]', 'input[type=submit]', 'button:not([type])']
+    .map(sel => `${sel}:not([disabled])`)
+    .map(sel => `${sel}:not([form])${form.id ? `,${sel}[form='${form.id}']` : ''}`)
+    .join(',');
 
   form.addEventListener('click', event => {
     const target = event.target as Element;
