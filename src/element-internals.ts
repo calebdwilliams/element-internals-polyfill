@@ -193,7 +193,7 @@ export class ElementInternals implements IElementInternals {
    *
    * If the field is valid and a message is specified, the method will throw a TypeError.
    */
-  setValidity(validityChanges: Partial<globalThis.ValidityState>, validationMessage?: string, anchor?: HTMLElement) {
+  setValidity(validityChanges: Partial<ValidityState>, validationMessage?: string, anchor?: HTMLElement) {
     const ref = refMap.get(this);
     throwIfNotFormAssociated(ref, `Failed to execute 'setValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
     if (!validityChanges) {
@@ -245,7 +245,7 @@ export class ElementInternals implements IElementInternals {
   }
 
   /** The current validity state of the object */
-  get validity(): globalThis.ValidityState {
+  get validity(): ValidityState {
     const ref = refMap.get(this);
     throwIfNotFormAssociated(ref, `Failed to read the 'validity' property from 'ElementInternals': The target element is not a form-associated custom element.`);
     const validity = validityMap.get(this);

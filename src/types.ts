@@ -52,14 +52,14 @@ export interface IElementInternals extends IAom {
   reportValidity: () => boolean;
   setFormValue: (value: string | FormData | null) => void;
   setValidity: (
-    validityChanges: Partial<globalThis.ValidityState>,
+    validityChanges: Partial<ValidityState>,
     validationMessage?: string,
     anchor?: HTMLElement
   ) => void;
   shadowRoot: ShadowRoot|null;
   states: CustomStateSet;
   validationMessage: string;
-  validity: globalThis.ValidityState;
+  validity: ValidityState;
   willValidate: boolean;
 }
 
