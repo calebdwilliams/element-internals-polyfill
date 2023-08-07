@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.7](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.6...v1.3.7) (2023-08-07)
+
+
+### Bug Fixes
+
+* **types:** reference `ValidityState` from typescript lib ([bbcf7f4](https://github.com/calebdwilliams/element-internals-polyfill/commit/bbcf7f4f0c1f59b9c61444bd7c8f4c0762801a1c)), closes [#119](https://github.com/calebdwilliams/element-internals-polyfill/issues/119)
+
 ### [1.3.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.5...v1.3.6) (2023-08-07)
 
 
