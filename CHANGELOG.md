@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.6](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.5...v1.3.6) (2023-08-07)
+
+
+### Bug Fixes
+
+* remove :is in submit selector to prevent error in non-supporting browsers ([f3cb74a](https://github.com/calebdwilliams/element-internals-polyfill/commit/f3cb74adfbfd22684c5bc5e70f0528b35033b160))
+
 ### [1.3.5](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.4...v1.3.5) (2023-05-04)
 
 
