@@ -1,7 +1,7 @@
 import { setFormValidity } from './utils.js';
 
 /** Emulate the browser's default ValidityState object */
-export class ValidityState implements globalThis.ValidityState {
+export class ValidityState implements ValidityState {
   badInput = false;
   customError = false;
   patternMismatch = false;

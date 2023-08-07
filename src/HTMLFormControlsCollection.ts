@@ -1,4 +1,4 @@
-export class HTMLFormControlsCollection implements globalThis.HTMLFormControlsCollection {
+export class HTMLFormControlsCollection implements HTMLFormControlsCollection {
   readonly #elements;
 
   constructor(elements) {
