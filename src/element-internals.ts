@@ -378,7 +378,7 @@ if (!isElementInternalsSupported()) {
     Element.prototype.attachShadow = attachShadowObserver;
   }
 
-  if (mutationObserverExists()) {
+  if (mutationObserverExists() && typeof document !== 'undefined') {
     const documentObserver = new MutationObserver(observerCallback);
     documentObserver.observe(document.documentElement, observerConfig);
   }
