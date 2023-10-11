@@ -182,6 +182,7 @@ describe('The ElementInternals polyfill', () => {
       constructor() {
         super();
         this.internals = this.attachInternals();
+        this.internals.role = 'generic';
       }
     }
 
@@ -200,6 +201,16 @@ describe('The ElementInternals polyfill', () => {
     it('will throw from setFormValue', async () => {
       expect(() => element.internals.setFormValue('foo')).to.throw();
     });
+
+    describe('inside a form', () => {
+      let form;
+
+      afterEach(async () => await fixtureCleanup(form));
+
+      it('will not throw', async () => {
+        form = await fixture(html`<form><not-associated></not-associated></form>`);
+      })
+    })
   });
 
   describe('inside a custom element with a form', () => {
