@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.9](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.8...v1.3.9) (2023-10-18)
+
+
+### Bug Fixes
+
+* only inits form association if element is form associated ([a3e742b](https://github.com/calebdwilliams/element-internals-polyfill/commit/a3e742be93f9e15112b204319b7edb3160ed20c1))
+
 ### [1.3.8](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.7...v1.3.8) (2023-09-07)
 
 
