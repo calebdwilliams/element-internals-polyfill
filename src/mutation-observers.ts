@@ -164,18 +164,18 @@ export function fragmentObserverCallback(mutationList: MutationRecord[]): void {
  * @param fragment {DocumentFragment}
  */
  export const deferUpgrade = (fragment: DocumentFragment) => {
-   const observer = new MutationObserver(fragmentObserverCallback);
-   // is this using shady DOM and is not actually a DocumentFragment?
-   if (
-     window?.ShadyDOM?.inUse &&
-     (fragment as unknown as { mode: string }).mode &&
-     (fragment as unknown as { host: HTMLElement | null }).host
-   ) {
-     // using shady DOM polyfill. Best to just observe the host.
-     fragment = (fragment as ShadowRoot).host as unknown as DocumentFragment;
-   }
-   observer.observe?.(fragment, { childList: true });
-   documentFragmentMap.set(fragment, observer);
+  const observer = new MutationObserver(fragmentObserverCallback);
+  // is this using shady DOM and is not actually a DocumentFragment?
+  if (
+    window?.ShadyDOM?.inUse &&
+    (fragment as unknown as { mode: string }).mode &&
+    (fragment as unknown as { host: HTMLElement | null }).host
+  ) {
+    // using shady DOM polyfill. Best to just observe the host.
+    fragment = (fragment as ShadowRoot).host as unknown as DocumentFragment;
+  }
+  observer.observe?.(fragment, { childList: true });
+  documentFragmentMap.set(fragment, observer);
  };
 
 export const observer = mutationObserverExists() ? new MutationObserver(observerCallback) : {} as MutationObserver;
