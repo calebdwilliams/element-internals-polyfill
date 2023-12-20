@@ -306,7 +306,49 @@ export function isElementInternalsSupported(): boolean {
   ].every(prop => prop in featureDetectionElement.internals);
 }
 
-if (!isElementInternalsSupported()) {
+let hasElementInternalsPolyfillBeenApplied = false;
+let hasCustomStateSetPolyfillBeenApplied = false;
+
+/**
+ * Forcibly applies the polyfill for CustomStateSet.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/CustomStateSet
+ */
+export function forceCustomStateSetPolyfill(attachInternals?: HTMLElement['attachInternals']) {
+  if (hasCustomStateSetPolyfillBeenApplied) {
+    return;
+  }
+
+  hasCustomStateSetPolyfillBeenApplied = true;
+  window.CustomStateSet = CustomStateSet;
+
+  if (attachInternals) {
+    HTMLElement.prototype.attachInternals = function(...args) {
+      const internals = attachInternals.call(this, args);
+      internals.states = new CustomStateSet(this);
+      return internals;
+    }
+  }
+}
+
+/**
+ * Forcibly applies the polyfill for ElementInternals. Useful for situations
+ * like Chrome extensions where Chrome supports ElementInternals, but the
+ * CustomElements polyfill is required.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals
+ *
+ * @param forceCustomStateSet Optional: when true, forces the
+ * [CustomStateSet](https://developer.mozilla.org/en-US/docs/Web/API/CustomStateSet)
+ * polyfill as well.
+ */
+export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
+  if (hasElementInternalsPolyfillBeenApplied) {
+    return;
+  }
+
+  hasElementInternalsPolyfillBeenApplied = true;
+
   if (typeof window !== 'undefined') {
     /** @ts-expect-error: we need to replace the default ElementInternals */
     window.ElementInternals = ElementInternals;
@@ -391,15 +433,10 @@ if (!isElementInternalsSupported()) {
     patchFormPrototype();
   }
 
-  if (typeof window !== 'undefined' && !window.CustomStateSet) {
-    window.CustomStateSet = CustomStateSet;
-  }
-} else if (typeof window !== 'undefined' && !window.CustomStateSet) {
-  window.CustomStateSet = CustomStateSet;
-  const attachInternals = HTMLElement.prototype.attachInternals;
-  HTMLElement.prototype.attachInternals = function(...args) {
-    const internals = attachInternals.call(this, args);
-    internals.states = new CustomStateSet(this);
-    return internals;
+  if (
+    forceCustomStateSet ||
+    (typeof window !== "undefined" && !window.CustomStateSet)
+  ) {
+    forceCustomStateSetPolyfill();
   }
 }
