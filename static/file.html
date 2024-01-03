@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <title>Appended via tree test</title>
+  <script type="module">
+    import '../dist/index.js';
+
+    customElements.define('my-file-upload', class extends HTMLElement {
+      static formAssociated = true;
+      internals = this.attachInternals();
+    });
+  </script>
+</head>
+<body>
+<form id="form">
+  <input type="file" name="orig" required id="original" onchange="dupeFile()">
+  <my-file-upload name="file" required id="custom"></my-file-upload>
+  <button type="submit">submit</button>
+</form>
+
+<script>
+  let original, custom;
+
+  window.addEventListener('load', () => {
+    original = document.querySelector('#original');
+    custom = document.querySelector('#custom');
+  });
+
+  function dupeFile() {
+    custom.internals.setFormValue(original.files[0] || '');
+  }
+
+  document.querySelector('#form').addEventListener('submit', e => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    // The input with the name "file" should contain the File from the original input
+    console.log('file = ', formData.get('file'));
+    return false;
+  })
+</script>
+</body>
+</html>

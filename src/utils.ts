@@ -50,6 +50,36 @@ export const createHiddenInput = (ref: ICustomElement, internals: IElementIntern
 }
 
 /**
+ * Creates a hidden file input for the given ref
+ * @param {ICustomElement} ref - The element to watch
+ * @param {IElementInternals} internals - The element internals instance for the ref
+ * @return {HTMLInputElement} The hidden input
+ */
+export const createHiddenFileInput = (ref: ICustomElement, internals: IElementInternals): HTMLInputElement | null => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.name = ref.getAttribute('name');
+  input.style.display = 'none !important';
+  input.setAttribute('hidden', '');
+  ref.after(input);
+  hiddenInputMap.get(internals).push(input);
+  return input;
+}
+
+/**
+ * Creates a FileList instance from the given files.
+ * @param {File[]} files
+ * @return {FileList}
+ */
+export const createFileList = (files: File[]): FileList => {
+  const dt = new DataTransfer()
+  files.forEach(file => {
+    dt.items.add(file);
+  });
+  return dt.files;
+}
+
+/**
  * Initialize a ref by setting up an attribute observe on it
  * looking for changes to disabled
  * @param {ICustomElement} ref - The element to watch
