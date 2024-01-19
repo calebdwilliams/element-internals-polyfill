@@ -5,11 +5,13 @@ const polyfillContents = readFileSync('./dist/index.js', 'utf-8');
 
 function test(title, condition) {
   if (!condition) {
-    throw new Error(`${title} failed with error ${error}`);
+    throw new Error(`${title} failed with error`);
   } else {
     console.log(`${title} passed in JSDOM`);
   }
 }
+
+test("no optional chaining operator in output",!polyfillContents.includes("?."));
 
 JSDOM.fromFile('./jsdom-tests/index.html', {
   runScripts: 'dangerously'

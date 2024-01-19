@@ -4,6 +4,7 @@ import livereload from 'rollup-plugin-livereload';
 import cleanup from 'rollup-plugin-cleanup';
 
 const plugins = [typescript({
+  target: 'es2015',
   rootDir: 'src'
 })];
 const config = {
