@@ -393,9 +393,6 @@ export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
       } else if (this.tagName.indexOf('-') === -1) {
         throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
       }
-      if (internalsMap.has(this)) {
-        throw new DOMException(`DOMException: Failed to execute 'attachInternals' on 'HTMLElement': ElementInternals for the specified element was already attached.`);
-      }
       return new ElementInternals(this) as IElementInternals;
     }
   }
