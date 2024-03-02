@@ -62,7 +62,7 @@ export const reconcileValidity = (validityObject: ValidityState, newState: Parti
 export const isValid = (validityState: Partial<ValidityState>): boolean => {
   let valid = true;
   for (let key in validityState) {
-    if (key !== 'valid' && validityState[key] !== false) {
+    if (key !== 'valid' && (validityState[key] !== false && validityState[key] !== undefined)) {
       valid = false;
     }
   }
