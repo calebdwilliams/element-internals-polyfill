@@ -11,6 +11,7 @@ export const aom: IAom = {
   ariaColIndexText: 'aria-colindextext',
   ariaColSpan: 'aria-colspan',
   ariaCurrent: 'aria-current',
+  ariaDescription: 'aria-description',
   ariaDisabled: 'aria-disabled',
   ariaExpanded: 'aria-expanded',
   ariaHasPopup: 'aria-haspopup',
