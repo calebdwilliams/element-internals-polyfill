@@ -11,6 +11,7 @@ export interface IAom {
   ariaColIndexText: string;
   ariaColSpan: string;
   ariaCurrent: string;
+  ariaDescription: string;
   ariaDisabled: string;
   ariaExpanded: string;
   ariaHasPopup: string;
