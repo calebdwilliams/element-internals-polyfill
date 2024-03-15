@@ -37,6 +37,7 @@ export class ElementInternals implements IElementInternals {
   ariaColIndexText: string;
   ariaColSpan: string;
   ariaCurrent: string;
+  ariaDescription: string;
   ariaDisabled: string;
   ariaExpanded: string;
   ariaHasPopup: string;
