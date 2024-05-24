@@ -1,6 +1,5 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import '../dist/index.js';
-
 class TestInput extends HTMLElement {
   static formAssociated = true;
   internals = this.attachInternals();
@@ -11,7 +10,12 @@ customElements.define('test-input', TestInput);
 class TestDummy extends HTMLElement {
 }
 
+
 customElements.define('test-dummy', TestDummy);
+class TestFormAssociatedNoAttachInternals extends HTMLElement {
+  static formAssociated = true;
+}
+customElements.define('test-no-attach-internals', TestFormAssociatedNoAttachInternals);
 
 async function createForm(): Promise<HTMLFormElement> {
   return await fixture<HTMLFormElement>(html`
@@ -22,18 +26,20 @@ async function createForm(): Promise<HTMLFormElement> {
       <test-input name="second" id="ti2"></test-input>
       <test-input name="third" id="ti3"></test-input>
       <button type="submit">Submit</button>
+      <test-no-attach-internals></test-no-attach-internals>
     </form>`);
 }
 
 it('must contains the custom elements associated to the current form, in the correct order', async () => {
   const form = await createForm();
-  expect(form.elements).to.have.length(5);
+  expect(form.elements).to.have.length(6);
 
   expect(form.elements[0]).to.be.an.instanceof(HTMLInputElement);
   expect(form.elements[1]).to.be.an.instanceof(TestInput);
   expect(form.elements[2]).to.be.an.instanceof(TestInput);
   expect(form.elements[3]).to.be.an.instanceof(TestInput);
   expect(form.elements[4]).to.be.an.instanceof(HTMLButtonElement);
+  expect(form.elements[5]).to.be.an.instanceof(TestFormAssociatedNoAttachInternals);
 
   expect(form.elements[0].id).to.equal('foo');
   expect(form.elements[1].id).to.equal('ti1');
