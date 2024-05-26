@@ -119,7 +119,7 @@ export const formInputCallback = (event: Event) => {
  * @param {Event} - The form change event
  * @return {void}
  */
- export const formChangeCallback = (event: Event) => {
+export const formChangeCallback = (event: Event) => {
   setFormValidity(findParentForm(event.target));
 };
 
@@ -263,7 +263,7 @@ export const throwIfNotFormAssociated = (ref: ICustomElement, message: string, E
  * @param method {'checkValidity'|'reportValidity'} - The original method
  * @returns {boolean} The form's validity state
  */
-export const overrideFormMethod = (form: HTMLFormElement, returnValue: boolean, method: 'checkValidity'|'reportValidity'): boolean => {
+export const overrideFormMethod = (form: HTMLFormElement, returnValue: boolean, method: 'checkValidity' | 'reportValidity'): boolean => {
   const elements = formElementsMap.get(form);
 
   /** Some forms won't contain form associated custom elements */
@@ -287,10 +287,17 @@ export const overrideFormMethod = (form: HTMLFormElement, returnValue: boolean, 
  */
 export const upgradeInternals = (ref: ICustomElement) => {
   if (ref.constructor['formAssociated']) {
-    const internals = internalsMap.get(ref);
+    let internals = internalsMap.get(ref);
+    // we might have cases where the internals are not set
+    if (internals === undefined) {
+      console.warn('ElementInternals missing from the element', ref);
+      ref.attachInternals();
+      internals = internalsMap.get(ref);
+    }
     const { labels, form } = internals;
     initLabels(ref, labels);
     initForm(ref, form, internals);
+
   }
 };
 
