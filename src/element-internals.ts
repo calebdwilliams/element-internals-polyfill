@@ -11,6 +11,8 @@ import {
   validityUpgradeMap,
 } from './maps.js';
 import {
+  createFileList,
+  createHiddenFileInput,
   createHiddenInput,
   findParentForm,
   initRef,
@@ -166,23 +168,32 @@ export class ElementInternals implements IElementInternals {
   }
 
   /** Sets the element's value within the form */
-  setFormValue(value: string | FormData | null): void {
+  setFormValue(value: string | FormData | File): void {
     const ref = refMap.get(this);
     throwIfNotFormAssociated(ref, `Failed to execute 'setFormValue' on 'ElementInternals': The target element is not a form-associated custom element.`);
     removeHiddenInputs(this);
-    if (value != null && !(value instanceof FormData)) {
+    if (value instanceof File) {
       if (ref.getAttribute('name')) {
-        const hiddenInput = createHiddenInput(ref, this);
-        hiddenInput.value = value;
+        const hiddenInput = createHiddenFileInput(ref, this);
+        hiddenInput.files = createFileList([value]);
       }
-    } else if (value != null && value instanceof FormData) {
+    } else if (value instanceof FormData) {
       Array.from(value).reverse().forEach(([formDataKey, formDataValue]) => {
         if (typeof formDataValue === 'string') {
           const hiddenInput = createHiddenInput(ref, this);
           hiddenInput.name = formDataKey;
           hiddenInput.value = formDataValue;
+        } else if (formDataValue instanceof File) {
+          const hiddenInput = createHiddenFileInput(ref, this);
+          hiddenInput.name = formDataKey;
+          hiddenInput.files = createFileList([formDataValue]);
         }
       });
+    } else if (value != null) {
+      if (ref.getAttribute('name')) {
+        const hiddenInput = createHiddenInput(ref, this);
+        hiddenInput.value = value;
+      }
     }
     refValueMap.set(ref, value);
   }
