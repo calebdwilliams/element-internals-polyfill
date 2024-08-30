@@ -6,6 +6,7 @@ export const aom: IAom = {
   ariaAutoComplete: 'aria-autocomplete',
   ariaBrailleLabel: 'aria-braille-label',
   ariaBrailleRoleDescription: 'aria-braille-role-description',
+  ariaBrailleRoleDescriptions: 'aria-braille-role-descriptions',
   ariaBusy: 'aria-busy',
   ariaChecked: 'aria-checked',
   ariaColCount: 'aria-colcount',

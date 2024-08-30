@@ -6,6 +6,7 @@ export interface IAom {
   ariaAutoComplete: string;
   ariaBrailleLabel: string;
   ariaBrailleRoleDescription: string;
+  ariaBrailleRoleDescriptions: string;
   ariaBusy: string;
   ariaChecked: string;
   ariaColCount: string;
