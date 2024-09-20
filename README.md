@@ -97,6 +97,8 @@ In addition to form controls, `ElementInternals` will also surface several acces
 
 - `ariaAtomic`: 'aria-atomic'
 - `ariaAutoComplete`: 'aria-autocomplete'
+- `ariaBrailleLabel`: 'aria-braillelabel'
+- `ariaBrailleRoleDescription`: 'aria-brailleroledescription'
 - `ariaBusy`: 'aria-busy'
 - `ariaChecked`: 'aria-checked'
 - `ariaColCount`: 'aria-colcount'

@@ -4,6 +4,8 @@ import { IAom, IElementInternals } from './types.js';
 export const aom: IAom = {
   ariaAtomic: 'aria-atomic',
   ariaAutoComplete: 'aria-autocomplete',
+  ariaBrailleLabel: 'aria-braillelabel',
+  ariaBrailleRoleDescription: 'aria-brailleroledescription',
   ariaBusy: 'aria-busy',
   ariaChecked: 'aria-checked',
   ariaColCount: 'aria-colcount',
