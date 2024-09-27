@@ -1,19 +1,30 @@
-import { hiddenInputMap, formsMap, formElementsMap, internalsMap } from './maps.js';
-import { disabledOrNameObserver, disabledOrNameObserverConfig } from './mutation-observers.js';
-import { ICustomElement, IElementInternals, LabelsList } from './types.js';
+import {
+  hiddenInputMap,
+  formsMap,
+  formElementsMap,
+  internalsMap,
+} from "./maps.js";
+import {
+  disabledOrNameObserver,
+  disabledOrNameObserverConfig,
+} from "./mutation-observers.js";
+import { LabelsList } from "./types.js";
 
 /**
  * Toggle's the disabled state (attributes & callback) on the given element
- * @param {ICustomElement} ref - The custom element instance
+ * @param {HTMLElement} ref - The custom element instance
  * @param {boolean} disabled - The disabled state
  */
-export const setDisabled = (ref: ICustomElement, disabled: boolean): void => {
-  ref.toggleAttribute('internals-disabled', disabled);
+export const setDisabled = (
+  ref: FormAssociatedCustomElement,
+  disabled: boolean
+): void => {
+  ref.toggleAttribute("internals-disabled", disabled);
 
   if (disabled) {
-    ref.setAttribute('aria-disabled', 'true');
+    ref.setAttribute("aria-disabled", "true");
   } else {
-    ref.removeAttribute('aria-disabled');
+    ref.removeAttribute("aria-disabled");
   }
 
   if (ref.formDisabledCallback) {
@@ -23,60 +34,69 @@ export const setDisabled = (ref: ICustomElement, disabled: boolean): void => {
 
 /**
  * Removes all hidden inputs for the given element internals instance
- * @param {IElementInternals} internals - The element internals instance
+ * @param {ElementInternals} internals - The element internals instance
  * @return {void}
  */
-export const removeHiddenInputs = (internals: IElementInternals): void => {
+export const removeHiddenInputs = (internals: ElementInternals): void => {
   const hiddenInputs = hiddenInputMap.get(internals);
-  hiddenInputs.forEach(hiddenInput => {
+  hiddenInputs.forEach((hiddenInput) => {
     hiddenInput.remove();
   });
   hiddenInputMap.set(internals, []);
-}
+};
 
 /**
  * Creates a hidden input for the given ref
- * @param {ICustomElement} ref - The element to watch
- * @param {IElementInternals} internals - The element internals instance for the ref
+ * @param {HTMLElement} ref - The element to watch
+ * @param {ElementInternals} internals - The element internals instance for the ref
  * @return {HTMLInputElement} The hidden input
  */
-export const createHiddenInput = (ref: ICustomElement, internals: IElementInternals): HTMLInputElement | null => {
-  const input = document.createElement('input');
-  input.type = 'hidden';
-  input.name = ref.getAttribute('name');
+export const createHiddenInput = (
+  ref: HTMLElement,
+  internals: ElementInternals
+): HTMLInputElement | null => {
+  const input = document.createElement("input");
+  input.type = "hidden";
+  input.name = ref.getAttribute("name");
   ref.after(input);
   hiddenInputMap.get(internals).push(input);
   return input;
-}
+};
 
 /**
  * Initialize a ref by setting up an attribute observe on it
  * looking for changes to disabled
- * @param {ICustomElement} ref - The element to watch
- * @param {IElementInternals} internals - The element internals instance for the ref
+ * @param {HTMLElement} ref - The element to watch
+ * @param {ElementInternals} internals - The element internals instance for the ref
  * @return {void}
  */
-export const initRef = (ref: ICustomElement, internals: IElementInternals): void => {
+export const initRef = (
+  ref: HTMLElement,
+  internals: ElementInternals
+): void => {
   hiddenInputMap.set(internals, []);
   disabledOrNameObserver.observe?.(ref, disabledOrNameObserverConfig);
 };
 
 /**
  * Set up labels for the ref
- * @param {ICustomElement} ref - The ref to add labels to
- * @param {LabelsList} labels - A list of the labels
+ * @param {HTMLElement} ref - The ref to add labels to
+ * @param {NodeList} labels - A list of the labels
  * @return {void}
  */
-export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
+export const initLabels = (ref: HTMLElement, labels: NodeList): void => {
   if (labels.length) {
-    Array.from(labels).forEach(label =>
-      label.addEventListener('click', ref.click.bind(ref)));
-    let firstLabelId = labels[0].id;
-    if (!labels[0].id) {
-      firstLabelId = `${labels[0].htmlFor}_Label`;
-      labels[0].id = firstLabelId;
+    const labelList = Array.from(labels) as HTMLLabelElement[];
+    labelList.forEach((label) =>
+      label.addEventListener("click", ref.click.bind(ref))
+    );
+    const [firstLabel] = labelList;
+    let firstLabelId = firstLabel.id;
+    if (!firstLabel.id) {
+      firstLabelId = `${firstLabel.htmlFor}_Label`;
+      firstLabel.id = firstLabelId;
     }
-    ref.setAttribute('aria-labelledby', firstLabelId);
+    ref.setAttribute("aria-labelledby", firstLabelId);
   }
 };
 
@@ -88,20 +108,26 @@ export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
  */
 export const setFormValidity = (form: HTMLFormElement) => {
   const nativeControlValidity = Array.from(form.elements)
-    .filter((element: Element & { validity: ValidityState }) => !element.tagName.includes('-') && element.validity)
+    .filter(
+      (element: Element & { validity: ValidityState }) =>
+        !element.tagName.includes("-") && element.validity
+    )
     .map(
       (element: Element & { validity: ValidityState }) => element.validity.valid
     );
   const polyfilledElements = formElementsMap.get(form) || [];
   const polyfilledValidity = Array.from(polyfilledElements)
-    .filter(control => control.isConnected)
-    .map((control: ICustomElement) =>
-      internalsMap.get(control).validity.valid
+    .filter((control) => control.isConnected)
+    .map(
+      (control: HTMLElement) =>
+        internalsMap.get(control as FormAssociatedCustomElement).validity.valid
     );
-  const hasInvalid = [...nativeControlValidity, ...polyfilledValidity].includes(false);
-  form.toggleAttribute('internals-invalid', hasInvalid);
-  form.toggleAttribute('internals-valid', !hasInvalid);
-}
+  const hasInvalid = [...nativeControlValidity, ...polyfilledValidity].includes(
+    false
+  );
+  form.toggleAttribute("internals-invalid", hasInvalid);
+  form.toggleAttribute("internals-valid", !hasInvalid);
+};
 
 /**
  * The global form input callback. Updates the form's validity
@@ -119,7 +145,7 @@ export const formInputCallback = (event: Event) => {
  * @param {Event} - The form change event
  * @return {void}
  */
- export const formChangeCallback = (event: Event) => {
+export const formChangeCallback = (event: Event) => {
   setFormValidity(findParentForm(event.target));
 };
 
@@ -130,12 +156,19 @@ export const formInputCallback = (event: Event) => {
  * @return {void}
  */
 export const wireSubmitLogic = (form: HTMLFormElement) => {
-  const submitButtonSelector = ['button[type=submit]', 'input[type=submit]', 'button:not([type])']
-    .map(sel => `${sel}:not([disabled])`)
-    .map(sel => `${sel}:not([form])${form.id ? `,${sel}[form='${form.id}']` : ''}`)
-    .join(',');
+  const submitButtonSelector = [
+    "button[type=submit]",
+    "input[type=submit]",
+    "button:not([type])",
+  ]
+    .map((sel) => `${sel}:not([disabled])`)
+    .map(
+      (sel) =>
+        `${sel}:not([form])${form.id ? `,${sel}[form='${form.id}']` : ""}`
+    )
+    .join(",");
 
-  form.addEventListener('click', event => {
+  form.addEventListener("click", (event) => {
     const target = event.target as Element;
     if (target.closest(submitButtonSelector)) {
       // validate
@@ -152,12 +185,10 @@ export const wireSubmitLogic = (form: HTMLFormElement) => {
       if (elements.size) {
         const nodes = Array.from(elements);
         /** Check the internals.checkValidity() of all nodes */
-        const validityList = nodes
-          .reverse()
-          .map(node => {
-            const internals = internalsMap.get(node);
-            return internals.reportValidity();
-          });
+        const validityList = nodes.reverse().map((node) => {
+          const internals = internalsMap.get(node);
+          return internals.reportValidity();
+        });
 
         /** If any node is false, stop the event */
         if (validityList.includes(false)) {
@@ -166,7 +197,7 @@ export const wireSubmitLogic = (form: HTMLFormElement) => {
       }
     }
   });
-}
+};
 
 /**
  * The global form reset callback. This will loop over added
@@ -180,8 +211,11 @@ export const formResetCallback = (event: Event) => {
   /** Some forms won't contain form associated custom elements */
   if (elements && elements.size) {
     /** Loop over the elements and call formResetCallback if applicable */
-    elements.forEach(element => {
-      if ((element.constructor as any).formAssociated && element.formResetCallback) {
+    elements.forEach((element) => {
+      if (
+        (element.constructor as any).formAssociated &&
+        element.formResetCallback
+      ) {
         element.formResetCallback.apply(element);
       }
     });
@@ -196,7 +230,11 @@ export const formResetCallback = (event: Event) => {
  * @param {ElementInternals} internals - The internals for ref
  * @return {void}
  */
-export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: IElementInternals) => {
+export const initForm = (
+  ref: FormAssociatedCustomElement,
+  form: HTMLFormElement,
+  internals: ElementInternals
+) => {
   if (form) {
     /** This will be a WeakMap<HTMLFormElement, Set<HTMLElement> */
     const formElements = formElementsMap.get(form);
@@ -206,21 +244,21 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
       formElements.add(ref);
     } else {
       /** If formElements doesn't exist, create it and add to it */
-      const initSet = new Set<ICustomElement>();
+      const initSet = new Set<FormAssociatedCustomElement>();
       initSet.add(ref);
       formElementsMap.set(form, initSet);
 
       /** Add listeners to emulate validation and reset behavior */
       wireSubmitLogic(form);
-      form.addEventListener('reset', formResetCallback);
-      form.addEventListener('input', formInputCallback);
-      form.addEventListener('change', formChangeCallback);
+      form.addEventListener("reset", formResetCallback);
+      form.addEventListener("input", formInputCallback);
+      form.addEventListener("change", formChangeCallback);
     }
 
     formsMap.set(form, { ref, internals });
 
     /** Call formAssociatedCallback if applicable */
-    if (ref.constructor['formAssociated'] && ref.formAssociatedCallback) {
+    if (ref.constructor["formAssociated"] && ref.formAssociatedCallback) {
       setTimeout(() => {
         ref.formAssociatedCallback.apply(ref, [form]);
       }, 0);
@@ -236,7 +274,7 @@ export const initForm = (ref: ICustomElement, form: HTMLFormElement, internals: 
  */
 export const findParentForm = (elem) => {
   let parent = elem.parentNode;
-  if (parent && parent.tagName !== 'FORM') {
+  if (parent && parent.tagName !== "FORM") {
     parent = findParentForm(parent);
   }
   return parent;
@@ -244,15 +282,19 @@ export const findParentForm = (elem) => {
 
 /**
  * Throw an error if the element ref is not form associated
- * @param ref {ICustomElement} - The element to check if it is form associated
+ * @param ref {HTMLElement} - The element to check if it is form associated
  * @param message {string} - The error message to throw
  * @param ErrorType {any} - The error type to throw, defaults to DOMException
  */
-export const throwIfNotFormAssociated = (ref: ICustomElement, message: string, ErrorType: any = DOMException): void => {
-  if (!ref.constructor['formAssociated']) {
+export const throwIfNotFormAssociated = (
+  ref: HTMLElement,
+  message: string,
+  ErrorType: any = DOMException
+): void => {
+  if (!ref.constructor["formAssociated"]) {
     throw new ErrorType(message);
   }
-}
+};
 
 /**
  * Called for each HTMLFormElement.checkValidity|reportValidity
@@ -263,12 +305,16 @@ export const throwIfNotFormAssociated = (ref: ICustomElement, message: string, E
  * @param method {'checkValidity'|'reportValidity'} - The original method
  * @returns {boolean} The form's validity state
  */
-export const overrideFormMethod = (form: HTMLFormElement, returnValue: boolean, method: 'checkValidity'|'reportValidity'): boolean => {
+export const overrideFormMethod = (
+  form: HTMLFormElement,
+  returnValue: boolean,
+  method: "checkValidity" | "reportValidity"
+): boolean => {
   const elements = formElementsMap.get(form);
 
   /** Some forms won't contain form associated custom elements */
   if (elements && elements.size) {
-    elements.forEach(element => {
+    elements.forEach((element) => {
       const internals = internalsMap.get(element);
       const valid = internals[method]();
       if (!valid) {
@@ -283,10 +329,10 @@ export const overrideFormMethod = (form: HTMLFormElement, returnValue: boolean, 
  * Will upgrade an ElementInternals instance by initializing the
  * instance's form and labels. This is called when the element is
  * either constructed or appended from a DocumentFragment
- * @param ref {ICustomElement} - The custom element to upgrade
+ * @param ref {HTMLElement} - The custom element to upgrade
  */
-export const upgradeInternals = (ref: ICustomElement) => {
-  if (ref.constructor['formAssociated']) {
+export const upgradeInternals = (ref: FormAssociatedCustomElement) => {
+  if (ref.constructor["formAssociated"]) {
     const internals = internalsMap.get(ref);
     const { labels, form } = internals;
     initLabels(ref, labels);
@@ -300,5 +346,5 @@ export const upgradeInternals = (ref: ICustomElement) => {
  * @returns {boolean}
  */
 export function mutationObserverExists(): boolean {
-  return typeof MutationObserver !== 'undefined';
-};
+  return typeof MutationObserver !== "undefined";
+}

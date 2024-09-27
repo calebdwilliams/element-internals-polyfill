@@ -9,7 +9,7 @@ import {
   validityMap,
   validationMessageMap,
   validityUpgradeMap,
-} from './maps.js';
+} from "./maps.js";
 import {
   createHiddenInput,
   findParentForm,
@@ -18,18 +18,24 @@ import {
   removeHiddenInputs,
   setDisabled,
   throwIfNotFormAssociated,
-  upgradeInternals
-} from './utils.js';
-import { initAom } from './aom.js';
-import { ValidityState, reconcileValidity, setValid } from './ValidityState.js';
-import { deferUpgrade, observerCallback, observerConfig } from './mutation-observers.js';
-import { IElementInternals, ICustomElement, LabelsList } from './types.js';
-import { CustomStateSet } from './CustomStateSet.js';
-import { patchFormPrototype } from './patch-form-prototype.js';
+  upgradeInternals,
+} from "./utils.js";
+import { initAom } from "./aom.js";
+import { ValidityState, reconcileValidity, setValid } from "./ValidityState.js";
+import {
+  deferUpgrade,
+  observerCallback,
+  observerConfig,
+} from "./mutation-observers.js";
+import { ICustomElement, LabelsList } from "./types.js";
+import { CustomStateSet } from "./CustomStateSet.js";
+import { patchFormPrototype } from "./patch-form-prototype.js";
 
-export class ElementInternals implements IElementInternals {
+export class ElementInternals implements globalThis.ElementInternals {
   ariaAtomic: string;
   ariaAutoComplete: string;
+  ariaBrailleLabel: string;
+  ariaBrailleRoleDescription: string;
   ariaBusy: string;
   ariaChecked: string;
   ariaColCount: string;
@@ -77,9 +83,9 @@ export class ElementInternals implements IElementInternals {
     return true;
   }
 
-  constructor(ref: ICustomElement) {
-    if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
-      throw new TypeError('Illegal constructor');
+  constructor(ref: FormAssociatedCustomElement) {
+    if (!ref || !ref.tagName || ref.tagName.indexOf("-") === -1) {
+      throw new TypeError("Illegal constructor");
     }
     const rootNode = ref.getRootNode();
     const validity = new ValidityState();
@@ -105,17 +111,20 @@ export class ElementInternals implements IElementInternals {
    */
   checkValidity(): boolean {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to execute 'checkValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to execute 'checkValidity' on 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     /** If the element will not validate, it is necessarily valid by default */
     if (!this.willValidate) {
       return true;
     }
     const validity = validityMap.get(this);
     if (!validity.valid) {
-      const validityEvent = new Event('invalid', {
+      const validityEvent = new Event("invalid", {
         bubbles: false,
         cancelable: true,
-        composed: false
+        composed: false,
       });
       ref.dispatchEvent(validityEvent);
     }
@@ -125,9 +134,12 @@ export class ElementInternals implements IElementInternals {
   /** The form element the custom element is associated with */
   get form(): HTMLFormElement {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to read the 'form' property from 'ElementInternals': The target element is not a form-associated custom element.`);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'form' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     let form;
-    if (ref.constructor['formAssociated'] === true) {
+    if (ref.constructor["formAssociated"] === true) {
       form = findParentForm(ref);
     }
     return form;
@@ -136,11 +148,16 @@ export class ElementInternals implements IElementInternals {
   /** A list of all relative form labels for this element */
   get labels(): LabelsList {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to read the 'labels' property from 'ElementInternals': The target element is not a form-associated custom element.`);
-    const id = ref.getAttribute('id');
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'labels' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
+    const id = ref.getAttribute("id");
     const hostRoot = ref.getRootNode() as Element;
     if (hostRoot && id) {
-      return hostRoot.querySelectorAll<HTMLLabelElement>(`[for="${id}"]`) as unknown as LabelsList;
+      return hostRoot.querySelectorAll<HTMLLabelElement>(
+        `[for="${id}"]`
+      ) as unknown as LabelsList;
     }
     return [] as unknown as LabelsList;
   }
@@ -148,15 +165,20 @@ export class ElementInternals implements IElementInternals {
   /** Will report the elements validity state */
   reportValidity(): boolean {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to execute 'reportValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to execute 'reportValidity' on 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     /** If the element will not validate, it is valid by default */
     if (!this.willValidate) {
       return true;
     }
-    const valid =  this.checkValidity();
+    const valid = this.checkValidity();
     const anchor = validationAnchorMap.get(this);
-    if (anchor && !ref.constructor['formAssociated']) {
-      throw new DOMException(`Failed to execute 'reportValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
+    if (anchor && !ref.constructor["formAssociated"]) {
+      throw new DOMException(
+        `Failed to execute 'reportValidity' on 'ElementInternals': The target element is not a form-associated custom element.`
+      );
     }
     if (!valid && anchor) {
       ref.focus();
@@ -168,21 +190,26 @@ export class ElementInternals implements IElementInternals {
   /** Sets the element's value within the form */
   setFormValue(value: string | FormData | null): void {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to execute 'setFormValue' on 'ElementInternals': The target element is not a form-associated custom element.`);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to execute 'setFormValue' on 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     removeHiddenInputs(this);
     if (value != null && !(value instanceof FormData)) {
-      if (ref.getAttribute('name')) {
+      if (ref.getAttribute("name")) {
         const hiddenInput = createHiddenInput(ref, this);
         hiddenInput.value = value;
       }
     } else if (value != null && value instanceof FormData) {
-      Array.from(value).reverse().forEach(([formDataKey, formDataValue]) => {
-        if (typeof formDataValue === 'string') {
-          const hiddenInput = createHiddenInput(ref, this);
-          hiddenInput.name = formDataKey;
-          hiddenInput.value = formDataValue;
-        }
-      });
+      Array.from(value)
+        .reverse()
+        .forEach(([formDataKey, formDataValue]) => {
+          if (typeof formDataValue === "string") {
+            const hiddenInput = createHiddenInput(ref, this);
+            hiddenInput.name = formDataKey;
+            hiddenInput.value = formDataValue;
+          }
+        });
     }
     refValueMap.set(ref, value);
   }
@@ -194,11 +221,20 @@ export class ElementInternals implements IElementInternals {
    *
    * If the field is valid and a message is specified, the method will throw a TypeError.
    */
-  setValidity(validityChanges: Partial<ValidityState>, validationMessage?: string, anchor?: HTMLElement) {
+  setValidity(
+    validityChanges: Partial<ValidityState>,
+    validationMessage?: string,
+    anchor?: HTMLElement
+  ) {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to execute 'setValidity' on 'ElementInternals': The target element is not a form-associated custom element.`);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to execute 'setValidity' on 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     if (!validityChanges) {
-      throw new TypeError('Failed to execute \'setValidity\' on \'ElementInternals\': 1 argument required, but only 0 present.');
+      throw new TypeError(
+        "Failed to execute 'setValidity' on 'ElementInternals': 1 argument required, but only 0 present."
+      );
     }
     validationAnchorMap.set(this, anchor);
     const validity = validityMap.get(this);
@@ -214,16 +250,18 @@ export class ElementInternals implements IElementInternals {
     const { valid } = reconcileValidity(validity, check, this.form);
 
     if (!valid && !validationMessage) {
-      throw new DOMException(`Failed to execute 'setValidity' on 'ElementInternals': The second argument should not be empty if one or more flags in the first argument are true.`);
+      throw new DOMException(
+        `Failed to execute 'setValidity' on 'ElementInternals': The second argument should not be empty if one or more flags in the first argument are true.`
+      );
     }
-    validationMessageMap.set(this, valid ? '' : validationMessage);
+    validationMessageMap.set(this, valid ? "" : validationMessage);
 
     // check to make sure the host element is connected before adding attributes
     // because safari doesnt allow elements to have attributes added in the constructor
     if (ref.isConnected) {
-      ref.toggleAttribute('internals-invalid', !valid);
-      ref.toggleAttribute('internals-valid', valid);
-      ref.setAttribute('aria-invalid', `${!valid}`);
+      ref.toggleAttribute("internals-invalid", !valid);
+      ref.toggleAttribute("internals-valid", valid);
+      ref.setAttribute("aria-invalid", `${!valid}`);
     } else {
       validityUpgradeMap.set(ref, this);
     }
@@ -241,14 +279,20 @@ export class ElementInternals implements IElementInternals {
   /** The element's validation message set during a call to ElementInternals.setValidity */
   get validationMessage(): string {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to read the 'validationMessage' property from 'ElementInternals': The target element is not a form-associated custom element.`);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'validationMessage' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     return validationMessageMap.get(this);
   }
 
   /** The current validity state of the object */
   get validity(): ValidityState {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to read the 'validity' property from 'ElementInternals': The target element is not a form-associated custom element.`);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'validity' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     const validity = validityMap.get(this);
     return validity;
   }
@@ -256,10 +300,15 @@ export class ElementInternals implements IElementInternals {
   /** If true the element will participate in a form's constraint validation. */
   get willValidate(): boolean {
     const ref = refMap.get(this);
-    throwIfNotFormAssociated(ref, `Failed to read the 'willValidate' property from 'ElementInternals': The target element is not a form-associated custom element.`);
+    throwIfNotFormAssociated(
+      ref,
+      `Failed to read the 'willValidate' property from 'ElementInternals': The target element is not a form-associated custom element.`
+    );
     if (
-      (ref.disabled || ref.hasAttribute('disabled')) ||
-      ref.hasAttribute('readonly')
+      ref.matches(":disabled") ||
+      ref["disabled"] ||
+      ref.hasAttribute("disabled") ||
+      ref.hasAttribute("readonly")
     ) {
       return false;
     }
@@ -273,38 +322,44 @@ declare global {
   }
 
   interface Window {
-    ElementInternals: typeof ElementInternals
+    ElementInternals: typeof ElementInternals;
   }
 }
 
 export function isElementInternalsSupported(): boolean {
-  if (typeof window === 'undefined' || !window.ElementInternals || !HTMLElement.prototype.attachInternals) {
+  if (
+    typeof window === "undefined" ||
+    !window.ElementInternals ||
+    !HTMLElement.prototype.attachInternals
+  ) {
     return false;
   }
 
   class ElementInternalsFeatureDetection extends HTMLElement {
-    internals: IElementInternals;
+    internals: ElementInternals;
 
     constructor() {
       super();
       this.internals = this.attachInternals();
     }
   }
-  const randomName = `element-internals-feature-detection-${Math.random().toString(36).replace(/[^a-z]+/g, '')}`;
+  const randomName = `element-internals-feature-detection-${Math.random()
+    .toString(36)
+    .replace(/[^a-z]+/g, "")}`;
   customElements.define(randomName, ElementInternalsFeatureDetection);
   const featureDetectionElement = new ElementInternalsFeatureDetection();
   return [
-    'shadowRoot',
-    'form',
-    'willValidate',
-    'validity',
-    'validationMessage',
-    'labels',
-    'setFormValue',
-    'setValidity',
-    'checkValidity',
-    'reportValidity'
-  ].every(prop => prop in featureDetectionElement.internals);
+    "shadowRoot",
+    "form",
+    "willValidate",
+    "validity",
+    "validationMessage",
+    "labels",
+    "setFormValue",
+    "setValidity",
+    "checkValidity",
+    "reportValidity",
+  ].every((prop) => prop in featureDetectionElement.internals);
 }
 
 let hasElementInternalsPolyfillBeenApplied = false;
@@ -315,20 +370,23 @@ let hasCustomStateSetPolyfillBeenApplied = false;
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/CustomStateSet
  */
-export function forceCustomStateSetPolyfill(attachInternals?: HTMLElement['attachInternals']) {
+export function forceCustomStateSetPolyfill(
+  attachInternals?: HTMLElement["attachInternals"]
+) {
   if (hasCustomStateSetPolyfillBeenApplied) {
     return;
   }
 
   hasCustomStateSetPolyfillBeenApplied = true;
+  /** @ts-expect-error These types won't match because this is a polyfill */
   window.CustomStateSet = CustomStateSet;
 
   if (attachInternals) {
-    HTMLElement.prototype.attachInternals = function(...args) {
+    HTMLElement.prototype.attachInternals = function (...args) {
       const internals = attachInternals.call(this, args);
       internals.states = new CustomStateSet(this);
       return internals;
-    }
+    };
   }
 }
 
@@ -350,21 +408,25 @@ export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
 
   hasElementInternalsPolyfillBeenApplied = true;
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     /** @ts-expect-error: we need to replace the default ElementInternals */
     window.ElementInternals = ElementInternals;
   }
 
-  if (typeof CustomElementRegistry !== 'undefined') {
+  if (typeof CustomElementRegistry !== "undefined") {
     const define = CustomElementRegistry.prototype.define;
-    CustomElementRegistry.prototype.define = function (name, constructor, options) {
+    CustomElementRegistry.prototype.define = function (
+      name,
+      constructor,
+      options
+    ) {
       if (constructor.formAssociated) {
         const connectedCallback = constructor.prototype.connectedCallback;
         constructor.prototype.connectedCallback = function () {
           if (!connectedCallbackMap.has(this)) {
             connectedCallbackMap.set(this, true);
 
-            if (this.hasAttribute('disabled')) {
+            if (this.hasAttribute("disabled")) {
               setDisabled(this, true);
             }
           }
@@ -378,29 +440,33 @@ export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
       }
 
       define.call(this, name, constructor, options);
-    }
+    };
   }
 
   /**
    * Attaches an ElementInternals instance to a custom element. Calling this method
    * on a built-in element will throw an error.
    */
-  if (typeof HTMLElement !== 'undefined') {
-    HTMLElement.prototype.attachInternals = function(): IElementInternals {
+  if (typeof HTMLElement !== "undefined") {
+    HTMLElement.prototype.attachInternals = function (): ElementInternals {
       if (!this.tagName) {
         /** This happens in the LitSSR environment. Here we can generally ignore internals for now */
-        return {} as object as IElementInternals;
-      } else if (this.tagName.indexOf('-') === -1) {
-        throw new Error(`Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`);
+        return {} as object as ElementInternals;
+      } else if (this.tagName.indexOf("-") === -1) {
+        throw new Error(
+          `Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`
+        );
       }
       if (internalsMap.has(this)) {
-        throw new DOMException(`DOMException: Failed to execute 'attachInternals' on 'HTMLElement': ElementInternals for the specified element was already attached.`);
+        throw new DOMException(
+          `DOMException: Failed to execute 'attachInternals' on 'HTMLElement': ElementInternals for the specified element was already attached.`
+        );
       }
-      return new ElementInternals(this) as IElementInternals;
-    }
+      return new ElementInternals(this);
+    };
   }
 
-  if (typeof Element !== 'undefined') {
+  if (typeof Element !== "undefined") {
     function attachShadowObserver(...args) {
       const shadowRoot = attachShadow.apply(this, args);
       shadowRootMap.set(this, shadowRoot);
@@ -421,7 +487,7 @@ export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
     Element.prototype.attachShadow = attachShadowObserver;
   }
 
-  if (mutationObserverExists() && typeof document !== 'undefined') {
+  if (mutationObserverExists() && typeof document !== "undefined") {
     const documentObserver = new MutationObserver(observerCallback);
     documentObserver.observe(document.documentElement, observerConfig);
   }
@@ -430,7 +496,7 @@ export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
    * Keeps the polyfill from throwing in environments where HTMLFormElement
    * is undefined like in a server environment
    */
-  if (typeof HTMLFormElement !== 'undefined') {
+  if (typeof HTMLFormElement !== "undefined") {
     patchFormPrototype();
   }
 

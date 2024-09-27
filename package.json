@@ -16,10 +16,11 @@
     "test:coverage": "npm run test -- --coverage",
     "test:jsdom": "node ./jsdom-tests/jsdom.test.js",
     "start": "rollup -c --watch --environment BUILD:dev",
-    "build": "rollup -c --environment BUILD:production",
+    "build": "tsc",
     "prerelease": "npm run build",
     "release": "standard-version",
-    "postrelease": "git push --follow-tags origin master; npm publish"
+    "postrelease": "git push --follow-tags origin master; npm publish",
+    "release:alpha": "npm run release -- --prerelease alpha"
   },
   "repository": {
     "type": "git",
@@ -75,6 +76,6 @@
     "sinon": "^9.2.4",
     "standard-version": "^9.0.0",
     "tslib": "^2.1.0",
-    "typescript": "^4.5.2"
+    "typescript": "^5.5.4"
   }
 }

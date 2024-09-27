@@ -3,15 +3,15 @@ import {
   forceCustomStateSetPolyfill,
   forceElementInternalsPolyfill,
   isElementInternalsSupported,
-} from './element-internals.js';
-import { CustomStateSet } from './CustomStateSet.js';
-import './element-internals.js';
-import { IElementInternals } from './types.js';
-export * from './types.js';
+} from "./element-internals.js";
+import { CustomStateSet } from "./CustomStateSet.js";
+import "./element-internals.js";
+
+export * from "./types.js";
 export {
   forceCustomStateSetPolyfill,
   forceElementInternalsPolyfill,
-} from './element-internals.js';
+} from "./element-internals.js";
 
 declare global {
   interface Window {
@@ -24,7 +24,7 @@ declare global {
      * Attaches an ElementInternals instance to a custom element. Calling this method
      * on a built-in element will throw an error.
      */
-    attachInternals(): ElementInternals&IElementInternals;
+    attachInternals(): ElementInternals;
   }
 }
 

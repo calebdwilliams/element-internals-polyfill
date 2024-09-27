@@ -1,9 +1,7 @@
-import { ICustomElement } from "./types.js";
-
 /** Save a reference to the ref for teh CustomStateSet */
-const customStateMap = new WeakMap<CustomStateSet, ICustomElement>();
+const customStateMap = new WeakMap<CustomStateSet, HTMLElement>();
 
-function addState(ref: ICustomElement, stateName: string): void {
+function addState(ref: HTMLElement, stateName: string): void {
   ref.toggleAttribute(stateName, true);
   if (ref.part) {
     ref.part.add(stateName);
@@ -17,18 +15,20 @@ export class CustomStateSet extends Set<CustomState> {
     return true;
   }
 
-  constructor(ref: ICustomElement) {
+  constructor(ref: HTMLElement) {
     super();
-    if (!ref || !ref.tagName || ref.tagName.indexOf('-') === -1) {
-      throw new TypeError('Illegal constructor');
+    if (!ref || !ref.tagName || ref.tagName.indexOf("-") === -1) {
+      throw new TypeError("Illegal constructor");
     }
 
     customStateMap.set(this, ref);
   }
 
   add(state: CustomState) {
-    if (!/^--/.test(state) || typeof state !== 'string') {
-      throw new DOMException(`Failed to execute 'add' on 'CustomStateSet': The specified value ${state} must start with '--'.`);
+    if (!/^--/.test(state) || typeof state !== "string") {
+      throw new DOMException(
+        `Failed to execute 'add' on 'CustomStateSet': The specified value ${state} must start with '--'.`
+      );
     }
     const result = super.add(state);
     const ref = customStateMap.get(this);
@@ -79,7 +79,6 @@ export class CustomStateSet extends Set<CustomState> {
         }
       });
     }
-
 
     return result;
   }
