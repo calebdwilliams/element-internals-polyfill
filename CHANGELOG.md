@@ -9,6 +9,12 @@
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 ### [1.3.12-alpha.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.11...v1.3.12-alpha.0) (2024-09-27)
+### [1.3.12](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.11...v1.3.12) (2024-09-27)
+
+
+### Bug Fixes
+
+* update grammar ([f8a1907](https://github.com/calebdwilliams/element-internals-polyfill/commit/f8a19070dd04611fffd4e748a88ff5574a54a584))
 
 ### [1.3.11](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.10...v1.3.11) (2024-04-10)
 
