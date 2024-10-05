@@ -1,3 +1,4 @@
+import { CustomState } from "./CustomStateSet.js";
 import { ElementInternals } from "./element-internals.js";
 
 declare global {
@@ -44,6 +45,8 @@ declare global {
     formResetCallback: () => void;
     formAssociatedCallback: (form: HTMLFormElement) => void;
   }
+
+  interface CustomStateSet extends Set<CustomState> {}
 }
 
 export interface ICustomElement extends HTMLElement {
