@@ -64,7 +64,7 @@ export const initAom = (
       set(value) {
         closureValue = value;
         if (ref.isConnected) {
-          ref.setAttribute(attributeName, value);
+          setAttribute(ref, attributeName, value);
         } else {
           upgradeMap.set(ref, internals);
         }

@@ -11,6 +11,7 @@ import {
   validityUpgradeMap,
 } from "./maps.js";
 import {
+  setAttribute,
   createHiddenInput,
   findParentForm,
   initRef,
@@ -261,7 +262,7 @@ export class ElementInternals implements globalThis.ElementInternals {
     if (ref.isConnected) {
       ref.toggleAttribute("internals-invalid", !valid);
       ref.toggleAttribute("internals-valid", valid);
-      ref.setAttribute("aria-invalid", `${!valid}`);
+      setAttribute(ref, "aria-invalid", `${!valid}`);
     } else {
       validityUpgradeMap.set(ref, this);
     }
