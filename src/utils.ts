@@ -3,6 +3,32 @@ import { disabledOrNameObserver, disabledOrNameObserverConfig } from './mutation
 import { ICustomElement, IElementInternals, LabelsList } from './types.js';
 
 /**
+ * Set attribute if its value differs from existing one.
+ * 
+ * In comparison to other attribute modification methods (removeAttribute and
+ * toggleAttribute), setAttribute always triggers attributeChangedCallback
+ * even if the actual value has not changed.
+ * 
+ * This polyfill relies heavily on attributes to pass aria information to 
+ * screen readers. This behaviour differs from native implementation which does
+ * not change attributes.
+ * 
+ * To limit this difference we only set attribute value when it is different
+ * from the current state.
+ * 
+ * @param {ICustomElement | Element} ref - The custom element instance
+ * @param {string} name - The attribute name
+ * @param {string} value - The attribute value
+ * @returns 
+ */
+export const setAttribute = (ref: ICustomElement | Element, name: string, value: string): void => {
+  if (ref.getAttribute(name) === value) {
+    return;
+  }
+  ref.setAttribute(name, value);
+}
+
+/**
  * Toggle's the disabled state (attributes & callback) on the given element
  * @param {ICustomElement} ref - The custom element instance
  * @param {boolean} disabled - The disabled state
@@ -11,7 +37,7 @@ export const setDisabled = (ref: ICustomElement, disabled: boolean): void => {
   ref.toggleAttribute('internals-disabled', disabled);
 
   if (disabled) {
-    ref.setAttribute('aria-disabled', 'true');
+    setAttribute(ref, 'aria-disabled', 'true');
   } else {
     ref.removeAttribute('aria-disabled');
   }
@@ -76,7 +102,7 @@ export const initLabels = (ref: ICustomElement, labels: LabelsList): void => {
       firstLabelId = `${labels[0].htmlFor}_Label`;
       labels[0].id = firstLabelId;
     }
-    ref.setAttribute('aria-labelledby', firstLabelId);
+    setAttribute(ref, 'aria-labelledby', firstLabelId);
   }
 };
 

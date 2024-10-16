@@ -1,6 +1,6 @@
 import { internalsMap, shadowHostsMap, upgradeMap, hiddenInputMap, documentFragmentMap, formElementsMap, validityUpgradeMap, refValueMap } from './maps.js';
 import { aom } from './aom.js';
-import { removeHiddenInputs, initForm, initLabels, upgradeInternals, setDisabled, mutationObserverExists } from './utils.js';
+import { setAttribute, removeHiddenInputs, initForm, initLabels, upgradeInternals, setDisabled, mutationObserverExists } from './utils.js';
 import { ICustomElement } from './types.js';
 
 function initNode(node: ICustomElement): void {
@@ -86,7 +86,7 @@ export function observerCallback(mutationList: MutationRecord[]) {
         aomKeys
           .filter(key => internals[key] !== null)
           .forEach(key => {
-            node.setAttribute(aom[key], internals[key]);
+            setAttribute(node, aom[key], internals[key]);
           });
         upgradeMap.delete(node);
       }
@@ -94,9 +94,9 @@ export function observerCallback(mutationList: MutationRecord[]) {
       /** Upgrade the validity state when the element is connected */
       if (validityUpgradeMap.has(node)) {
         const internals = validityUpgradeMap.get(node);
-        node.setAttribute('internals-valid', internals.validity.valid.toString());
-        node.setAttribute('internals-invalid', (!internals.validity.valid).toString());
-        node.setAttribute('aria-invalid', (!internals.validity.valid).toString());
+        setAttribute(node, 'internals-valid', internals.validity.valid.toString());
+        setAttribute(node, 'internals-invalid', (!internals.validity.valid).toString());
+        setAttribute(node, 'aria-invalid', (!internals.validity.valid).toString());
         validityUpgradeMap.delete(node);
       }
 
