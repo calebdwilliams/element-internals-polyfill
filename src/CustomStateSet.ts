@@ -1,4 +1,4 @@
-/** Save a reference to the ref for teh CustomStateSet */
+/** Save a reference to the ref for the CustomStateSet */
 const customStateMap = new WeakMap<CustomStateSet, HTMLElement>();
 
 function addState(ref: HTMLElement, stateName: string): void {
