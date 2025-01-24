@@ -31,6 +31,9 @@ import { patchFormPrototype } from './patch-form-prototype.js';
 export class ElementInternals implements IElementInternals {
   ariaAtomic: string;
   ariaAutoComplete: string;
+  ariaBrailleLabel: string;
+  ariaBrailleRoleDescription: string;
+  ariaBrailleRoleDescriptions: string;
   ariaBusy: string;
   ariaChecked: string;
   ariaColCount: string;

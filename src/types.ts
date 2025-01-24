@@ -4,6 +4,9 @@ import { ElementInternals } from './element-internals.js';
 export interface IAom {
   ariaAtomic: string;
   ariaAutoComplete: string;
+  ariaBrailleLabel: string;
+  ariaBrailleRoleDescription: string;
+  ariaBrailleRoleDescriptions: string;
   ariaBusy: string;
   ariaChecked: string;
   ariaColCount: string;
