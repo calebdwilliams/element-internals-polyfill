@@ -8,7 +8,7 @@ function addState(ref: HTMLElement, stateName: string): void {
   }
 }
 
-export type CustomState = `--${string}`;
+export type CustomState = `--${string}` | string;
 
 export class CustomStateSet extends Set<CustomState> {
   static get isPolyfilled() {
