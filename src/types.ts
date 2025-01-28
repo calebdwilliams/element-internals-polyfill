@@ -21,7 +21,7 @@ declare global {
 
   interface ElementInternals extends ARIAMixin {
     checkValidity: () => boolean;
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     readonly labels: NodeList;
     reportValidity: () => boolean;
     setFormValue: (
