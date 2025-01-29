@@ -10,13 +10,13 @@ declare global {
     ariaBrailleRoleDescription: string | null;
 
     /** [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaColIndexText) */
-    ariaColIndexText: string;
+    ariaColIndexText: string | null;
 
     /** [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaRelevant) */
-    ariaRelevant: string;
+    ariaRelevant: string | null;
 
     /** [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaRowIndexText) */
-    ariaRowIndexText: string;
+    ariaRowIndexText: string | null;
   }
 
   interface ElementInternals extends ARIAMixin {
