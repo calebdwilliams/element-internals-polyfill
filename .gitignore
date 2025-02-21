@@ -5,3 +5,4 @@ node_modules
 dist
 .npmrc
 .idea
+jsdom-tests/polyfill.js
