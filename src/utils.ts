@@ -29,7 +29,7 @@ import {
  * @returns
  */
 export const setAttribute = (
-  ref: ICustomElement | Element,
+  ref: Element,
   name: string,
   value: string
 ): void => {

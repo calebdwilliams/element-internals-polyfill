@@ -15,7 +15,7 @@
     "test": "web-test-runner test/*.test.* --node-resolve --playwright --browsers chromium firefox webkit && npm run test:jsdom",
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
-    "test:jsdom": "node ./jsdom-tests/jsdom.test.js",
+    "test:jsdom": "node ./jsdom-tests/jsdom.test.mjs",
     "start": "rollup -c --watch --environment BUILD:dev",
     "build": "tsc",
     "prerelease": "npm run build",

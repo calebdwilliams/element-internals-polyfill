@@ -1,4 +1,5 @@
 import { upgradeMap } from "./maps.js";
+import { setAttribute } from "./utils.js";
 import "./types.js";
 
 export const aom: Record<keyof ARIAMixin, string> = {
