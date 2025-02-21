@@ -1,5 +1,24 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [3.0.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.11...v3.0.0) (2025-02-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* this could result in changes to how TypeScript treats the polyfill
+
+### Features
+
+* update types ([0449145](https://github.com/calebdwilliams/element-internals-polyfill/commit/0449145a14151fa53c87628dca60666cd2b23a14))
+
+
+### Bug Fixes
+
+* fix the custom state set behavior ([19f31c4](https://github.com/calebdwilliams/element-internals-polyfill/commit/19f31c4345c9c4172a190eda905168aeaf0cf2f5))
+* fix type for ElementInternals.form ([251c648](https://github.com/calebdwilliams/element-internals-polyfill/commit/251c6484c2bd4b9e5a6d076b9e8e10e75a5101be))
+
 ## 2.0.0-next.1
 
 ### Major Changes
