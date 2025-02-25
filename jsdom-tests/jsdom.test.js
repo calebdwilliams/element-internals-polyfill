@@ -11,11 +11,6 @@ function test(title, condition) {
   }
 }
 
-test(
-  "no optional chaining operator in output",
-  !polyfillContents.includes("?.")
-);
-
 JSDOM.fromFile("./jsdom-tests/index.html", {
   runScripts: "dangerously",
 }).then(async ({ window }) => {

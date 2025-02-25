@@ -47,6 +47,7 @@
   },
   "homepage": "https://github.com/calebdwilliams/element-internals-polyfill#readme",
   "devDependencies": {
+    "@changesets/cli": "^2.27.8",
     "@lit-labs/testing": "^0.2.1",
     "@open-wc/testing": "^3.1.7",
     "@open-wc/testing-helpers": "^1.7.1",
@@ -80,7 +81,5 @@
     "tslib": "^2.1.0",
     "typescript": "^5.5.4"
   },
-  "dependencies": {
-    "@changesets/cli": "^2.27.8"
-  }
+  "dependencies": {}
 }
