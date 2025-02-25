@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/calebdwilliams/element-internals-polyfill/compare/v3.0.0...v3.0.1) (2025-02-25)
+
 ## [3.0.0](https://github.com/calebdwilliams/element-internals-polyfill/compare/v1.3.11...v3.0.0) (2025-02-21)
 
 
