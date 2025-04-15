@@ -403,6 +403,7 @@ export function forceCustomStateSetPolyfill(
  * polyfill as well.
  */
 export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
+  let attachedFlag = false;
   if (hasElementInternalsPolyfillBeenApplied) {
     return;
   }
@@ -436,7 +437,7 @@ export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
             connectedCallback.apply(this);
           }
           // always upgradeInternals in connectedCallback instead of constructor
-          upgradeInternals(this);
+          attachedFlag = upgradeInternals(this);
         };
       }
 
@@ -458,7 +459,7 @@ export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
           `Failed to execute 'attachInternals' on 'HTMLElement': Unable to attach ElementInternals to non-custom elements.`
         );
       }
-      if (internalsMap.has(this)) {
+      if (internalsMap.has(this) && !attachedFlag) {
         throw new DOMException(
           `DOMException: Failed to execute 'attachInternals' on 'HTMLElement': ElementInternals for the specified element was already attached.`
         );
