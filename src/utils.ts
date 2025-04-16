@@ -345,9 +345,9 @@ export const overrideFormMethod = (
  * either constructed or appended from a DocumentFragment
  * @param ref {HTMLElement} - The custom element to upgrade
  */
-export const upgradeInternals = (ref: FormAssociatedCustomElement) => {
+export const upgradeInternals = (ref: FormAssociatedCustomElement): boolean => {
+  let attached = false;
   if (ref.constructor["formAssociated"]) {
-    let attached = false;
     let internals = internalsMap.get(ref);
     // we might have cases where the internals are not set
     if (internals === undefined) {
@@ -358,8 +358,8 @@ export const upgradeInternals = (ref: FormAssociatedCustomElement) => {
     const { labels, form } = internals;
     initLabels(ref, labels);
     initForm(ref, form, internals);
-    return attached;
   }
+  return attached;
 };
 
 /**
