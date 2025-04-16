@@ -30,7 +30,7 @@ import {
   observerCallback,
   observerConfig,
 } from "./mutation-observers.js";
-import { ICustomElement, LabelsList } from "./types.js";
+import { LabelsList } from "./types.js";
 import { CustomStateSet } from "./CustomStateSet.js";
 import { patchFormPrototype } from "./patch-form-prototype.js";
 
