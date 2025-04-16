@@ -405,6 +405,10 @@ export function forceCustomStateSetPolyfill(
  * polyfill as well.
  */
 export function forceElementInternalsPolyfill(forceCustomStateSet = true) {
+  /**
+   * This is a flag to prevent a DOMException from being thrown when
+   * attachInternals is called in upgradeInternals.
+   */
   let attachedFlag = false;
   if (hasElementInternalsPolyfillBeenApplied) {
     return;
