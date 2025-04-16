@@ -16,7 +16,7 @@
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
     "test:jsdom": "node ./jsdom-tests/jsdom.test.js",
-    "pretest:jsdom": "rollup -i dist/index.js -o jsdom-tests/polyfill.js -f iife",
+    "pretest:jsdom": "rollup -i dist/index.js -o jsdom-tests/polyfill.js -f iife -n polyfill",
     "start": "rollup -c --watch --environment BUILD:dev",
     "build": "tsc",
     "prerelease": "npm run build",
