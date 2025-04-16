@@ -3,6 +3,23 @@ import { aom } from './aom.js';
 import { setAttribute, removeHiddenInputs, initForm, initLabels, upgradeInternals, setDisabled, mutationObserverExists } from './utils.js';
 import { ICustomElement } from './types.js';
 
+
+/**
+ * Initialize a ref by setting up an attribute observe on it
+ * looking for changes to disabled
+ * @param {HTMLElement} ref - The element to watch
+ * @param {ElementInternals} internals - The element internals instance for the ref
+ * @return {void}
+ */
+export const initRef = (
+  ref: HTMLElement,
+  internals: ElementInternals
+): void => {
+  hiddenInputMap.set(internals, []);
+  disabledOrNameObserver.observe?.(ref, disabledOrNameObserverConfig);
+};
+
+
 function initNode(node: ICustomElement): void {
   const internals = internalsMap.get(node);
   const { form } = internals;

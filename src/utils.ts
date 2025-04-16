@@ -93,21 +93,6 @@ export const createHiddenInput = (
 };
 
 /**
- * Initialize a ref by setting up an attribute observe on it
- * looking for changes to disabled
- * @param {HTMLElement} ref - The element to watch
- * @param {ElementInternals} internals - The element internals instance for the ref
- * @return {void}
- */
-export const initRef = (
-  ref: HTMLElement,
-  internals: ElementInternals
-): void => {
-  hiddenInputMap.set(internals, []);
-  disabledOrNameObserver.observe?.(ref, disabledOrNameObserverConfig);
-};
-
-/**
  * Set up labels for the ref
  * @param {HTMLElement} ref - The ref to add labels to
  * @param {NodeList} labels - A list of the labels

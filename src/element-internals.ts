@@ -14,13 +14,15 @@ import {
   setAttribute,
   createHiddenInput,
   findParentForm,
-  initRef,
   mutationObserverExists,
   removeHiddenInputs,
   setDisabled,
   throwIfNotFormAssociated,
   upgradeInternals,
 } from "./utils.js";
+import {
+  initRef,
+} from "./mutation-observers.js";
 import { initAom } from "./aom.js";
 import { ValidityState, reconcileValidity, setValid } from "./ValidityState.js";
 import {
